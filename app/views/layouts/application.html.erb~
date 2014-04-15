@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title><%= content_for?(:title) ? yield(:title) : "foundation-rails" %></title>
+
+<%= stylesheet_link_tag    "application" %>
+<%= javascript_include_tag "vendor/modernizr" %>
+<%= csrf_meta_tags %>
+</head>
+
+<body>
+<div class="sticky">
+<nav class="top-bar" data-topbar data-options="is_hover: false">
+	<ul class="title-area">
+		<li class="name">
+		<h1><a href="#">Root's</a></h1>
+		</li>
+		<li class="toggle-topbar menu-icon"><a href="#">Menú</a></li>
+	</ul>
+
+	<section class="top-bar-section">
+		<!-- Left Nav Section --> 
+		<ul class="left">
+
+<!-- Menú Administración -->
+			<li class="has-dropdown">
+			<a>General</a>
+			<ul class="dropdown">
+				<li>
+					<ul>
+		
+						<li class="menu_label"><label>CARGAR</label></li>					
+						<li><a>Operaciones</a></li>
+						<li><a>Asientos</a></li>
+						<li><a>Cierre de tarjetas</a></li>
+					</ul>
+					<ul>
+						<li class="menu_label"><label>ANALIZAR</label></li>			
+						<li><a>Operaciones</a></li>
+						<li><a>EE.RR.</a></li>
+						<li><a>Flujo de fondos</a></li>
+					</ul>
+					<ul>
+						<li class="menu_label"><label>CONFIGURAR</label></li>
+						<li><a>Tipo de operaciones</a></li>
+						<li><a>Plan de cuentas</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+<!-- Fin Menú Administración  -->
+<!-- Menú Ganadería -->
+			<li class="has-dropdown">
+			<a href="#">GANADERÍA</a>
+
+			<ul class="dropdown">
+				<li>
+				<ul>
+<li class="menu_label"><label>CARGAR</label></li>					
+			<li><a>Movimientos</a></li> 		
+				</ul>
+	<ul style="width:150px;float:left;">
+					<li class="menu_label"><label>ANALIZAR</label></li>		
+<li><a>MOVIMIENTOS</a></li>			
+<li><a>EXISTENCIAS</a></li>			
+			</ul>
+				<ul style="width:150px;float:left;">
+					<li class="menu_label"><label>CONFIGURAR</label></li>
+<li><a>CATEGORÍAS</a></li>			
+<li><a>RODEOS</a></li>			
+<li><a>ESTADOS</a></li>			
+<li><a>ACCIONES</a></li>
+<li><a>TIPOS DE CATEGORÍAS</a></li>			
+		
+
+			</ul>
+				</li>
+			</ul>
+			</li>
+<!-- Fin Ganadería  -->
+
+<li class="has-form">
+  <div class="row collapse">
+    <div class="large-8 small-9 columns">
+      <input type="text" placeholder="¿?">
+    </div>
+    <div class="large-4 small-3 columns">
+      <a href="#" class="alert button expand">BUSCAR</a>
+    </div>
+  </div>
+</li>
+		</ul>
+
+		<!-- Right Nav Section -->
+<ul class="right">
+<!-- Menú general -->
+			<li class="has-dropdown">
+			<a href="#">Mi Perfil</a>
+			<ul class="dropdown" style="width:300px;">
+				<li>
+				<ul style="width:150px;float:left;">
+					<% 5.times do |a| %>
+						<li>
+					<a href="#">First link in dropdown</a>
+					</li>
+				<% end %>
+				</ul>
+
+				<ul style="width:150px;float:left;">
+					<% 5.times do |a| %>
+						<li>
+							<a href="#">First link in dropdown</a>
+						</li>
+					<% end %>
+				</ul>
+				</li>
+			</ul>
+			</li>
+<!-- Fin Menú general  -->
+
+
+
+	</section>
+</nav></div>
+<%= yield %>
+<%= javascript_include_tag "application" %>
+</body>
+</html>
