@@ -10,7 +10,16 @@
 
 
 //Particularizaciones
-	//Para el TOPBAR DROPDOWN-LINKS
+
+.barra_herramientas {
+position:fixed;
+bottom:0px;
+margin-bottom:15px;
+height: rem-calc(18);
+width: rem-calc(1000);
+
+}
+//Para el TOPBAR DROPDOWN-LINKS
 nav section ul li ul li ul li:not(.menu_label) {
 text-align:right;
 text-transform:uppercase;
@@ -23,11 +32,18 @@ text-transform:uppercase;
 }
 
 .top-bar-section ul.dropdown {
-width: 600px;
+width: 450px;
 }
 
+
+.top-bar a.topbar_button, .top-bar input.topbar_input {
+font-size: rem-calc(10);
+top:0px;
+
+	}
+
 .dropdown li ul {
-width:200px;
+width:150px;
 float:left;
 }
 

@@ -23,11 +23,18 @@ text-transform:uppercase;
 }
 
 .top-bar-section ul.dropdown {
-width: 600px;
+width: 450px;
 }
 
+
+.top-bar a.topbar_button, .top-bar input.topbar_input {
+font-size: rem-calc(10);
+top:0px;
+
+	}
+
 .dropdown li ul {
-width:200px;
+width:150px;
 float:left;
 }
 
@@ -1153,7 +1160,7 @@ nav li ul li {
 }
 
 // Height and margin
- $topbar-height: 25px;
+ $topbar-height: 30px;
 // $topbar-margin-bottom: 0;
 
 // Controlling the styles for the title in the top bar

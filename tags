@@ -1,0 +1,39 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ActiveSupport	test/test_helper.rb	/^class ActiveSupport::TestCase$/;"	c
+Application	config/application.rb	/^  class Application < Rails::Application$/;"	c	class:Roots
+ApplicationController	app/controllers/application_controller.rb	/^class ApplicationController < ActionController::Base$/;"	c
+ApplicationHelper	app/helpers/application_helper.rb	/^module ApplicationHelper$/;"	m
+CreateRbUsuarios	db/migrate/20140405161247_create_rb_usuarios.rb	/^class CreateRbUsuarios < ActiveRecord::Migration$/;"	c
+Rb	app/controllers/rb/sesiones_controller.rb	/^class Rb::SesionesController < ApplicationController$/;"	c
+Rb	app/controllers/rb/usuarios_controller.rb	/^class Rb::UsuariosController < ApplicationController$/;"	c
+Rb	app/helpers/rb/sesiones_helper.rb	/^module Rb::SesionesHelper$/;"	m
+Rb	app/helpers/rb/usuarios_helper.rb	/^module Rb::UsuariosHelper$/;"	m
+Rb	app/models/rb.rb	/^module Rb$/;"	m
+Rb	app/models/rb/usuario.rb	/^class Rb::Usuario < ActiveRecord::Base$/;"	c
+Rb	test/controllers/rb/sesiones_controller_test.rb	/^class Rb::SesionesControllerTest < ActionController::TestCase$/;"	c
+Rb	test/controllers/rb/usuarios_controller_test.rb	/^class Rb::UsuariosControllerTest < ActionController::TestCase$/;"	c
+Rb	test/helpers/rb/sesiones_helper_test.rb	/^class Rb::SesionesHelperTest < ActionView::TestCase$/;"	c
+Rb	test/helpers/rb/usuarios_helper_test.rb	/^class Rb::UsuariosHelperTest < ActionView::TestCase$/;"	c
+Rb	test/models/rb/usuario_test.rb	/^class Rb::UsuarioTest < ActiveSupport::TestCase$/;"	c
+Roots	config/application.rb	/^module Roots$/;"	m
+change	db/migrate/20140405161247_create_rb_usuarios.rb	/^  def change$/;"	f	class:CreateRbUsuarios
+create	app/controllers/rb/sesiones_controller.rb	/^	def create$/;"	f	class:Rb
+create	app/controllers/rb/usuarios_controller.rb	/^  def create$/;"	f	class:Rb
+destroy	app/controllers/rb/usuarios_controller.rb	/^  def destroy$/;"	f	class:Rb
+edit	app/controllers/rb/usuarios_controller.rb	/^  def edit$/;"	f	class:Rb
+hola	app/models/rb/usuario.rb	/^	def hola$/;"	f	class:Rb
+index	app/controllers/rb/usuarios_controller.rb	/^  def index$/;"	f	class:Rb
+new	app/controllers/rb/sesiones_controller.rb	/^	def new$/;"	f	class:Rb
+new	app/controllers/rb/usuarios_controller.rb	/^  def new$/;"	f	class:Rb
+rb_usuario_params	app/controllers/rb/usuarios_controller.rb	/^    def rb_usuario_params$/;"	f	class:Rb
+salir	app/controllers/rb/sesiones_controller.rb	/^	def salir$/;"	f	class:Rb
+set_rb_usuario	app/controllers/rb/usuarios_controller.rb	/^    def set_rb_usuario$/;"	f	class:Rb
+show	app/controllers/rb/usuarios_controller.rb	/^  def show$/;"	f	class:Rb
+table_name_prefix	app/models/rb.rb	/^  def self.table_name_prefix$/;"	F	class:Rb
+update	app/controllers/rb/usuarios_controller.rb	/^  def update$/;"	f	class:Rb
+validar_usuario	app/controllers/application_controller.rb	/^	def validar_usuario$/;"	f	class:ApplicationController
