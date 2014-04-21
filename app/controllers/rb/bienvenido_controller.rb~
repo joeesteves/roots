@@ -1,0 +1,2 @@
+class Rb::BienvenidoController < ApplicationController
+end

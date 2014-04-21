@@ -1,0 +1,43 @@
+<div class="row">
+	<div class="small-12 columns">
+
+<div id="jqxgrid">
+</div>
+</div>
+</div>
+
+
+<!--	
+			<table>
+				<thead>
+					<tr>
+						<th><input type="checkbox" id="selecciona_todo" /></th>
+						<th>Usuario</th>
+						<th>Nombre</th>
+						<th>Apellido</th>
+						<th>Mail</th>
+						<th style="width:100%">Descripcion</th>
+					</tr>
+				</thead>
+
+				<tbody>
+				<% @rb_usuarios.each do |rb_usuario| %>
+					<tr>
+						<td><input type="checkbox" value=<%=rb_usuario.id %> /></td>
+						<td><%= link_to rb_usuario.usuario, edit_rb_usuario_path(rb_usuario) %></td>
+						<td><%= rb_usuario.nombre %></td>
+						<td><%= rb_usuario.apellido %></td>
+						<td><%= rb_usuario.mail %></td>
+						<td></td>
+
+						<td><%= link_to 'Show', rb_usuario %></td>
+				<td><%= link_to 'Edit', edit_rb_usuario_path(rb_usuario) %></td>
+				<td><%= link_to 'Destroy', rb_usuario, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+					</tr>
+			<% end %>
+				</tbody>
+			</table>
+	</div>
+</div>
+			-->

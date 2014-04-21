@@ -1,0 +1,5 @@
+class Rb::BienvenidosController < ApplicationController
+	def index
+			render :layout => false	
+	end
+end

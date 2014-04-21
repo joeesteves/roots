@@ -1,0 +1,2 @@
+module Rb::BienvenidosHelper
+end

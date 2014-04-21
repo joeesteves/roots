@@ -6,9 +6,10 @@ class ApplicationController < ActionController::Base
 
 	def validar_usuario
 		if session[:usuario_id] == nil 
-			redirect_to new_rb_sesion_path
+			redirect_to root_url
 		else 				
 			@usuario_actual ||= Rb::Usuario.find(session[:usuario_id]) 
 		end
 	end	
+
 end

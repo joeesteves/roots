@@ -1,0 +1,1 @@
+<%= render 'rb/sesiones/new' %>

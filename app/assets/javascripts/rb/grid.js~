@@ -1,0 +1,18 @@
+//= require grid/jqxcore
+//= require rb/grid/jqxdata
+//= require rb/grid/jqxbuttons
+//= require rb/grid/jqxscrollbar
+//= require rb/grid/jqxmenu
+//= require rb/grid/jqxlistbox
+//= require rb/grid/jqxdropdownlist
+//= require rb/grid/jqxgrid
+//= require rb/grid/jqxgrid.selection
+//= require rb/grid/jqxgrid.columnsresize
+//= require rb/grid/jqxgrid.filter
+//= require rb/grid/jqxgrid.sort
+//= require rb/grid/jqxgrid.pager
+//= require rb/grid/jqxgrid.grouping
+//= require rb/grid/jqxcheckbox
+
+
+

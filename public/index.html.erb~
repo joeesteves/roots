@@ -1,0 +1,13 @@
+<h1>Ingresar</h1>
+
+<%= form_tag rb_sesiones_path do %>
+	  <div class="field">
+    <%= label_tag :usuario %>
+    <%= text_field_tag :usuario, params[:usuario] %>
+  </div>
+  <div class="field">
+    <%= label_tag :password %>
+    <%= password_field_tag :password %>
+  </div>
+	<div class="actions"><%= submit_tag "Entrar", :class => "tiny button" %></div>
+<% end %>
