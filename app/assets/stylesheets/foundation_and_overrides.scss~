@@ -10,12 +10,36 @@
 
 
 //Particularizaciones
-	//Para el TOPBAR DROPDOWN-LINKS
+.has-dropdown, .dropdown, .top-bar,div .sticky,div .fixed {
+z-index: 200;
+}
+
+
+footer {
+	width: rem-calc(970);
+	margin: 0px;
+	position: fixed;
+	bottom: 0px;
+}
+
+//Para el TOPBAR DROPDOWN-LINKS
 nav section ul li ul li ul li:not(.menu_label) {
 text-align:right;
 text-transform:uppercase;
 }
+th {
 
+text-transform:uppercase;
+
+}
+th, td {
+border-color: #c2c2c2; 
+vertical-align: middle;
+}
+
+table input[type="checkbox"] {
+margin-bottom:0px;
+}
 // PARA EL TOPBAR OPCIONES VISIBLES
 
 nav li {
@@ -1058,26 +1082,25 @@ $body-font-family: 'Raleway', sans-serif;
 // $include-html-table-classes: $include-html-classes;
 
 // These control the background color for the table and even rows
-// $table-bg: #fff;
-// $table-even-row-bg: #f9f9f9  ;
+$table-bg: #c2c2c2;
+$table-even-row-bg: #A7C491 ;
 
 // These control the table cell border style
 // $table-border-style: solid;
 // $table-border-size: 1px;
-// $table-border-color: #ddd;
+$table-border-color: #c2c2c2;
 
 // These control the table head styles
-// $table-head-bg: #f5f5f5  ;
+$table-head-bg: #c3c3c3  ;
 // $table-head-font-size: rem-calc(14);
 // $table-head-font-color: #222;
 // $table-head-font-weight: bold;
-// $table-head-padding: rem-calc(8 10 10);
-
+$table-head-padding: rem-calc(3);
 // These control the row padding and font styles
-// $table-row-padding: rem-calc(9 10);
+$table-row-padding: rem-calc(2);
 // $table-row-font-size: rem-calc(14);
 // $table-row-font-color: #222;
-// $table-line-height: rem-calc(18);
+$table-line-height: rem-calc(12);
 
 // These are for controlling the display and margin of tables
 // $table-display: table-cell;
@@ -1182,7 +1205,7 @@ nav li ul li {
 // $topbar-link-color-active: #fff;
 // $topbar-link-color-active-hover: #fff;
 // $topbar-link-weight: normal;
-$topbar-link-font-size: rem-calc(10);
+$topbar-link-font-size: rem-calc(12);
 // $topbar-link-hover-lightness: -10%; // Darken by 10%
 // $topbar-link-bg-hover: #272727  ;
 // $topbar-link-bg-active: $primary-color;
@@ -1194,7 +1217,7 @@ $topbar-link-font-size: rem-calc(10);
 // $topbar-dropdown-label-color: #777;
 // $topbar-dropdown-label-text-transform: uppercase;
 // $topbar-dropdown-label-font-weight: bold;
- $topbar-dropdown-label-font-size: rem-calc(10);
+ $topbar-dropdown-label-font-size: rem-calc(12);
 // $topbar-dropdown-label-bg: #333;
 
 // Top menu icon styles
@@ -1226,4 +1249,4 @@ $topbar-link-font-size: rem-calc(10);
 
 // $include-html-visibility-classes: $include-html-classes;
 
-@import 'foundation';
+

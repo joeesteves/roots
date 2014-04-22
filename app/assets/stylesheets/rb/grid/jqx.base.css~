@@ -3199,6 +3199,7 @@ input[type=text].jqx-input, input[type=password].jqx-input {
     border-style: solid;
     font-size: 13px;
     padding: 0px;
+		height:auto;
 }
 .jqx-input::-ms-reveal {
     display: none;

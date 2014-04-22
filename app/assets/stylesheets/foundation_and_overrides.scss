@@ -10,6 +10,11 @@
 
 
 //Particularizaciones
+.has-dropdown, .dropdown, .top-bar,div .sticky,div .fixed {
+z-index: 200;
+}
+
+
 footer {
 	width: rem-calc(970);
 	margin: 0px;
@@ -1245,3 +1250,7 @@ $topbar-link-font-size: rem-calc(12);
 // $include-html-visibility-classes: $include-html-classes;
 
 @import 'foundation';
+.has-dropdown, .dropdown, .top-bar,div .sticky,.fixed {
+z-index: 200;
+}
+
