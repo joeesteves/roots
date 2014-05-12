@@ -1,4 +1,6 @@
 Roots::Application.routes.draw do
+  resources :pruebas
+
   namespace :rb do
     resources :usuarios
 		resources :sesiones

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="3130025055">
+    <data-source source="LOCAL" name="Rails roots: development" uuid="f3ccae36-6ede-457c-9188-31dc5aa8d8f0">
+      <driver-ref>mysql</driver-ref>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://127.0.0.1/roots_dev</jdbc-url>
+      <user-name>root</user-name>
+      <user-password>dfcbdfc6dfccdfcbdf9bdf9cdf98df9f</user-password>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="Rails roots: production" uuid="f57dc5bd-9e7a-462b-a42d-4729fcbb939f">
+      <driver-ref>mysql</driver-ref>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://127.0.0.1/roots_dev</jdbc-url>
+      <user-name>root</user-name>
+      <user-password>dfcbdfc6dfccdfcbdf9bdf9cdf98df9f</user-password>
+      <libraries />
+    </data-source>
+  </component>
+</project>
+

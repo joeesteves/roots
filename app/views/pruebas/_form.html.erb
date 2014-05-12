@@ -1,0 +1,26 @@
+<>
+<%= form_for(@prueba) do |f| %>
+  <% if @prueba.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@prueba.errors.count, "error") %> prohibited this prueba from being saved:</h2>
+
+      <ul>
+      <% @prueba.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :nombre %><br>
+    <%= f.text_field :nombre %>
+  </div>
+  <div class="field">
+    <%= f.label :apellido %><br>
+    <%= f.text_field :apellido %>
+  </div>
+  <div class="actions">
+		<%= f.submit :class => "button tiny" %>
+  </div>
+<% end %></>
