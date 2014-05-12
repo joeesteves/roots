@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20140510204521) do
     t.datetime "updated_at"
   end
 
-  create_table "rb_usuarios", force: true do |t|
+  create_table "rba_usuarios", force: true do |t|
     t.string   "usuario"
     t.string   "nombre"
     t.string   "apellido"

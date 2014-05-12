@@ -2,7 +2,7 @@ ready = ->
 	if $('#action').val() == 'index'
 		index() 
 index = () ->
-	url = $('#root_path').val() + "rb/usuarios.json"
+	url = $('#root_path').val() + "rba/usuarios.json"
 	source =
   datatype: "json",
   datafields: [

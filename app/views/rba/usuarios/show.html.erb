@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Usuario:</strong>
+  <%= @rba_usuario.usuario %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_usuario.nombre %>
+</p>
+
+<p>
+  <strong>Apellido:</strong>
+  <%= @rba_usuario.apellido %>
+</p>
+
+<p>
+  <strong>Mail:</strong>
+  <%= @rba_usuario.mail %>
+</p>
+
+<p>
+  <strong>Password digest:</strong>
+  <%= @rba_usuario.password_digest %>
+</p>
+
+<%= link_to 'Edit', edit_rba_usuario_path(@rba_usuario) %> |
+<%= link_to 'Back', rba_usuarios_path %>

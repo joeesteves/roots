@@ -1,6 +1,6 @@
-class CreateRbUsuarios < ActiveRecord::Migration
+class CreateRbaUsuarios < ActiveRecord::Migration
   def change
-    create_table :rb_usuarios do |t|
+    create_table :rba_usuarios do |t|
       t.string :usuario
       t.string :nombre
       t.string :apellido

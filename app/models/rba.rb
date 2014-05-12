@@ -1,5 +1,5 @@
-module Rb
+module Rba
   def self.table_name_prefix
-    'rb_'
+    'rba_'
   end
 end
