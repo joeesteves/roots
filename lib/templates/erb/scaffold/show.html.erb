@@ -7,5 +7,5 @@
 </p>
 
 <% end -%>
-<%%= link_to 'Edit', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>) %> |
-<%%= link_to 'Back', <%= index_helper %>_path %>
+<%%= link_to 'Editar', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), :class => "button tiny" %>
+<%%= link_to 'Volver', <%= index_helper %>_path, :class => "button tiny" %>

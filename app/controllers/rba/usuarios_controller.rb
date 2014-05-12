@@ -61,6 +61,11 @@ class Rba::UsuariosController < ApplicationController
     end
   end
 
+  def delete_selection
+    @rba_usuarios = Rba::Usuario.delete(params[:ids])
+    render nothing: true
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_rba_usuario

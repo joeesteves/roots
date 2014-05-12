@@ -5,7 +5,6 @@ class PruebasController < ApplicationController
   # GET /pruebas.json
   def index
     @pruebas = Prueba.all
-
   end
 
   # GET /pruebas/1
@@ -62,6 +61,11 @@ class PruebasController < ApplicationController
     end
   end
 
+  def delete_selection
+    @pruebas = Prueba.delete(params[:ids])
+    render nothing: true
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_prueba
@@ -70,6 +74,6 @@ class PruebasController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def prueba_params
-      params.require(:prueba).permit(:nombre, :apellido)
+      params.require(:prueba).permit(:nombre, :apellido, :ids)
     end
 end

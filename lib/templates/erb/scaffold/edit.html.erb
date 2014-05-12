@@ -2,5 +2,5 @@
 
 <%%= render 'form' %>
 
-<%%= link_to 'Show', @<%= singular_table_name %> %> |
-<%%= link_to 'Back', <%= index_helper %>_path %>
+<%%= link_to 'Ir', @<%= singular_table_name %>, :class => "button tiny" %>
+<%%= link_to 'Volver', <%= index_helper %>_path, :class => "button tiny" %>

@@ -1,9 +1,13 @@
 Roots::Application.routes.draw do
-  resources :pruebas
+  resources :pruebas do
+    post 'delete_selection', on: :collection
+  end
 
   namespace :rba do
-    resources :usuarios
-		resources :sesiones
+    resources :usuarios do
+     post 'delete_selection', on: :collection
+		end
+    resources :sesiones
   end
 	get 'salir', to: 'rba/sesiones#salir', :as => :salir
 

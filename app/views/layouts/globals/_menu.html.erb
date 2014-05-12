@@ -10,60 +10,11 @@
 		<section class="top-bar-section">
 			<!-- Left Nav Section --> 
 			<ul class="left">
+				<%= render "layouts/globals/menu/general" %>
+				<%= render "layouts/globals/menu/rga" %>
 
-				<!-- Menú Administración -->
-				<li class="has-dropdown">
-				<a>General</a>
-				<ul class="dropdown">
-					<li>
-					<ul>
-						<li class="menu_label"><label>CARGAR</label></li>					
-						<li><a>Operaciones</a></li>
-						<li><a>Asientos</a></li>
-						<li><a>Cierre de tarjetas</a></li>
-					</ul>
-					<ul>
-						<li class="menu_label"><label>ANALIZAR</label></li>			
-						<li><a>Operaciones</a></li>
-						<li><a>EE.RR.</a></li>
-						<li><a>Flujo de fondos</a></li>
-					</ul>
-					<ul>
-						<li class="menu_label"><label>CONFIGURAR</label></li>
-						<li><a>Tipo de operaciones</a></li>
-						<li><a>Plan de cuentas</a></li>
-					</ul>
-					</li>
-				</ul>
-				</li>
-				<!-- Fin Menú Administración  -->
-				<!-- Menú Ganadería -->
-				<li class="has-dropdown">
-				<a>GANADERÍA</a>
 
-				<ul class="dropdown">
-					<li>
-					<ul>
-						<li class="menu_label"><label>CARGAR</label></li>					
-						<li><a>Movimientos</a></li> 		
-					</ul>
-					<ul>
-						<li class="menu_label"><label>ANALIZAR</label></li>		
-						<li><a>MOVIMIENTOS</a></li>			
-						<li><a>EXISTENCIAS</a></li>			
-					</ul>
-					<ul>
-						<li class="menu_label"><label>CONFIGURAR</label></li>
-						<li><a>CATEGORÍAS</a></li>			
-						<li><a>RODEOS</a></li>			
-						<li><a>ESTADOS</a></li>			
-						<li><a>ACCIONES</a></li>
-						<li><a>TIPOS DE CATEGORÍAS</a></li>			
-					</ul>
-					</li>
-				</ul>
-				</li>
-				<!-- Fin Ganadería  -->
+		
 				<li class="has-form">
 				<div class="row collapse">
 					<div class="large-8 small-9 columns">
@@ -76,31 +27,13 @@
 				</li>
 			</ul>
 
-			<!-- Right Nav Section -->
 			<ul class="right">
-				<!-- Menú general -->
-				<li class="has-dropdown">
-				<a href="#">Mi Cuenta</a>
-				<ul class="dropdown">
-					<li>
-					<ul>
-						<li><label>Empresas</label></li>
-						<li><a>lista de empresas</a></li>
-					</ul>
+				<!-- Menú Acciones -->
+				<%= render "layouts/globals/menu/acciones" %>
+				<!-- Menú Usuario -->
+				<%= render "layouts/globals/menu/cuenta" %>
 
-					<ul>
-						<li><label>Establecimientos</label></li>
-						<li><a>Lista de establecimiento</a></li>
-					</ul>
-					<ul>
-						<li><label>Mi perfil</label></li>
-						<li><a>Configuración</a></li>
-					</ul>
-					</li>
-				</ul>
-				</li>
-				<!-- Fin Menú general  -->
-
+				
 			</section>
 	</nav>
 </div>

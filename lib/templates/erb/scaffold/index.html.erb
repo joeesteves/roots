@@ -1,4 +1,4 @@
-<h1>Listing <%= plural_table_name %></h1>
+<h1><%= plural_table_name %></h1>
 
 <table>
   <thead>
@@ -28,4 +28,4 @@
 
 <br>
 
-<%%= link_to 'New <%= human_name %>', new_<%= singular_table_name %>_path %>
+<%%= link_to 'Nuevo <%= human_name %>', new_<%= singular_table_name %>_path, :class => "button tiny" %>

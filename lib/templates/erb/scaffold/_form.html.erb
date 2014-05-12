@@ -1,32 +1,41 @@
-<%%= form_for(@<%= singular_table_name %>) do |f| %>
-  <%% if @<%= singular_table_name %>.errors.any? %>
+<div class="row">
+  <div class="panel">
+    <%%= form_for(@<%= singular_table_name %>) do |f| %>
+    <%% if @<%= singular_table_name %>.errors.any? %>
     <div id="error_explanation">
       <h2><%%= pluralize(@<%= singular_table_name %>.errors.count, "error") %> prohibited this <%= singular_table_name %> from being saved:</h2>
 
       <ul>
-      <%% @<%= singular_table_name %>.errors.full_messages.each do |msg| %>
+        <%% @<%= singular_table_name %>.errors.full_messages.each do |msg| %>
         <li><%%= msg %></li>
-      <%% end %>
+        <%% end %>
       </ul>
     </div>
-  <%% end %>
+    <%% end %>
 
-<% attributes.each do |attribute| -%>
-  <div class="field">
-<% if attribute.password_digest? -%>
-    <%%= f.label :password %><br>
+    <% attributes.each do |attribute| -%>
+    <% if attribute.password_digest? -%>
+    <%%= f.label :password %>
     <%%= f.password_field :password %>
-  </div>
-  <div>
     <%%= f.label :password_confirmation %><br>
     <%%= f.password_field :password_confirmation %>
-<% else -%>
-    <%%= f.label :<%= attribute.name %> %><br>
-    <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
-<% end -%>
+    <% else -%>
+    <div class="row collapse">
+      <div class="small-3 columns">
+        <span class="prefix">
+          <%%= f.label :<%= attribute.name %> %>
+        </span>
+      </div>
+      <div class="small-9 columns">
+
+        <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+        <% end -%>
+      </div>
+    </div>
+    <% end -%>
+    <div class="actions">
+      <%%= f.submit :class => "button tiny", :style => "width:100%" %>
+    </div>
+    <%% end %>
   </div>
-<% end -%>
-  <div class="actions">
-    <%%= f.submit %>
-  </div>
-<%% end %>
+</div>
