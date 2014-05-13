@@ -1,4 +1,4 @@
 require 'test_helper'
 
-class Rb::BienvenidosHelperTest < ActionView::TestCase
+class Rba::BienvenidosHelperTest < ActionView::TestCase
 end

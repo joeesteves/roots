@@ -23,7 +23,7 @@ footer {
 }
 
 //Para el TOPBAR DROPDOWN-LINKS
-nav section ul li ul li ul li:not(.menu_label) {
+nav section ul li ul li ul li:not(.menu_label, .simple) {
 text-align:right;
 text-transform:uppercase;
 }
@@ -46,7 +46,7 @@ nav li {
 text-transform:uppercase;
 }
 
-.top-bar-section ul.dropdown {
+.top-bar-section ul.dropdown:not(.simple) {
 width: 450px;
 }
 
@@ -57,7 +57,7 @@ top:0px;
 
 	}
 
-.dropdown li ul {
+.dropdown:not(.simple) li ul {
 width:150px;
 float:left;
 }

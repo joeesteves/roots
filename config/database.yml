@@ -16,7 +16,7 @@ test:
 production:
   adapter: mysql2
   encode: utf8
-  database: roots_dev
+  database: roots
   pool: 5
   timeout: 5000
   username: root

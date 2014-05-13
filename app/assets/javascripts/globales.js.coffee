@@ -29,10 +29,8 @@ jQuery.fn.acciones = () ->
 				ids: jQuery.fn.getSelected()
 			dataType: "script"
 			complete: ->
-				$('#jqxgrid').jqxGrid('updatebounddata');
-
-   
-
+				$('#jqxgrid').jqxGrid('updatebounddata')
+				$("#jqxgrid").jqxGrid('clearselection')
 
 #Funcion para convertir los nombres que pasa cada index en un json utilizado por fx grid
 jQuery.fn.fill_datafields = (col_nombres) ->
