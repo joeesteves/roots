@@ -1,1 +1,27 @@
-<%= render 'rba/sesiones/new' %>
+<html>
+<head>
+	<%= javascript_include_tag "jquery" %>
+	<%= javascript_include_tag "jquery_ujs" %>
+	<%= javascript_include_tag "foundation" %>
+	<%= stylesheet_link_tag    "application" %>
+</head>
+<body>
+	<div class="row">
+		<div class="small-12 columns">
+			<%= render 'titulo' %> 
+		</div>
+	</div>
+	<div class="row">
+		<div class="small-8 columns">
+			<div class="panel">
+				<%= render 'contenido' %>
+			</div>
+		</div>
+		<div class="small-4 columns">
+			<div class="panel">
+				<%= render 'rba/sesiones/new' %>
+			</div>
+		</div>
+	</div>	
+</body>
+</html>

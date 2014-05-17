@@ -1,13 +1,17 @@
 ready = ->
 	if $('#action_name').val() == 'index'
-		_url = "pruebas.json"
-		col_nombres = ["id","nombre","apellido"]
+		col_nombres = ["id", "nombre","apellido"]
 		col_props =  [
-			{ text: 'Id', datafield: 'id', width: 'auto' },
-			{ text: 'Nombre', datafield: 'nombre', width: '50%' },
-			{ text: 'Apellido', datafield: 'apellido', width: ' 50%' },
+			{ text: 'Nombre', datafield: 'nombre', width: '40%' },
+			{ text: 'Apellido', datafield: 'apellido', width: ' 40%' },
+			{ text: 'Editar', datafield: 'Editar', columntype: 'button',cellsrenderer: ->
+	      return 'Editar'
+			buttonclick: (row) ->
+				jQuery.fn.editar(row)
+			}
 			]
 		jQuery.fn.grid(col_nombres, col_props) 
+
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

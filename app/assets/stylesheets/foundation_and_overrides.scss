@@ -8,8 +8,7 @@
 // Allows the use of rem-calc() or lower-bound() in your settings
 @import "foundation/functions";
 
-
-//Particularizaciones
+// Particularizaciones
 .has-dropdown, .dropdown, .top-bar,div .sticky,div .fixed {
 z-index: 200;
 }

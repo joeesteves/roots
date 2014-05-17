@@ -28,7 +28,7 @@ class Rba::UsuariosController < ApplicationController
 
     respond_to do |format|
       if @rba_usuario.save
-        format.html { redirect_to @rba_usuario, notice: 'Usuario was successfully created.' }
+        format.html { redirect_to rba_usuarios_path, notice: 'Usuario was successfully created.' }
         format.json { render action: 'show', status: :created, location: @rba_usuario }
       else
         format.html { render action: 'new' }
@@ -42,7 +42,7 @@ class Rba::UsuariosController < ApplicationController
   def update
     respond_to do |format|
       if @rba_usuario.update(rba_usuario_params)
-        format.html { redirect_to @rba_usuario, notice: 'Usuario was successfully updated.' }
+        format.html { redirect_to rba_usuarios_path, notice: 'Usuario was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
