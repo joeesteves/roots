@@ -23,7 +23,7 @@ footer {
 }
 
 //Para el TOPBAR DROPDOWN-LINKS
-nav section ul li ul li ul li:not(.menu_label) {
+nav section ul li ul li ul li:not(.menu_label, .simple) {
 text-align:right;
 text-transform:uppercase;
 }
@@ -46,7 +46,7 @@ nav li {
 text-transform:uppercase;
 }
 
-.top-bar-section ul.dropdown {
+.top-bar-section ul.dropdown:not(.simple) {
 width: 450px;
 }
 
@@ -57,7 +57,7 @@ top:0px;
 
 	}
 
-.dropdown li ul {
+.dropdown:not(.simple) li ul {
 width:150px;
 float:left;
 }
@@ -105,7 +105,7 @@ $body-font-family: 'Raleway', sans-serif;
 // $default-float: left;
 
 // We use these as default colors throughout
-// $primary-color: #008CBA;
+$primary-color: #333333; // #008CBA
 // $secondary-color: #e7e7e7;
 // $alert-color: #f04124;
 // $success-color: #43AC6A;

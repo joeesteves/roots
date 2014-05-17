@@ -1,0 +1,1 @@
+(function(){var d;d=function(){var d,e,t;return"index"===$("#action_name").val()?(t="pruebas.json",d=["id","nombre","apellido"],e=[{text:"Id",datafield:"id",width:"auto"},{text:"Nombre",datafield:"nombre",width:"50%"},{text:"Apellido",datafield:"apellido",width:" 50%"}],jQuery.fn.grid(d,e)):void 0},$(document).ready(d),$(document).on("page:load",d)}).call(this);

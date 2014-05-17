@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require foundation
 //= require turbolinks
-//= require rb
+//= require globales
+//= require rba
 
 $(function(){ $(document).foundation(); });

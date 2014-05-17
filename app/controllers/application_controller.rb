@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
 		if session[:usuario_id] == nil 
 			redirect_to root_url
 		else 				
-			@usuario_actual ||= Rb::Usuario.find(session[:usuario_id]) 
+			@usuario_actual ||= Rba::Usuario.find(session[:usuario_id]) 
 		end
 	end	
 

@@ -1,15 +1,25 @@
 Roots::Application.routes.draw do
-  namespace :rb do
-    resources :usuarios
-		resources :sesiones
+  resources :agendas do
+    post 'delete_selection', on: :collection
   end
-	get 'salir', to: 'rb/sesiones#salir', :as => :salir
+
+  resources :pruebas do
+    post 'delete_selection', on: :collection
+  end
+
+  namespace :rba do
+    resources :usuarios do
+     post 'delete_selection', on: :collection
+		end
+    resources :sesiones
+  end
+	get 'salir', to: 'rba/sesiones#salir', :as => :salir
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-	  root 'rb/bienvenidos#index'
+	  root 'rba/bienvenidos#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
