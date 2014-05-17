@@ -28,8 +28,8 @@ class PruebasController < ApplicationController
 
     respond_to do |format|
       if @prueba.save
-        format.html { redirect_to @prueba, notice: 'Prueba was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @prueba }
+        format.html { redirect_to pruebas_path, notice: 'Prueba was successfully created.' }
+        format.json { render action: 'index', status: :created, location: @prueba }
       else
         format.html { render action: 'new' }
         format.json { render json: @prueba.errors, status: :unprocessable_entity }
@@ -42,7 +42,7 @@ class PruebasController < ApplicationController
   def update
     respond_to do |format|
       if @prueba.update(prueba_params)
-        format.html { redirect_to @prueba, notice: 'Prueba was successfully updated.' }
+        format.html { redirect_to pruebas_path, notice: 'Prueba was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
