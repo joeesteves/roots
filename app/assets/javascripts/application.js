@@ -14,7 +14,7 @@
 //= require jquery_ujs
 //= require foundation
 //= require turbolinks
-//= require globales
+//= require index_grid
 //= require rba
 
 $(function(){ $(document).foundation(); });

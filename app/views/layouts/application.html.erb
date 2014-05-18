@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title><%= content_for?(:title) ? yield(:title) : "Root's e.r.p." %></title>
-<!-- Utiles variables global -->
-<%= render "layouts/globals/var" %>
+		<title><%= content_for?(:title) ? yield(:title) : "Root's e.r.p." %></title>
+		<!-- Variables global para acceder desde js 
+		controller_name, conroller_path, action_name, root_path -->
 
-<%= stylesheet_link_tag    "application" %>
-<%= javascript_include_tag "vendor/modernizr" %>
-<%= javascript_include_tag "application" %>
-<%= javascript_include_tag params[:controller] %>
+		<%= render "layouts/globals/var" %>
 
-<%= csrf_meta_tags %>
+		<%= stylesheet_link_tag    "application" %>
+		<%= javascript_include_tag "vendor/modernizr" %>
+		<%= javascript_include_tag "application" %>
+		<%= javascript_include_tag params[:controller] %>
 
-</head>
+		<%= csrf_meta_tags %>
+	</head>
 
-<body>
-	
-	<%= render "layouts/globals/menu" %>
-
-	<%= yield %>
-
-</body>
+	<body>
+	<!-- El if es para que en la pantalla de inicio no muestre el menu -->
+		<% unless controller_name == "bienvenidos" %>
+			<%= render "layouts/globals/menu" %>
+		<% end %>
+		<%= yield %>
+	</body>
 </html>
