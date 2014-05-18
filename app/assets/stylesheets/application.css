@@ -12,3 +12,7 @@
  *= require foundation_and_overrides
  *= require_tree .
  */
+ /* clase utilizada en los titulos de las acciones crear, editar */
+.titulo_accion {
+text-align:center;
+}

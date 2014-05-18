@@ -1,3 +1,4 @@
+<input id="esForm" type="hidden" value=true />
 <div class="row">
   <div class="panel">
     <%%= form_for(@<%= singular_table_name %>) do |f| %>
@@ -13,28 +14,27 @@
     </div>
     <%% end %>
 
-    <% attributes.each do |attribute| -%>
-    <% if attribute.password_digest? -%>
-    <%%= f.label :password %>
-    <%%= f.password_field :password %>
-    <%%= f.label :password_confirmation %><br>
-    <%%= f.password_field :password_confirmation %>
-    <% else -%>
     <div class="row collapse">
-      <div class="small-3 columns">
-        <span class="prefix">
-          <%%= f.label :<%= attribute.name %> %>
-        </span>
-      </div>
-      <div class="small-9 columns">
-
-        <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
-        <% end -%>
-      </div>
+      <% attributes.each do |attribute| -%>
+      <% if attribute.password_digest? -%>
+        <%%= f.label :password %>
+        <%%= f.password_field :password %>
+        <%%= f.label :password_confirmation %><br>
+        <%%= f.password_field :password_confirmation %>
+      <% else -%>
+        <div class="small-3 columns">
+          <span class="prefix">
+            <%= attribute.name %>
+          </span>
+          <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+          <% end -%>
+        </div>
+      <% end -%>
     </div>
-    <% end -%>
-    <div class="actions">
-      <%%= f.submit :class => "button tiny", :style => "width:100%" %>
+    <div class="row">
+      <div class="small-12 columns">
+        <%%= f.submit "Guardar" :class => "button tiny", :style => "width:100%" %>
+      </div>
     </div>
     <%% end %>
   </div>
