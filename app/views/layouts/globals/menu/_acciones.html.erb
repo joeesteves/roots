@@ -1,11 +1,17 @@
-	<li class="has-dropdown">
-		<a href="#">Acciones</a>
-		<ul class="dropdown simple">
-			<li>
-				<ul>				
+				<% if action_name == 'index'%>
+<li class="has-dropdown">
+
+	<a href="#">Acciones</a>
+	<ul class="dropdown simple">
+		<li>
+			<ul>				
 					<li><a id="nuevo">Nuevo</a></li>
 					<li><a id="borrar">Borrar</a></li>
-				</ul>
-			</li>
-		</ul>
-	</li>
+			</ul>
+		</li>
+	</ul>
+</li>
+				<% else %>
+
+<li>				<a href='/<%= controller_path %>'>Atras</a>
+				</li>				<% end %>

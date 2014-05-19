@@ -17,23 +17,23 @@
     <div class="row collapse">
       <% attributes.each do |attribute| -%>
       <% if attribute.password_digest? -%>
-        <%%= f.label :password %>
-        <%%= f.password_field :password %>
-        <%%= f.label :password_confirmation %><br>
-        <%%= f.password_field :password_confirmation %>
+      <%%= f.label :password %>
+      <%%= f.password_field :password %>
+      <%%= f.label :password_confirmation %><br>
+      <%%= f.password_field :password_confirmation %>
       <% else -%>
-        <div class="small-3 columns">
-          <span class="prefix">
-            <%= attribute.name %>
-          </span>
-          <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
-          <% end -%>
-        </div>
+      <div class="small-3 columns">
+        <span class="prefix postfix">
+         <%= attribute.name %>
+        </span>
+        <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+      </div>
+      <% end -%>
       <% end -%>
     </div>
     <div class="row">
       <div class="small-12 columns">
-        <%%= f.submit "Guardar" :class => "button tiny", :style => "width:100%" %>
+        <%%= f.submit "Guardar", :class => "button tiny", :style => "width:100%" %>
       </div>
     </div>
     <%% end %>
