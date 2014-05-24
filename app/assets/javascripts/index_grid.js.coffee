@@ -1,6 +1,7 @@
 //= require index_acciones
-
 jQuery.fn.grid = (col_nombres, col_props)->
+	$("#jqxgrid").jqxGrid('destroy')
+	$(".panelGrid" ).append('<div id="jqxgrid"></div>')
 	jQuery.fn.acciones()
 	url = $('#controller_path').val() + '.json'
 	source =

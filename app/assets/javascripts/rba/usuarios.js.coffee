@@ -11,10 +11,9 @@ ready = ->
 				jQuery.fn.editar(row)
 			}
 			]
-
 		jQuery.fn.grid(col_nombres, col_props) 
 	else if $('#esForm').val() == 'true'
 		$('#rba_usuario_usuario').focus()
 
-$(document).ready(ready)
 $(document).on('page:load', ready)
+$(document).ready(ready)
