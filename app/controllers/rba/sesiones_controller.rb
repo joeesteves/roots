@@ -10,8 +10,8 @@ class Rba::SesionesController < ApplicationController
 			session[:usuario_id] = usuario.id
 			redirect_to rba_usuarios_url, :notice => "Adentro! Dijo Juan Carlos Saravia"
 		else
-			flash.now.alert = "Datos Invalidos, contactese con nuestros operadores"
-			redirect_to root_url
+			
+			redirect_to root_url, :notice => "Usuario ó contraseña incorrectos"
 		end
 	end
 

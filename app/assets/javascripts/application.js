@@ -16,9 +16,4 @@
 //= require turbolinks
 //= require index_grid
 //= require rba
-//= require fxUtilesDef
-//= require fxUtilesActivacion
-
-
-
 $(function(){ $(document).foundation(); });

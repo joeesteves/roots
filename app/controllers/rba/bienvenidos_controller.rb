@@ -1,6 +1,6 @@
 class Rba::BienvenidosController < ApplicationController
 	skip_before_filter :validar_usuario
-	def index
+	def inicio
 
 	end
 end
