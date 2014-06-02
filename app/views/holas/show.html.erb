@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @hola.nombre %>
+</p>
+
+<p>
+  <strong>Apellido:</strong>
+  <%= @hola.apellido %>
+</p>
+
+<%= link_to 'Editar', edit_hola_path(@hola), :class => "button tiny" %>
+<%= link_to 'Volver', holas_path, :class => "button tiny" %>

@@ -13,6 +13,6 @@
 //= require rba/grid/jqxgrid.pager
 //= require rba/grid/jqxgrid.grouping
 //= require rba/grid/jqxcheckbox
-
+//= require rba/grid/gridLoc
 
 

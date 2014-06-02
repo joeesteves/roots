@@ -50,11 +50,18 @@ class <%= controller_class_name %>Controller < ApplicationController
     redirect_to <%= index_helper %>_url, notice: <%= "'#{human_name} eliminado.'" %>
   end
 
+  def delete_selection
+    <%= class_name %>.delete(params[:ids]) 
+    render nothing: true  
+  end
+ 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_<%= singular_table_name %>
       @<%= singular_table_name %> = <%= orm_class.find(class_name, "params[:id]") %>
     end
+
+
 
     # Only allow a trusted parameter "white list" through.
     def <%= "#{singular_table_name}_params" %>

@@ -1,4 +1,9 @@
 Roots::Application.routes.draw do
+ 
+ resources :holas do
+    post 'delete_selection', on: :collection
+  end
+
   resources :pruebas
 
   resources :agendas do
