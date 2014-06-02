@@ -44,6 +44,10 @@ class PruebasController < ApplicationController
     @prueba.destroy
     redirect_to pruebas_url, notice: 'Prueba eliminado.'
   end
+  def delete_selection
+    Prueba.delete(params[:ids])
+    render nothing: true
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
