@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rba_empresagrupo.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_empresagrupo.nombre %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rba_empresagrupo.desc %>
+</p>
+
+<%= link_to 'Editar', edit_rba_empresagrupo_path(@rba_empresagrupo), :class => "button tiny" %>
+<%= link_to 'Volver', rba_empresagrupos_path, :class => "button tiny" %>

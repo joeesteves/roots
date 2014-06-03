@@ -50,7 +50,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     redirect_to <%= index_helper %>_url, notice: <%= "'#{human_name} eliminado.'" %>
   end
 
-  def delete_selection
+  def borrar_seleccion
     <%= class_name %>.delete(params[:ids]) 
     render nothing: true  
   end

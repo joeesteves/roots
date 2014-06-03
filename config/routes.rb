@@ -1,25 +1,15 @@
 Roots::Application.routes.draw do
  
- resources :holas do
-    post 'delete_selection', on: :collection
-  end
-
-  resources :pruebas
-
-  resources :agendas do
-    post 'delete_selection', on: :collection
-  end
-
-  resources :pruebas do
-    post 'delete_selection', on: :collection
-  end
-
   namespace :rba do
     resources :usuarios do
-     post 'delete_selection', on: :collection
+     post 'borrar_seleccion', on: :collection
 		end
     resources :sesiones
+    resources :empresagrupos do
+     post 'borrar_seleccion', on: :collection
+    end
   end
+
 	get 'salir', to: 'rba/sesiones#salir', :as => :salir
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -11,6 +11,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 	inflect.irregular 'nota', 'notas'
   inflect.irregular 'catfiscal', 'catfiscales'
   inflect.irregular 'sesion', 'sesiones'
+  
 end
 
 # These inflection rules are supported but not enabled by default:
