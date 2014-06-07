@@ -1,46 +1,38 @@
 <input id="esForm" type="hidden" value=true />
-<%= form_for(@rba_usuario) do |f| %>
-<% if @rba_usuario.errors.any? %>
-<div id="error_explanation">
-  <h2><%= pluralize(@rba_usuario.errors.count, "error") %> prohibited this rba_usuario from being saved:</h2>
+<%= form_for @rba_usuario, builder: EstandarFormBuilder do |f| %>
 
-  <ul>
-    <% @rba_usuario.errors.full_messages.each do |msg| %>
-    <li><%= msg %></li>
-    <% end %>
-  </ul>
-</div>
-<% end %>
+<%= f.errores %>
 
 <div class="row collapse">
   <div class="panel">
-
-    <div class="small-4 columns">
-    <span class="prefix postfix postfix"> Usuario </span>
+    <div class="small-4 columns">    
       <%= f.text_field :usuario, :tabindex => 1 %>
     </div>
+
     <div class="small-4 columns">
-     <span class="prefix postfix"> Nombre </span>
       <%= f.text_field :nombre, :tabindex => 2 %>
     </div>
+    
     <div class="small-4 columns">
-     <span class="prefix postfix"> Apellido </span>
       <%= f.text_field :apellido, :tabindex => 3 %>
     </div>
+    
     <div class="small-4 columns">    
-     <span class="prefix postfix"> E-mail </span>
       <%= f.text_field :mail, :tabindex => 4 %>
     </div>
+    
     <div class="small-4 columns">
-     <span class="prefix postfix"> Clave </span>
-      <%= f.password_field :password, :tabindex => 5 %>
+      <%= f.password_field :password, label: "Clave", :tabindex => 5 %>
     </div>
+    
     <div class="small-4 columns">
-     <span class="prefix postfix"> Confirmar clave </span>
-      <%= f.password_field :password_confirmation, :tabindex => 6 %>
+      <%= f.password_field :password_confirmation, label: "Confirmar Clave", :tabindex => 6 %>
     </div>
-    <%= f.submit "Guardar", :class => "button tiny", :style => "width:100%" %>
+    
+    <%= f.submit %>
+  
   </div>
+
 </div>
 
 <% end %>

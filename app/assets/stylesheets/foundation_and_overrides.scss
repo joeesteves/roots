@@ -13,6 +13,15 @@
 z-index: 200;
 }
 
+// EstandarFormBuilder le pega esta clase a todos los botones
+.boton_largo {
+	width:100%;
+}
+// 
+.index {
+	height:95%;
+}
+
 
 footer {
 	width: rem-calc(970);

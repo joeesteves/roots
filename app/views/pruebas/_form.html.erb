@@ -1,0 +1,25 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+  <%= form_for @prueba, builder: EstandarFormBuilder do |f| %>
+    <% f.errores %>
+
+    <div class="row collapse">
+      
+      <div class="small-3 columns">
+        <%= f.text_field :nombre %>
+      </div>
+      <div class="small-3 columns">
+        <%= f.text_field :apellido %>
+      </div>
+      
+    </div>
+ 
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.submit %>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>

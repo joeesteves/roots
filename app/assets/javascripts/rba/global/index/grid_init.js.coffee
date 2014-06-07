@@ -1,16 +1,19 @@
-jQuery.fn.grid = (col_nombres, col_props)->
+jQuery.fn.gridInit = (col_nombres, col_props)->
 	$("#cargando").css('display', 'block')
 	$("#jqxgrid").jqxGrid('destroy')
 	$(".panelGrid" ).append('<div id="jqxgrid"></div>')
 	jQuery.fn.acciones()
 	url = $('#controller_path').val() + '.json'
+	
 	source =
 	datatype: "json"
 	datafields: col_nombres
 	id: 'id'
 	url: url
+	
 	dataAdapter = new $.jqx.dataAdapter(source)
-	$("#jqxgrid").jqxGrid
+	opciones = 
+		height: '100%',
 		source: dataAdapter,
 		ready: ->
 			$('#jqxgrid').jqxGrid('localizestrings', jQuery.fn.gridLoc())
@@ -27,6 +30,6 @@ jQuery.fn.grid = (col_nombres, col_props)->
 		# selectionmode: 'checkbox',
 		selectionmode: 'multiplerows',
 		filterable: true,
+		pagesizeoptions: ['25','50','100']
 		pageable: true
-
-
+	$("#jqxgrid").jqxGrid(opciones)

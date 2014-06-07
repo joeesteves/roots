@@ -1,5 +1,7 @@
 Roots::Application.routes.draw do
  
+  resources :pruebas
+
   namespace :rba do
     resources :usuarios do
      post 'borrar_seleccion', on: :collection

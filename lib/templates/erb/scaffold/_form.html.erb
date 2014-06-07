@@ -1,41 +1,33 @@
 <input id="esForm" type="hidden" value=true />
 <div class="row">
   <div class="panel">
-    <%%= form_for(@<%= singular_table_name %>) do |f| %>
-    <%% if @<%= singular_table_name %>.errors.any? %>
-    <div id="error_explanation">
-      <h2><%%= pluralize(@<%= singular_table_name %>.errors.count, "error") %> prohibited this <%= singular_table_name %> from being saved:</h2>
-
-      <ul>
-        <%% @<%= singular_table_name %>.errors.full_messages.each do |msg| %>
-        <li><%%= msg %></li>
-        <%% end %>
-      </ul>
-    </div>
-    <%% end %>
+  <%%= form_for @<%= singular_table_name %>, builder: EstandarFormBuilder do |f| %>
+    <%% f.errores %>
 
     <div class="row collapse">
-      <% attributes.each do |attribute| -%>
-      <% if attribute.password_digest? -%>
+      
+<% attributes.each do |attribute| -%>
+<% if attribute.password_digest? -%>
+      <div class="small-3 columns">
       <%%= f.label :password %>
       <%%= f.password_field :password %>
       <%%= f.label :password_confirmation %><br>
       <%%= f.password_field :password_confirmation %>
-      <% else -%>
+      </div>
+<% else -%>
       <div class="small-3 columns">
-        <span class="prefix postfix">
-         <%= attribute.name %>
-        </span>
         <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
       </div>
-      <% end -%>
-      <% end -%>
+<% end -%>
+<% end -%>
+      
     </div>
+ 
     <div class="row">
       <div class="small-12 columns">
-        <%%= f.submit "Guardar", :class => "button tiny", :style => "width:100%" %>
+        <%%= f.submit %>
       </div>
     </div>
-    <%% end %>
+  <%% end %>
   </div>
 </div>

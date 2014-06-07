@@ -23,5 +23,5 @@ jQuery.fn.getSelected = ->
 	seleccion = $('#jqxgrid').jqxGrid('getselectedrowindexes')
 	seleccion_ids	= []
 	$.each(seleccion, (row) ->
-		seleccion_ids.push($('#jqxgrid').jqxGrid('getrowdata', row).id))
+		seleccion_ids.push($('#jqxgrid').jqxGrid('getrowdata', seleccion[row]).id))
 	seleccion_ids
