@@ -5,4 +5,8 @@
 //= require rba/global/utiles/fxUtilesDef
 //= require rba/global/utiles/fxComunicacion
 //= require rba/global/utiles/fxUtilesActivacion
+//= require rba/global/utiles/chosen_init
+//= require rba/global/utiles/jquery.inputmask.bundle.min
+
+
 

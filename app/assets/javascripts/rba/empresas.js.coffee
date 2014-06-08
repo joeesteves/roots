@@ -8,6 +8,7 @@ ready = ->
 		['empresagrupo', '15%', 'Grupo']
 	]
 	jQuery.fn.gridPrepDatos(nombres, propiedades)
+	$('#rba_empresa_cuit').inputmask('99-99999999-9') if $('#esForm').val() == 'true'	
 	
 $(document).on('page:load', ready)
 $(document).ready(ready)
