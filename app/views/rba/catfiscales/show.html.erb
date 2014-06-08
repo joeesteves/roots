@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rba_catfiscal.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_catfiscal.nombre %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rba_catfiscal.desc %>
+</p>
+
+<%= link_to 'Editar', edit_rba_catfiscal_path(@rba_catfiscal), :class => "button tiny" %>
+<%= link_to 'Volver', rba_catfiscales_path, :class => "button tiny" %>

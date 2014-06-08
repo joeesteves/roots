@@ -12,7 +12,10 @@
 .has-dropdown, .dropdown, .top-bar,div .sticky,div .fixed {
 z-index: 200;
 }
-
+// Por si son impares
+div .row > .columns:last-child {
+	float: left
+}
 // EstandarFormBuilder le pega esta clase a todos los botones
 .boton_largo {
 	width:100%;

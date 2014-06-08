@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rba_empresa.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_empresa.nombre %>
+</p>
+
+<p>
+  <strong>Catfiscal:</strong>
+  <%= @rba_empresa.catfiscal %>
+</p>
+
+<p>
+  <strong>Cuit:</strong>
+  <%= @rba_empresa.cuit %>
+</p>
+
+<p>
+  <strong>Empresagrupo:</strong>
+  <%= @rba_empresa.empresagrupo %>
+</p>
+
+<%= link_to 'Editar', edit_rba_empresa_path(@rba_empresa), :class => "button tiny" %>
+<%= link_to 'Volver', rba_empresas_path, :class => "button tiny" %>

@@ -1,0 +1,34 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+  <%= form_for @rba_empresa, builder: EstandarFormBuilder do |f| %>
+    <% f.errores %>
+
+    <div class="row">
+      
+      <div class="small-3 columns">
+        <%= f.text_field :codigo %>
+      </div>
+      <div class="small-3 columns">
+        <%= f.text_field :nombre %>
+      </div>
+      <div class="small-3 columns">
+        <%= f.collection_select :catfiscal_id, Rba::Catfiscal.all, :id, :nombre, {}, {}, label: 'Categoria Fiscal' %>
+      </div>
+      <div class="small-3 columns">
+        <%= f.text_field :cuit, label: 'CUIT' %>
+      </div>
+      <div class="small-3 columns">
+        <%= f.collection_select :empresagrupo_id, Rba::Empresagrupo.all, :id, :nombre, {}, {}, label: 'Grupo' %>
+      </div>
+      
+    </div>
+ 
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.submit %>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>

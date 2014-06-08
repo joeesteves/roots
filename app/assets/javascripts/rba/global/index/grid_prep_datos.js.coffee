@@ -4,7 +4,12 @@ jQuery.fn.gridPrepDatos = (columnas_datos_array, columnas_prop_array) ->
 		columnas_datos_json.push({name: nombre}) for nombre in columnas_datos_array
 
 		columnas_prop_json = []
-		columnas_prop_json.push({text: dato[0], datafield: dato[0].toLowerCase(), width: dato[1]}) for dato in columnas_prop_array
+		for dato in columnas_prop_array
+			if dato[2] != undefined
+				titulo = dato[2]
+			else
+				titulo = dato[0]
+			columnas_prop_json.push({text: titulo, datafield: dato[0].toLowerCase(), width: dato[1]}) 
 		
 		columnas_prop_json.push
 			text: 'Editar'

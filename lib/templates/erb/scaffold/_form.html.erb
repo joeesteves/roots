@@ -4,7 +4,7 @@
   <%%= form_for @<%= singular_table_name %>, builder: EstandarFormBuilder do |f| %>
     <%% f.errores %>
 
-    <div class="row collapse">
+    <div class="row">
       
 <% attributes.each do |attribute| -%>
 <% if attribute.password_digest? -%>

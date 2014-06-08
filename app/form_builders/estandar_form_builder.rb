@@ -2,7 +2,8 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 	delegate  :content_tag, to: :@template
 	%w[text_field text_area password_field collection_select].each do |method_name|
 
-		define_method(method_name) do |nombre, options={}|	
+		define_method(method_name) do |nombre,*args|	
+			options = args.extract_options!
 			if options[:label]
 				label = options[:label]
 			else
@@ -10,7 +11,7 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 			end
 
 			"<span class='prefix postfix'>#{label.to_s.capitalize}</span>".html_safe + 
-			super(nombre, options={})
+			super(nombre,*args)
 		
 		end
 

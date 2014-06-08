@@ -1,0 +1,2 @@
+module Rba::EmpresasHelper
+end

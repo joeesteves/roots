@@ -1,6 +1,12 @@
 Roots::Application.routes.draw do
  
-  resources :pruebas
+  namespace :rba do
+    resources :empresas
+  end
+
+  namespace :rba do
+    resources :catfiscales
+  end
 
   namespace :rba do
     resources :usuarios do
