@@ -16,7 +16,7 @@
         <%= f.collection_select :catfiscal_id, Rba::Catfiscal.all, :id, :nombre, {}, {}, label: 'Categoria Fiscal' %>
       </div>
       <div class="small-3 columns">
-        <%= f.text_field :cuit, label: 'CUIT' %>
+        <%= f.text_field :cuit, {'data-inputmask' => "'mask': '99-99999999-9'"} , {label: 'C.U.I.T'}%>
       </div>
       <div class="small-3 columns">
         <%= f.collection_select :empresagrupo_id, Rba::Empresagrupo.all, :id, :nombre, {}, {}, label: 'Grupo' %>

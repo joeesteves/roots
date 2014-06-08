@@ -22,3 +22,4 @@ jQuery.fn.gridPrepDatos = (columnas_datos_array, columnas_prop_array) ->
 
 	else if $('#esForm').val() == 'true'
 	 	$('input:text:not(.topbar_input)').first().focus()
+	 	$('input').inputmask()
