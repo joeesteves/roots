@@ -1,21 +1,13 @@
 Roots::Application.routes.draw do
- 
-  namespace :rba do
-    resources :empresas
-  end
-
-  namespace :rba do
-    resources :catfiscales
-  end
-
-  namespace :rba do
-    resources :usuarios do
-     post 'borrar_seleccion', on: :collection
-		end
-    resources :sesiones
-    resources :empresagrupos do
-     post 'borrar_seleccion', on: :collection
+ concern :borrar_seleccion do
+    collection do
+      post :borrar_seleccion
     end
+  end
+
+  namespace :rba do
+    resources :usuarios,:empresagrupos, :empresas, :catfiscales, concerns: [:borrar_seleccion]
+    resources :sesiones
   end
 
 	get 'salir', to: 'rba/sesiones#salir', :as => :salir

@@ -22,4 +22,4 @@ jQuery.fn.gridPrepDatos = (columnas_datos_array, columnas_prop_array) ->
 
 	else if $('#esForm').val() == 'true'
 	 	$('input:text:not(.topbar_input)').first().focus()
-	 	$('input').inputmask()
+	 	$('input').inputmask() # en el f.text_field :campo, 'data-inputmask' => "'mask:' '99-999-9'", {}
