@@ -1,4 +1,4 @@
-//= require rba/grid
+//= require rba/widgets
 //= require rba/global/index/index_acciones
 //= require rba/global/index/grid_prep_datos
 //= require rba/global/index/grid_init
