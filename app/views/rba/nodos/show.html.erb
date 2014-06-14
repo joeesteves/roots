@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_nodo.nombre %>
+</p>
+
+<p>
+  <strong>Arbol:</strong>
+  <%= @rba_nodo.arbol %>
+</p>
+
+<%= link_to 'Editar', edit_rba_nodo_path(@rba_nodo), :class => "button tiny" %>
+<%= link_to 'Volver', rba_nodos_path, :class => "button tiny" %>

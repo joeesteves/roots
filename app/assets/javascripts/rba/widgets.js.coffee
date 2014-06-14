@@ -6,5 +6,7 @@
 //= require rba/global/widgets/base/jqxlistbox
 //= require rba/global/widgets/base/jqxdropdownlist
 //= require rba/global/widgets/base/jqxcheckbox
+//= require rba/global/widgets/base/jqxdragdrop
+
 //= require rba/global/widgets/grid
 //= require rba/global/widgets/arbol

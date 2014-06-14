@@ -1,4 +1,12 @@
 Roots::Application.routes.draw do
+  namespace :rba do
+    resources :nodos
+  end
+
+  namespace :rba do
+    resources :arboles
+  end
+
  concern :borrar_seleccion do
     collection do
       post :borrar_seleccion

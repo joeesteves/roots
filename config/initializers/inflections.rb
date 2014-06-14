@@ -11,6 +11,10 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 	inflect.irregular 'nota', 'notas'
   inflect.irregular 'catfiscal', 'catfiscales'
   inflect.irregular 'sesion', 'sesiones'
+  inflect.irregular 'arbol', 'arboles'
+  inflect.irregular 'model', 'modelos'
+
+
   
 end
 

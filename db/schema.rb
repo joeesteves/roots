@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140607234411) do
+ActiveRecord::Schema.define(version: 20140613212357) do
+
+  create_table "rba_arboles", force: true do |t|
+    t.string   "nombre"
+    t.integer  "model_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rba_arboles", ["model_id"], name: "index_rba_arboles_on_model_id", using: :btree
 
   create_table "rba_catfiscales", force: true do |t|
     t.string   "codigo"
@@ -41,6 +50,30 @@ ActiveRecord::Schema.define(version: 20140607234411) do
 
   add_index "rba_empresas", ["catfiscal_id"], name: "index_rba_empresas_on_catfiscal_id", using: :btree
   add_index "rba_empresas", ["empresagrupo_id"], name: "index_rba_empresas_on_empresagrupo_id", using: :btree
+
+  create_table "rba_items_nodos", force: true do |t|
+    t.integer "item_id"
+    t.integer "nodo_id"
+  end
+
+  add_index "rba_items_nodos", ["item_id"], name: "index_rba_items_nodos_on_item_id", using: :btree
+  add_index "rba_items_nodos", ["nodo_id"], name: "index_rba_items_nodos_on_nodo_id", using: :btree
+
+  create_table "rba_modelos", force: true do |t|
+    t.string   "nombre"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "rba_nodos", force: true do |t|
+    t.string   "nombre"
+    t.integer  "arbol_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "padre_id"
+  end
+
+  add_index "rba_nodos", ["arbol_id"], name: "index_rba_nodos_on_arbol_id", using: :btree
 
   create_table "rba_usuarios", force: true do |t|
     t.string   "usuario"

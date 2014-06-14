@@ -1,0 +1,28 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+  <%= form_for @rba_nodo, builder: EstandarFormBuilder do |f| %>
+    <% f.errores %>
+
+    <div class="row">
+      
+      <div class="small-3 columns">
+        <%= f.text_field :nombre %>
+      </div>
+      <div class="small-3 columns">
+        <%= f.text_field :padre_id %>
+      </div>
+      <div class="small-3 columns">
+        <%= f.collection_select :arbol_id, Rba::Arbol.all, :id, :nombre %>
+      </div>
+      
+    </div>
+ 
+    <div class="row">
+      <div class="small-12 columns">
+        <%= f.submit %>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>

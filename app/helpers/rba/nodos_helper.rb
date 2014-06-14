@@ -1,0 +1,2 @@
+module Rba::NodosHelper
+end
