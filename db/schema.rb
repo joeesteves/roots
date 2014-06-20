@@ -11,16 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140613212357) do
+ActiveRecord::Schema.define(version: 20140616215028) do
 
   create_table "rba_arboles", force: true do |t|
     t.string   "nombre"
-    t.integer  "model_id"
+    t.string   "modelo"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "rba_arboles", ["model_id"], name: "index_rba_arboles_on_model_id", using: :btree
+  add_index "rba_arboles", ["modelo"], name: "index_rba_arboles_on_modelo", using: :btree
 
   create_table "rba_catfiscales", force: true do |t|
     t.string   "codigo"
@@ -58,12 +58,6 @@ ActiveRecord::Schema.define(version: 20140613212357) do
 
   add_index "rba_items_nodos", ["item_id"], name: "index_rba_items_nodos_on_item_id", using: :btree
   add_index "rba_items_nodos", ["nodo_id"], name: "index_rba_items_nodos_on_nodo_id", using: :btree
-
-  create_table "rba_modelos", force: true do |t|
-    t.string   "nombre"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "rba_nodos", force: true do |t|
     t.string   "nombre"

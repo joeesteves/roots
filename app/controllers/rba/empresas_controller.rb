@@ -3,9 +3,12 @@ class Rba::EmpresasController < ApplicationController
 
   # GET /rba/empresas
   def index
-    @rba_empresas = Rba::Empresa.all
+    unless params[:nodo]
+      @rba_empresas = Rba::Empresa.all
+    else
+      @rba_empresas = Rba::Nodo.find(params[:nodo]).rba_empresas
+    end
   end
-
   # GET /rba/empresas/1
   def show
   end
@@ -26,6 +29,7 @@ class Rba::EmpresasController < ApplicationController
     if @rba_empresa.save
       redirect_to rba_empresas_path, notice: 'Empresa guardado.'
     else
+
       render action: 'new'
     end
   end

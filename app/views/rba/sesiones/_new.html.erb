@@ -20,6 +20,7 @@
 	    <%= password_field_tag :password, params[:password] %>
 	</div>
 </div>
+<input id="url" name="url" type="hidden" value="<%= @url %>">
 
 		<%= submit_tag "Entrar", :class => "button tiny", :style => "width:100%" %>
 <% end %>

@@ -3,11 +3,11 @@ class Rba::NodosController < ApplicationController
 
   # GET /rba/nodos
   def index
-    unless params[:model]
+
+    unless params[:modelo]
       @rba_nodos = Rba::Nodo.all
     else  
-      @rba_nodos = Rba::Model.find_by_nombre(params[:model]).arboles.first.nodos
-      # where('padre_id is not null') para que no se vea la raiz
+      @rba_nodos = Rba::Arbol.find_by_modelo(params[:modelo]).nodos #.where.not(:padre_id => 'null' )
     end
   end
 
@@ -37,11 +37,14 @@ class Rba::NodosController < ApplicationController
 
   # PATCH/PUT /rba/nodos/1
   def update
-    if @rba_nodo.update(rba_nodo_params)
-      redirect_to rba_nodos_path, notice: 'Nodo actualizado.'
-    else
-      render action: 'edit'
-    end
+    
+    @rba_nodo.update(rba_nodo_params)
+    render :nothing => true # se actualiza con el drag and drop en el abm
+    #   #redirect_to rba_nodos_path, notice: 'Nodo actualizado.'
+      
+    # else
+    #   render action: 'edit'
+    # end
   end
 
   # DELETE /rba/nodos/1
@@ -65,6 +68,6 @@ class Rba::NodosController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def rba_nodo_params
-      params.require(:rba_nodo).permit(:nombre, :arbol_id, :padre_id, :model)
+      params.require(:rba_nodo).permit(:nombre, :arbol_id, :padre_id, :modelo)
     end
 end

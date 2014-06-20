@@ -1,12 +1,5 @@
 Roots::Application.routes.draw do
-  namespace :rba do
-    resources :nodos
-  end
-
-  namespace :rba do
-    resources :arboles
-  end
-
+  
  concern :borrar_seleccion do
     collection do
       post :borrar_seleccion
@@ -14,7 +7,8 @@ Roots::Application.routes.draw do
   end
 
   namespace :rba do
-    resources :usuarios,:empresagrupos, :empresas, :catfiscales, concerns: [:borrar_seleccion]
+    resources :usuarios,:empresagrupos, :empresas,
+     :catfiscales, :arboles, :nodos, concerns: [:borrar_seleccion]
     resources :sesiones
   end
 

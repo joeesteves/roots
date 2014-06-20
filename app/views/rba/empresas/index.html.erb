@@ -1,4 +1,10 @@
-<div class="row index" >
-	<%= render "layouts/globals/arbol" %>
-	<%= render "layouts/globals/index" %>
-</div>
+<% if @conArbol	%>
+<%= render "layouts/globals/arbol" %>
+
+<%= render "layouts/globals/arbolgrid" %>
+
+<% else %>
+
+<%= render "layouts/globals/grid" %>
+
+<% end %>

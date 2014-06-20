@@ -1,4 +1,8 @@
-ready = ->
+ready =  ->
+	jQuery.fn.gridRequest()
+	jQuery.fn.arbolInit()
+
+jQuery.fn.gridRequest = (query) ->
 	nombres = ['id','codigo', 'nombre','catfiscal', 'cuit', 'empresagrupo']
 	propiedades = [
 		['Codigo','15%']
@@ -7,7 +11,8 @@ ready = ->
 		['cuit', '20%	', 'C.U.I.T.']
 		['empresagrupo', '15%', 'Grupo']
 	]
-	jQuery.fn.gridPrepDatos(nombres, propiedades)
+	
+	jQuery.fn.gridPrepDatos(nombres, propiedades, query)
 	
 $(document).on('page:load', ready)
 $(document).ready(ready)

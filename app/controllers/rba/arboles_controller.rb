@@ -24,7 +24,13 @@ class Rba::ArbolesController < ApplicationController
     @rba_arbol = Rba::Arbol.new(rba_arbol_params)
 
     if @rba_arbol.save
-      redirect_to rba_arboles_path, notice: 'Arbol guardado.'
+      clase = @rba_arbol.modelo.classify.constantize
+      metodo = @rba_arbol.modelo.gsub('/','_') 
+      raiz = @rba_arbol.nodos.create(:nombre => @rba_arbol.nombre)
+      raiz.update_attributes(metodo.to_s => clase.all )
+
+
+      redirect_to rba_arboles_path, notice: 'Arbol guardado'
     else
       render action: 'new'
     end
@@ -60,6 +66,6 @@ class Rba::ArbolesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def rba_arbol_params
-      params.require(:rba_arbol).permit(:nombre, :model_id)
+      params.require(:rba_arbol).permit(:nombre, :modelo)
     end
 end

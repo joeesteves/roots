@@ -5,6 +5,7 @@ class Rba::UsuariosController < ApplicationController
   # GET /rba/usuarios.json
   def index
     @rba_usuarios = Rba::Usuario.all
+
   end
 
   # GET /rba/usuarios/1
