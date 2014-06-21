@@ -54,7 +54,7 @@ class Rba::NodosController < ApplicationController
   end
 
   def borrar_seleccion
-    Rba::Nodo.delete(params[:ids]) 
+    Rba::Nodo.destroy(params[:ids]) 
     render nothing: true  
   end
  

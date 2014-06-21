@@ -24,9 +24,11 @@
 			<%= render "layouts/globals/cargando" %>
 			<%= render "layouts/globals/menu" %>
 		<% end %>
+
 		<% if notice %>	
 			<%= render "layouts/globals/notice" %>
 		<% end %>
+		
 		<%= yield %>
 	</body>
 </html>

@@ -1,1 +1,6 @@
-<%%= render "layouts/globals/index" %>
+<%% if @conArbol	%>
+	<%%= render "layouts/globals/arbol" %>
+	<%%= render "layouts/globals/arbolgrid" %>
+<%% else %>
+	<%%= render "layouts/globals/grid" %>
+<%% end %>

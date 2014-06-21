@@ -51,7 +51,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   end
 
   def borrar_seleccion
-    <%= class_name %>.delete(params[:ids]) 
+    <%= class_name %>.destroy(params[:ids]) 
     render nothing: true  
   end
  

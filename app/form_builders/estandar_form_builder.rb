@@ -1,6 +1,10 @@
 class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 	delegate  :content_tag, to: :@template
-	%w[text_field text_area password_field collection_select].each do |method_name|
+	%w[text_field 
+		text_area 
+		password_field 
+		collection_select 
+		grouped_collection_select].each do |method_name|
 
 		define_method(method_name) do |nombre,*args|	
 			options = args.extract_options!

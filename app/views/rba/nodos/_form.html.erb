@@ -10,10 +10,10 @@
         <%= f.text_field :nombre %>
       </div>
       <div class="small-3 columns">
-        <%= f.text_field :padre_id %>
+        <%= f.collection_select :arbol_id, Rba::Arbol.all, :id, :nombre, {include_blank: true}, {}%>
       </div>
       <div class="small-3 columns">
-        <%= f.collection_select :arbol_id, Rba::Arbol.all, :id, :nombre %>
+        <%= f.grouped_collection_select :padre_id, Rba::Arbol.all, :nodos, :nombre,:id, :nombre %>
       </div>
       
     </div>

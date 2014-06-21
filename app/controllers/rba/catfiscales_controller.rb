@@ -46,7 +46,7 @@ class Rba::CatfiscalesController < ApplicationController
   end
 
   def borrar_seleccion
-    Rba::Catfiscal.delete(params[:ids]) 
+    Rba::Catfiscal.destroy(params[:ids]) 
     render nothing: true  
   end
  

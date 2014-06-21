@@ -23,17 +23,22 @@ class Rba::ArbolesController < ApplicationController
   def create
     @rba_arbol = Rba::Arbol.new(rba_arbol_params)
 
-    if @rba_arbol.save
+    
+    begin
+      @rba_arbol.save
       clase = @rba_arbol.modelo.classify.constantize
       metodo = @rba_arbol.modelo.gsub('/','_') 
       raiz = @rba_arbol.nodos.create(:nombre => @rba_arbol.nombre)
-      raiz.update_attributes(metodo.to_s => clase.all )
-
-
+      raiz.update_attributes(metodo.to_sym => clase.all )
       redirect_to rba_arboles_path, notice: 'Arbol guardado'
-    else
+
+    rescue  Exception 
+      @rba_arbol.destroy
+      # redirect_to new_rba_arbol_path, notice: "Revise el nombre del modelo"
+      flash[:notice] = 'Error: el modelo debe tener este formato
+      namespace/nombre del modelo. Incluir el modelo en el metodo habmt de la clase nodo'
       render action: 'new'
-    end
+    end 
   end
 
   # PATCH/PUT /rba/arboles/1
@@ -52,7 +57,7 @@ class Rba::ArbolesController < ApplicationController
   end
 
   def borrar_seleccion
-    Rba::Arbol.delete(params[:ids]) 
+    Rba::Arbol.destroy(params[:ids]) 
     render nothing: true  
   end
  

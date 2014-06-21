@@ -63,7 +63,7 @@ class Rba::UsuariosController < ApplicationController
   end
 
   def borrar_seleccion
-    @rba_usuarios = Rba::Usuario.delete(params[:ids])
+    @rba_usuarios = Rba::Usuario.destroy(params[:ids])
     render nothing: true
   end
 

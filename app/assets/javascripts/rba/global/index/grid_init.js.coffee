@@ -39,8 +39,8 @@ jQuery.fn.gridInit = (col_nombres, col_props, query) ->
 		groupable: true,
 		sortable: true,  
 		# selectionmode: 'checkbox',
-		selectionmode: 'multiplerows',
-		#selectionmode: 'multiplerowsextended',
+		# selectionmode: 'multiplerows',
+		selectionmode: 'multiplerowsextended',
 		filterable: true,
 		pagesizeoptions: ['25','50','100']
 		pageable: true

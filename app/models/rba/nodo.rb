@@ -1,8 +1,8 @@
 class Rba::Nodo < ActiveRecord::Base
   belongs_to :arbol
-  has_and_belongs_to_many :rba_empresas,
-:class_name => "Rba::Empresa",
-:join_table => "rba_items_nodos",
-:association_foreign_key => "item_id"
-
+  has_many :nodos, :foreign_key => "padre_id", :dependent => :destroy
+  include Habtm
+	habtm(%w(rba_empresas rba_arboles rba_empresagrupos rba_usuarios rba_nodos))
+ 
+	
 end

@@ -50,7 +50,7 @@ class Rba::EmpresasController < ApplicationController
   end
 
   def borrar_seleccion
-    Rba::Empresa.delete(params[:ids]) 
+    Rba::Empresa.destroy(params[:ids]) 
     render nothing: true  
   end
  
