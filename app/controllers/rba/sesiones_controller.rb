@@ -9,14 +9,17 @@ class Rba::SesionesController < ApplicationController
 		usuario = Rba::Usuario.find_by_usuario(params[:usuario])
 		if usuario && usuario.authenticate(params[:password])
 			session[:usuario_id] = usuario.id
-			if params[:url]
+		
+			if params[:url] != ''
 				redirect_to params[:url]
 			else
 				redirect_to rba_usuarios_url, :notice => "Adentro! Dijo Juan Carlos Saravia"
 			end
+	
 		else
 			
 			redirect_to root_url, :notice => "Usuario ó contraseña incorrectos"
+	
 		end
 	end
 

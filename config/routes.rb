@@ -6,6 +6,8 @@ Roots::Application.routes.draw do
     end
   end
 
+  post 'rba/mover_items', to: 'rba/nodos#mover_items'
+
   namespace :rba do
     resources :usuarios,:empresagrupos, :empresas,
      :catfiscales, :arboles, :nodos, concerns: [:borrar_seleccion]

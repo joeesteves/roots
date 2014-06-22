@@ -12,8 +12,9 @@ class ApplicationController < ActionController::Base
 
 	def validar_usuario
 		url = request.original_url 
+		
 		if session[:usuario_id] == nil 
-			redirect_to root_url + '?url='+url
+			redirect_to root_url + '?url='+ url
 		else 				
 			@usuario_actual ||= Rba::Usuario.find(session[:usuario_id]) 
 		end

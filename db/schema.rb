@@ -13,6 +13,20 @@
 
 ActiveRecord::Schema.define(version: 20140616215028) do
 
+  create_table "agendas", force: true do |t|
+    t.string   "nombre"
+    t.string   "telefono"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pruebas", force: true do |t|
+    t.string   "nombre"
+    t.string   "apellido"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "rba_arboles", force: true do |t|
     t.string   "nombre"
     t.string   "modelo"

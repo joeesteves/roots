@@ -1,6 +1,7 @@
 jQuery.fn.arbolInit = (modelo) ->
   if modelo == undefined
     modelo = $('#controller_path').val()
+  $('#arbol_actual').val(modelo) # sirve para la accion pegar
   pdata = jQuery.getJSON(
     'nodos.json?modelo=' + modelo
     (data) ->
@@ -49,6 +50,6 @@ jQuery.fn.arbolInit = (modelo) ->
       args = event.args
       item = $('#jqxTree').jqxTree('getItem', args.element)
       label = item.label
-      jQuery.fn.gridRequest('?nodo='+item.id)
+      jQuery.fn.gridRequest(item.id)
       $('#nodo_actual').val(item.id)
   ) 

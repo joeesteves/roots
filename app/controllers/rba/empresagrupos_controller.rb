@@ -3,7 +3,16 @@ class Rba::EmpresagruposController < ApplicationController
 
   # GET /rba/empresagrupos
   def index
-    @rba_empresagrupos = Rba::Empresagrupo.all
+    if params[:nodo]
+      unless params[:nodo] == 'raiz' 
+        @rba_empresagrupos = Rba::Nodo.find(params[:nodo]).rba_empresagrupos
+      else    
+       @rba_empresagrupos = Rba::Arbol.find_by_modelo(controller_path).nodos.first.rba_empresagrupos
+      end
+    else  
+        @rba_empresagrupos = Rba::Empresagrupo.all
+    end
+
   end
 
   # GET /rba/empresagrupos/1

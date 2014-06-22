@@ -1,11 +1,15 @@
 jQuery.fn.gridInit = (col_nombres, col_props, query) ->
-	if query == undefined
-		query = ''
+	if query != undefined
+		queryUrl = '?nodo='+ query
+	else if $('#con_arbol').val() == 'true'
+		queryUrl = '?nodo=raiz'
+	else	
+		queryUrl = ''
+			
 	$("#cargando").css('display', 'block')
 	$("#jqxgrid").jqxGrid('destroy')
 	$(".panelGrid" ).append('<div id="jqxgrid"></div>')
-	jQuery.fn.acciones()
-	url = $('#controller_full_path').val() + '.json' + query
+	url = $('#controller_full_path').val() + '.json' + queryUrl
 	
 	source =
 	datatype: "json"
