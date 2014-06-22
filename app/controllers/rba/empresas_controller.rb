@@ -1,19 +1,14 @@
 class Rba::EmpresasController < ApplicationController
   before_action :set_rba_empresa, only: [:show, :edit, :update, :destroy]
-
+  include Globales
+  
   # GET /rba/empresas
   def index
-      if params[:nodo]
-        unless params[:nodo] == 'raiz' 
-          @rba_empresas = Rba::Nodo.find(params[:nodo]).rba_empresas
-        else    
-         @rba_empresas = Rba::Arbol.find_by_modelo(controller_path).nodos.first.rba_empresas
-        end
-      else  
-        @rba_empresas = Rba::Empresa.all
-      end
-
+    arbol_index(params[:nodo])    
   end
+
+
+
   # GET /rba/empresas/1
   def show
   end
