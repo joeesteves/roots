@@ -61,22 +61,26 @@ class Rba::NodosController < ApplicationController
  
   def mover_items
 
-    @arbol = Rba::Arbol.find_by_modelo(params[:arbol])
+    @arbol = Rba::Arbol.find_by_modelo(params[:controller_path])
     @rba_nodo = Rba::Nodo.find(params[:nodo])
-    modeloString = params[:arbol].gsub('/','_')
+    modeloString = params[:controller_path].gsub('/','_')
     modelo_ids = (modeloString.singularize + '_ids').to_sym
     modelo = modeloString.to_sym
+    clase = params[:controller_path].classify.constantize
 
     
-    items = params[:items].split(',').map(&:to_i) + @rba_nodo.send(modelo).collect(&:id)
+    items = params[:items].split(',').map(&:to_i) +
+    @rba_nodo.send(modelo).collect(&:id)
     
-    nodo_anterior = Rba::Nodo.where(:arbol_id => @arbol.id).includes(modelo)
-    .where("#{modeloString}.id IN (?)", items).references(modelo).first
+    # identifica el nodo utilizando el primer item del array. 
+    # Los modelos-items deben tener la relacion habtm declarada
     
-    items_anteriores = nodo_anterior.send(modelo).collect(&:id) - items
+    nodo_origen =  clase.find(items[0]).nodos.where(:arbol_id => @arbol.id).first
     
-    nodo_anterior.update_attributes(modelo_ids => items_anteriores) 
-    
+   
+    items_nodo_origen = nodo_origen.send(modelo).collect(&:id) - items
+    nodo_origen.update_attributes(modelo_ids => items_nodo_origen) 
+   
     @rba_nodo.update_attributes(modelo_ids => items)
 
     render nothing: true  

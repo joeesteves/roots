@@ -1,9 +1,9 @@
 class Rba::ArbolesController < ApplicationController
   before_action :set_rba_arbol, only: [:show, :edit, :update, :destroy]
-
+  include Globales
   # GET /rba/arboles
   def index
-    @rba_arboles = Rba::Arbol.all
+    arbol_index(params[:nodo])
   end
 
   # GET /rba/arboles/1
@@ -36,7 +36,8 @@ class Rba::ArbolesController < ApplicationController
       @rba_arbol.destroy
       # redirect_to new_rba_arbol_path, notice: "Revise el nombre del modelo"
       flash[:notice] = 'Error: el modelo debe tener este formato
-      namespace/nombre del modelo. Incluir el modelo en el metodo habmt de la clase nodo'
+      namespace/nombre del modelo. Incluir el modelo en el metodo 
+      habmt de la clase nodo. Nombre y modelo no pueden repetirse'
       render action: 'new'
     end 
   end

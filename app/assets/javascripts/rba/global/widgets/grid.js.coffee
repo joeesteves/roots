@@ -5,4 +5,4 @@
 //= require rba/global/widgets/grid/jqxgrid.sort
 //= require rba/global/widgets/grid/jqxgrid.pager
 //= require rba/global/widgets/grid/jqxgrid.grouping
-//= require rba/global/widgets/grid/gridLoc
+//= require rba/global/widgets/grid/grid_loc

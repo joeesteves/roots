@@ -3,6 +3,8 @@ Roots::Application.routes.draw do
  concern :borrar_seleccion do
     collection do
       post :borrar_seleccion
+      get :editar_multiples
+      put :actualizar_multiples
     end
   end
 
