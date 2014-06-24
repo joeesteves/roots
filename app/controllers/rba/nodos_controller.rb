@@ -55,8 +55,12 @@ class Rba::NodosController < ApplicationController
   end
 
   def borrar_seleccion
-    Rba::Nodo.destroy(params[:ids]) 
-    render nothing: true  
+    unless Rba::Nodo.has_items(params[:ids])
+      Rba::Nodo.destroy(params[:ids]) 
+      render nothing: true
+    else
+      render nothing: true
+    end  
   end
  
   def mover_items
@@ -88,7 +92,7 @@ class Rba::NodosController < ApplicationController
   
     render nothing: true  
   end
-  
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_rba_nodo

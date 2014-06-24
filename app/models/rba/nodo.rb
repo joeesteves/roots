@@ -5,5 +5,15 @@ class Rba::Nodo < ActiveRecord::Base
   belongs_to :arbol
   has_many :nodos, :foreign_key => "padre_id", :dependent => :destroy
   
- 
+  def self.has_items(ids)
+    items = ids
+    
+    ids.each do |id|
+      items += find(id).nodo_ids
+    end
+
+  	find_by_sql(["select a.id from
+  	 rba_nodos as a join rba_items_nodos as b 
+  	 on a.id = b.nodo_id where a.id IN (?)", items]).any?
+	end
 end
