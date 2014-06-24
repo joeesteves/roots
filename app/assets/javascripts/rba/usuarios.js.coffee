@@ -5,7 +5,7 @@ ready = ->
 
 jQuery.fn.gridRequest = () ->
 	nombres = ['id','nombre','apellido','mail']
-	propiedades = [['Nombre','20%'],['Apellido','20%'],['Mail','auto']]
+	propiedades = [['Nombre','auto'],['Apellido','auto'],['Mail','auto']]
 	jQuery.fn.gridPrepDatos(nombres, propiedades)	
 	
 $(document).on('page:load', ready)

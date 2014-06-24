@@ -1,5 +1,6 @@
 <% if namespaced? -%>
 require_dependency "<%= namespaced_file_path %>/application_controller"
+include Globales
 
 <% end -%>
 <% module_namespacing do -%>
@@ -18,6 +19,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   # GET <%= route_url %>/new
   def new
     @<%= singular_table_name %> = <%= orm_class.build(class_name) %>
+    define_nodo(params[:nodo])
   end
 
   # GET <%= route_url %>/1/edit
@@ -30,6 +32,7 @@ class <%= controller_class_name %>Controller < ApplicationController
 
     if @<%= orm_instance.save %>
       redirect_to <%= plural_table_name %>_path, notice: <%= "'#{human_name} guardado.'" %>
+      ubica_en_nodo(params[:nodo])
     else
       render action: 'new'
     end

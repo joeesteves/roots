@@ -20,20 +20,14 @@ class Rba::EmpresasController < ApplicationController
   # GET /rba/empresas/1/edit
   def edit
   end
-
-  def editar_multiples
-    @rba_empresas = Rba::Empresa.find(params[:items].split(','))   
-    respond_to do |format|
-      format.html
-    end 
-  end 
+ 
 
   # POST /rba/empresas
   def create
     @rba_empresa = Rba::Empresa.new(rba_empresa_params)
 
     if @rba_empresa.save
-      ubica_en_nodo
+      ubica_en_nodo(params[:nodo])
       redirect_to rba_empresas_path, notice: 'Empresa guardada'
     else
 
@@ -50,16 +44,7 @@ class Rba::EmpresasController < ApplicationController
     end
   end
 
-  def actualizar_multiples
-    @rba_empresas = Rba::Empresa.update(params[:rba_empresas].keys, params[:rba_empresas].values)
-    @rba_empresas.reject! { |p| p.errors.empty? }
-    if @rba_empresas.empty?
-      redirect_to rba_empresas_url
-    else
-      render "editar_multiples"
-    end
-
-  end 
+ 
 
   # DELETE /rba/empresas/1
   def destroy

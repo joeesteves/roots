@@ -1,0 +1,39 @@
+jQuery.fn.gridLoc = () ->
+  gridLoc = new Object()
+  gridLoc.pagergotopagestring = "Pág. actual"
+  gridLoc.pagershowrowsstring = "Muestra"
+  gridLoc.pagerrangestring = " de "
+  gridLoc.pagernextbuttonstring = "Sig"
+  gridLoc.pagerpreviousbuttonstring = "Ant"
+  gridLoc.sortascendingstring = "Ascendente"
+  gridLoc.sortdescendingstring = "Descendente"
+  gridLoc.sortremovestring = "Limpiar"
+  gridLoc.percentsymbol = "%"
+  gridLoc.currencysymbol = "$"
+  gridLoc.currencysymbolposition = "before"
+  gridLoc.decimalseparator = ","
+  gridLoc.thousandsseparator = "."
+  gridLoc.groupsheaderstring = "Arrastre para agrupar"
+  gridLoc.groupbystring = "Agrupar columna"
+  gridLoc.groupremovestring = "Desagrupar columna"
+  gridLoc.filterclearstring = "Borrar"
+  gridLoc.filterstring = "Filtrar"
+  gridLoc.filtershowrowstring = "Filtrar por"
+  gridLoc.filtershowrowdatestring = "Mostrar lineas con fecha:"
+  gridLoc.filterorconditionstring = "O"
+  gridLoc.filterandconditionstring = "Y"
+  gridLoc.filterselectallstring = "(Seleccionar todos)"
+  gridLoc.filterchoosestring = "Seleccione:"
+  gridLoc.filterstringcomparisonoperators = ['vacio', 'no vacio', 'contiene', 'contiene(match case)',
+        'no contiene', 'no contiene(match case)', 'empieza con...', 'empieza con...(match case)',
+        'termina con...', 'termina con...(match case)', 'es igual a', 'es igual a(match case)', 'null', 'no null']
+  gridLoc.filternumericcomparisonoperators = ['igual', 'diferente', 'menor que', 'menor que o igual', 'mayor que', 'mayor que o igual', 'null', 'no null']
+  gridLoc.filterdatecomparisonoperators = ['igual', 'diferente', 'menor que', 'menor que o igual', 'mayor que', 'mayor que o igual', 'null', 'no null']
+  gridLoc.filterbooleancomparisonoperators = ['igual', 'diferente']
+  gridLoc.validationstring = "Valor ingresado no valido"
+  gridLoc.emptydatastring = "No hay datos para mostrar"
+  gridLoc.filterselectstring = "Filtro "
+  gridLoc.loadtext = "Cargando..."
+  gridLoc.clearstring = "Borrar"
+  gridLoc.todaystring = "Hoy"       
+  return gridLoc

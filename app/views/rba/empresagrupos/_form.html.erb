@@ -1,27 +1,16 @@
 <input id="esForm" type="hidden" value=true />
-<%= form_for @rba_empresagrupo, builder: EstandarFormBuilder do |f| %>
-
-<%= f.errores %>
-
 <div class="row">
   <div class="panel">
-    <div class="small-4 columns">    
-      <%= f.text_field :codigo, :tabindex => 1 %>
-    </div>
-
-    <div class="small-4 columns">
-      <%= f.text_field :nombre, :tabindex => 2 %>
-    </div>
-    
-    <div class="small-4 columns">
-      <%= f.text_field :desc, :tabindex => 3 %>
-    </div>
-    
+    <%= form_for @rba_empresagrupo, builder: EstandarFormBuilder do |f| %>
    
-    <%= f.submit %>
-  
+
+    <%= render 'form_fields', f:f %>
+    <div class="row">
+      <div class="small-12 columns">
+      <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> />
+      <%= f.submit %>
+      </div>
+    </div>
+  <% end %>
   </div>
-
 </div>
-
-<% end %>

@@ -2,29 +2,22 @@
 <div class="row">
   <div class="panel">
   <%%= form_for @<%= singular_table_name %>, builder: EstandarFormBuilder do |f| %>
+   
     <%% f.errores %>
-
-    <div class="row">
+<div class="row">
       
 <% attributes.each do |attribute| -%>
-<% if attribute.password_digest? -%>
-      <div class="small-3 columns">
-      <%%= f.label :password %>
-      <%%= f.password_field :password %>
-      <%%= f.label :password_confirmation %><br>
-      <%%= f.password_field :password_confirmation %>
-      </div>
-<% else -%>
+
       <div class="small-3 columns">
         <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
       </div>
-<% end -%>
+
 <% end -%>
       
-    </div>
- 
+</div>
     <div class="row">
       <div class="small-12 columns">
+        <input id="nodo" name="nodo" type="hidden" value=<%%= @nodo %> /> 
         <%%= f.submit %>
       </div>
     </div>

@@ -15,6 +15,8 @@ class Rba::EmpresagruposController < ApplicationController
   # GET /rba/empresagrupos/new
   def new
     @rba_empresagrupo = Rba::Empresagrupo.new
+    define_nodo(params[:nodo])
+
   end
 
   # GET /rba/empresagrupos/1/edit
@@ -26,6 +28,7 @@ class Rba::EmpresagruposController < ApplicationController
     @rba_empresagrupo = Rba::Empresagrupo.new(rba_empresagrupo_params)
 
     if @rba_empresagrupo.save
+      ubica_en_nodo(params[:nodo])
       redirect_to rba_empresagrupos_path, notice: 'Empresagrupo guardado.'
     else
       render action: 'new'

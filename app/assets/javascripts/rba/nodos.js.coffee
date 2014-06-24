@@ -7,9 +7,10 @@ ready = ->
 	filtrarNodosPadres()
 
 jQuery.fn.gridRequest = () ->	
-	nombres = ['id','nombre', 'padre_id']
-	propiedades = [['Id','20%'],['Nombre','20%'], ['Padre_id','20%']]
-	jQuery.fn.gridPrepDatos(nombres, propiedades)
+	nombres = ['id','arbol', 'nombre', 'padre_id']
+	propiedades = [['Id','auto'],['Arbol','auto'],['Nombre','auto'], ['Padre_id','auto']]
+	agrupar = 'arbol'
+	jQuery.fn.gridPrepDatos(nombres, propiedades, undefined, agrupar)
 
 filtrarNodosPadres = () ->
 	$('#rba_nodo_padre_id').parent().hide()

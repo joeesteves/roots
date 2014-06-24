@@ -1,6 +1,8 @@
 Roots::Application.routes.draw do
-  
- concern :borrar_seleccion do
+
+
+
+ concern :globales do
     collection do
       post :borrar_seleccion
       get :editar_multiples
@@ -9,10 +11,13 @@ Roots::Application.routes.draw do
   end
 
   post 'rba/mover_items', to: 'rba/nodos#mover_items'
+  
+
+  resources :pruebas, concerns: [:globales]
 
   namespace :rba do
     resources :usuarios,:empresagrupos, :empresas,
-     :catfiscales, :arboles, :nodos, concerns: [:borrar_seleccion]
+     :catfiscales, :arboles, :nodos, concerns: [:globales]
     resources :sesiones
   end
 

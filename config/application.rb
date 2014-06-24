@@ -9,7 +9,12 @@ Bundler.require(*Rails.groups)
 module Roots
   class Application < Rails::Application
     config.generators do |g|
-        g.stylesheets     false
+      g.orm             :active_record
+      g.template_engine :erb
+      g.test_framework  :test_unit, fixture: false
+      g.stylesheets     false
+      g.javascripts     true
+      g.helper          :form_fields_partial
     end
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
