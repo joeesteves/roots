@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rco_cuentatipo.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rco_cuentatipo.nombre %>
+</p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rco_cuentatipo.estado %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rco_cuentatipo.desc %>
+</p>
+
+<%= link_to 'Editar', edit_rco_cuentatipo_path(@rco_cuentatipo), :class => "button tiny" %>
+<%= link_to 'Volver', rco_cuentatipos_path, :class => "button tiny" %>

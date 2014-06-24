@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rco_cuenta.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rco_cuenta.nombre %>
+</p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rco_cuenta.estado %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rco_cuenta.desc %>
+</p>
+
+<p>
+  <strong>Cuentatipo:</strong>
+  <%= @rco_cuenta.cuentatipo %>
+</p>
+
+<p>
+  <strong>Rba empresagrupo:</strong>
+  <%= @rco_cuenta.rba_empresagrupo %>
+</p>
+
+<%= link_to 'Editar', edit_rco_cuenta_path(@rco_cuenta), :class => "button tiny" %>
+<%= link_to 'Volver', rco_cuentas_path, :class => "button tiny" %>

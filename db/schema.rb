@@ -11,14 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140624014549) do
-
-  create_table "pruebas", force: true do |t|
-    t.string   "nombre"
-    t.string   "apellido"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(version: 20140624184302) do
 
   create_table "rba_arboles", force: true do |t|
     t.string   "nombre"
@@ -66,15 +59,6 @@ ActiveRecord::Schema.define(version: 20140624014549) do
   add_index "rba_items_nodos", ["item_id"], name: "index_rba_items_nodos_on_item_id", using: :btree
   add_index "rba_items_nodos", ["nodo_id"], name: "index_rba_items_nodos_on_nodo_id", using: :btree
 
-  create_table "rba_libros", force: true do |t|
-    t.string   "nombre"
-    t.string   "autor"
-    t.string   "categoria"
-    t.string   "editorial"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "rba_nodos", force: true do |t|
     t.string   "nombre"
     t.integer  "arbol_id"
@@ -91,6 +75,29 @@ ActiveRecord::Schema.define(version: 20140624014549) do
     t.string   "apellido"
     t.string   "mail"
     t.string   "password_digest"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "rco_cuentas", force: true do |t|
+    t.string   "codigo"
+    t.string   "nombre"
+    t.integer  "estado"
+    t.text     "desc"
+    t.integer  "cuentatipo_id"
+    t.integer  "rba_empresagrupo_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rco_cuentas", ["cuentatipo_id"], name: "index_rco_cuentas_on_cuentatipo_id", using: :btree
+  add_index "rco_cuentas", ["rba_empresagrupo_id"], name: "index_rco_cuentas_on_rba_empresagrupo_id", using: :btree
+
+  create_table "rco_cuentatipos", force: true do |t|
+    t.string   "codigo"
+    t.string   "nombre"
+    t.integer  "estado"
+    t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

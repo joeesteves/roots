@@ -52,13 +52,18 @@ module Globales
     if nodo
       @nodo = nodo
     else
-      @nodo = Rba::Arbol.find_by_modelo(controller_path).nodos.first.id
+      begin
+        @nodo = Rba::Arbol.find_by_modelo(controller_path).nodos.first.id
+      rescue
+        @nodo = 'undefined'
+      end
     end
-
   end  
   def ubica_en_nodo(nodo)
-    v = getVariables(controller_path)
-    Rba::Nodo.find(nodo).send(v[:metodo]) << instance_variable_get(v[:member])
+    unless nodo == 'undefined'
+      v = getVariables(controller_path)
+      Rba::Nodo.find(nodo).send(v[:metodo]) << instance_variable_get(v[:member])
+    end
   end
 
 

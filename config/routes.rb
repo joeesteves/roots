@@ -1,5 +1,6 @@
 Roots::Application.routes.draw do
 
+  
  concern :globales do
     collection do
       post :borrar_seleccion
@@ -8,10 +9,9 @@ Roots::Application.routes.draw do
     end
   end
 
-  post 'rba/mover_items', to: 'rba/nodos#mover_items'
-  
-
-  resources :pruebas, concerns: [:globales]
+  namespace :rco do
+    resources :cuentas, :cuentatipos,  concerns: [:globales]
+  end
 
   namespace :rba do
     resources :usuarios,:empresagrupos, :empresas,
@@ -20,12 +20,13 @@ Roots::Application.routes.draw do
   end
 
 	get 'salir', to: 'rba/sesiones#salir', :as => :salir
+  post 'rba/mover_items', to: 'rba/nodos#mover_items'
+  root 'rba/bienvenidos#inicio'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-	  root 'rba/bienvenidos#inicio'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

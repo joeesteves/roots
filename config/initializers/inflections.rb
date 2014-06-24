@@ -13,6 +13,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'sesion', 'sesiones'
   inflect.irregular 'arbol', 'arboles'
   inflect.irregular 'model', 'modelos'
+  inflect.irregular 'cuenta', 'cuentas'
 
 
   

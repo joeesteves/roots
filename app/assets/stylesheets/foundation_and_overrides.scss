@@ -8,6 +8,8 @@
 // Allows the use of rem-calc() or lower-bound() in your settings
 @import "foundation/functions";
 
+
+
 //Chosen override
 .chosen-container-single .chosen-single {
 	height: 2.3125rem;
@@ -1271,3 +1273,17 @@ $topbar-link-font-size: rem-calc(12);
 z-index: 200;
 }
 
+.reveal-modal{
+	z-index: 200;
+}
+.reveal-modal-bg {
+	z-index: 199;
+
+}
+
+input[type="checkbox"] {
+  width: 100%; 
+  height: 30px;
+  margin-top: 5px; 
+
+}

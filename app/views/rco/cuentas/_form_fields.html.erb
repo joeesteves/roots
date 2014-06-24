@@ -1,0 +1,27 @@
+<% f.errores %>
+<div class="row">
+  <div class="small-4 columns">
+    <%= f.text_field :codigo %>
+  </div>
+  <div class="small-4 columns">
+    <%= f.text_field :nombre %>
+  </div>
+  
+  <div class="small-4 columns">
+    <%= f.collection_select :cuentatipo_id, Rco::Cuentatipo.all, :id, :nombre, 
+    {}, {label: "Tipo"}%>
+  </div>
+</div>
+<div class="row">
+
+  <div class="small-4 columns">
+    <%= f.collection_select :rba_empresagrupo_id, Rba::Empresagrupo.all, :id, :nombre,
+    {}, {label: "Grupo"} %>
+  </div>
+  <div class="small-4 columns">
+    <%= f.text_area :desc %>
+  </div>
+  <div class="small-4 columns">
+    <%= f.check_box :estado, {}, {label: "Activo?"} %>
+  </div>
+</div>

@@ -1,7 +1,8 @@
 class Rba::Nodo < ActiveRecord::Base
   include Habtm
 	habtm(%w(rba_empresas rba_arboles rba_empresagrupos 
-		rba_usuarios rba_nodos pruebas rba_libros))
+		rba_usuarios rba_nodos pruebas rba_libros 
+    rco_cuentas rco_cuentatipos))
   belongs_to :arbol
   has_many :nodos, :foreign_key => "padre_id", :dependent => :destroy
   

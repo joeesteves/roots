@@ -3,18 +3,19 @@
   <div class="panel">
   <%%= form_for @<%= singular_table_name %>, builder: EstandarFormBuilder do |f| %>
    
-    <%% f.errores %>
-<div class="row">
-      
+<!-- Cortar desde aca y pegar en el partial _form_fields.html.erb -->
+
+<%% f.errores %>
+<div class="row">      
 <% attributes.each do |attribute| -%>
-
-      <div class="small-3 columns">
-        <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
-      </div>
-
-<% end -%>
-      
+  <div class="small-3 columns">
+    <%%= f.<%= attribute.field_type %> :<%= attribute.name %> %>
+  </div>
+<% end -%>      
 </div>
+
+<!-- Cortar hasta aca y pegar en el partial _form_fields.html.erb -->
+
     <div class="row">
       <div class="small-12 columns">
         <input id="nodo" name="nodo" type="hidden" value=<%%= @nodo %> /> 
