@@ -5,9 +5,11 @@ module Globales
     controller = controller_path.gsub('/','_')
     coleccion = '@' + controller 
     member = coleccion.singularize
+    metodo_ids = (controller.singularize + '_ids').to_sym
     metodo = controller.to_sym
     clase = controller_path.singularize.classify.constantize
-    return {member: member, controller: controller, coleccion: coleccion, metodo: metodo, clase: clase}
+    return {controller: controller, coleccion: coleccion, member: member, 
+      metodo_ids: metodo_ids, metodo: metodo, clase: clase}
   end
 
   def arbol_index(nodo)

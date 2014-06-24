@@ -1,6 +1,6 @@
 class Rba::NodosController < ApplicationController
   before_action :set_rba_nodo, only: [:show, :edit, :update, :destroy]
-
+  include Globales
   # GET /rba/nodos
   def index
 
@@ -60,31 +60,35 @@ class Rba::NodosController < ApplicationController
   end
  
   def mover_items
+    # Los modelos-items deben tener la relacion habtm declarada 
 
-    @arbol = Rba::Arbol.find_by_modelo(params[:controller_path])
-    @rba_nodo = Rba::Nodo.find(params[:nodo])
-    
-    modeloString = params[:controller_path].gsub('/','_')
-    modelo_ids = (modeloString.singularize + '_ids').to_sym
-    modelo = modeloString.to_sym
-    clase = params[:controller_path].classify.constantize
+    # metodo definido en Globales pasamos el controller_path del modelo en el cual
+    # estamos trabajando. Lo hace el ajax $.fn.pegar en fxacciones.
 
-    items = params[:items].split(',').map(&:to_i) +
-    @rba_nodo.send(modelo).collect(&:id)
-    
+    v = getVariables(params[:controller_path])
+
+    arbol = Rba::Arbol.find_by_modelo(params[:controller_path])
+    nodo_destino = Rba::Nodo.find(params[:nodo])
+    items_destino_prev = nodo_destino.send(v[:metodo]).collect(&:id)
+    items_seleccion = params[:items].split(',').map(&:to_i)
+    items_destino_total = items_destino_prev + items_seleccion
+
     # identifica el nodo utilizando el primer item del array. 
-    # Los modelos-items deben tener la relacion habtm declarada
-    
-    nodo_origen =  clase.find(items[0]).nodos.where(:arbol_id => @arbol.id).first
-    
-   
-    items_nodo_origen = nodo_origen.send(modelo).collect(&:id) - items
-    nodo_origen.update_attributes(modelo_ids => items_nodo_origen) 
-   
-    @rba_nodo.update_attributes(modelo_ids => items)
+    nodo_origen =  v[:clase].find(items_seleccion[0]).nodos.
+    where(:arbol_id => arbol.id).first
 
+    unless nodo_origen == nodo_destino
+      items_origen_prev = nodo_origen.send(v[:metodo]).collect(&:id)
+      items_origen_total = items_origen_prev - items_seleccion
+
+      nodo_origen.update_attributes(v[:metodo_ids] => items_origen_total) 
+     
+      nodo_destino.update_attributes(v[:metodo_ids] => items_destino_total)
+    end
+  
     render nothing: true  
   end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_rba_nodo
