@@ -63,12 +63,12 @@ class Rba::NodosController < ApplicationController
 
     @arbol = Rba::Arbol.find_by_modelo(params[:controller_path])
     @rba_nodo = Rba::Nodo.find(params[:nodo])
+    
     modeloString = params[:controller_path].gsub('/','_')
     modelo_ids = (modeloString.singularize + '_ids').to_sym
     modelo = modeloString.to_sym
     clase = params[:controller_path].classify.constantize
 
-    
     items = params[:items].split(',').map(&:to_i) +
     @rba_nodo.send(modelo).collect(&:id)
     

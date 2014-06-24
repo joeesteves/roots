@@ -1,7 +1,5 @@
 Roots::Application.routes.draw do
 
-
-
  concern :globales do
     collection do
       post :borrar_seleccion
@@ -17,7 +15,7 @@ Roots::Application.routes.draw do
 
   namespace :rba do
     resources :usuarios,:empresagrupos, :empresas,
-     :catfiscales, :arboles, :nodos, concerns: [:globales]
+     :catfiscales, :arboles, :nodos, :libros, concerns: [:globales]
     resources :sesiones
   end
 

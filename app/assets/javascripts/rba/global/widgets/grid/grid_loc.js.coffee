@@ -1,4 +1,4 @@
-jQuery.fn.gridLoc = () ->
+$.fn.gridLoc = () ->
   gridLoc = new Object()
   gridLoc.pagergotopagestring = "Pág. actual"
   gridLoc.pagershowrowsstring = "Muestra"

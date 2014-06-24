@@ -1,13 +1,13 @@
 #Define la funcion para el calculo dentro de los campos
-jQuery.fn.activarCalcular = () ->
+$.fn.activarCalcular = () ->
 	$('input:text').focusout ->
-		rta = jQuery.fn.calcular($(this).val())
+		rta = $.fn.calcular($(this).val())
 		if rta == 'error'
 			alert("revisar calculo")
 			$(this).val('=').focus()
 		else
 			$(this).val(rta)
-jQuery.fn.calcular = (texto) ->
+$.fn.calcular = (texto) ->
 	if texto[0] == "="
 		try
 			fx = texto.substring(1,texto.length)
@@ -18,7 +18,7 @@ jQuery.fn.calcular = (texto) ->
 		rta = texto
 	rta
 #Activa la funcion para autocompletado inteligente de las fechas
-jQuery.fn.activarFechaAutocompletado = () ->
+$.fn.activarFechaAutocompletado = () ->
 	$(':input[type=date]').focusout ->
 		date = $(this).val().split('-')
 		dd = parseInt(date[2])

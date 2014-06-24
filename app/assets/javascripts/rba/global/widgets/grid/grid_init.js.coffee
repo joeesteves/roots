@@ -1,4 +1,4 @@
-jQuery.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
+$.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 	if query != undefined
 		queryUrl = '?nodo='+ query
 	else if $('#con_arbol').val() == 'true'
@@ -22,7 +22,7 @@ jQuery.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 		height: '100%',
 		source: dataAdapter,
 		ready: ->
-			$('#jqxgrid').jqxGrid('localizestrings', jQuery.fn.gridLoc())
+			$('#jqxgrid').jqxGrid('localizestrings', $.fn.gridLoc())
 			$('#gridpagerlistjqxgrid').css('width','auto')
 			$('#cargando').css('display', 'none')    
 			$('#jqxgrid').on 'groupschanged', () -> 
@@ -51,4 +51,6 @@ jQuery.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 		pageable: true
 	$("#jqxgrid").jqxGrid(opciones)
 	if agrupar != undefined
-		$("#jqxgrid").jqxGrid('addgroup', agrupar)
+		$('#jqxgrid').on 'bindingcomplete', () ->
+			$("#jqxgrid").jqxGrid('addgroup', agrupar)
+			$('#jqxgrid').jqxGrid('sortby', col_nombres[1].name, 'asc') 

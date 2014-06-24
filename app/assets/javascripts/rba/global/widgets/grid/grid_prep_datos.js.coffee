@@ -1,4 +1,4 @@
-jQuery.fn.gridPrepDatos = (columnas_datos_array, columnas_prop_array, query, agrupar) ->
+$.fn.gridPrepDatos = (columnas_datos_array, columnas_prop_array, query, agrupar) ->
 	if $('#action_name').val() == 'index'		
 		columnas_datos_json = []
 		columnas_datos_json.push({name: nombre}) for nombre in columnas_datos_array
@@ -17,10 +17,9 @@ jQuery.fn.gridPrepDatos = (columnas_datos_array, columnas_prop_array, query, agr
 			columntype: 'button'
 			width: '5%'
 			cellsrenderer: () -> 'Editar'
-			buttonclick: (row) -> jQuery.fn.editar(row)
-
-
-		jQuery.fn.gridInit(columnas_datos_json, columnas_prop_json, query, agrupar)
+			buttonclick: (row) -> $.fn.editaRow(row)
+			
+		$.fn.gridInit(columnas_datos_json, columnas_prop_json, query, agrupar)
 
 	else if $('#esForm').val() == 'true'
 	 	$('input:text:not(.topbar_input)').first().focus()

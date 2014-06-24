@@ -1,16 +1,16 @@
 ready = ->
 	if $('#con_arbol').val() == 'true'
-		jQuery.fn.arbolInit()
+		$.fn.arbolInit()
 	
-	jQuery.fn.gridRequest()
+	$.fn.gridRequest()
 	
 	filtrarNodosPadres()
 
-jQuery.fn.gridRequest = () ->	
+$.fn.gridRequest = () ->	
 	nombres = ['id','arbol', 'nombre', 'padre_id']
 	propiedades = [['Id','auto'],['Arbol','auto'],['Nombre','auto'], ['Padre_id','auto']]
 	agrupar = 'arbol'
-	jQuery.fn.gridPrepDatos(nombres, propiedades, undefined, agrupar)
+	$.fn.gridPrepDatos(nombres, propiedades, undefined, agrupar)
 
 filtrarNodosPadres = () ->
 	$('#rba_nodo_padre_id').parent().hide()

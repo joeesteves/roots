@@ -12,9 +12,6 @@ module Globales
 
   def arbol_index(nodo)
     v = getVariables(controller_path)
-    # modelo = '@' + controller_path.gsub('/','_')
-    # metodo = controller_path.gsub('/','_').to_sym
-    # clase = controller_path.singularize.classify.constantize
     if nodo
       unless nodo == 'raiz' 
        instance_variable_set(v[:coleccion], Rba::Nodo.find(nodo).send(v[:metodo]))

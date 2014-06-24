@@ -1,10 +1,17 @@
-jQuery.fn.atajos = () ->
+$.fn.atajos = () ->
 	$(document).keyup (e) -> 
 		e.preventDefault()
 		e.stopPropagation()
-		if e.ctrlKey && e.shiftKey && e.keyCode==65 # Ctrl + Shift + A
-			if $('#nodo_actual').val() == ''
-				nodo = ''
-			else
-				nodo = '?nodo=' + $('#nodo_actual').val()
-			$(location).attr('href',$('#controller_full_path').val()+'/new'+ nodo)
+		if e.ctrlKey && e.altKey
+			switch e.keyCode
+				when 65 # Ctrl + Shift + A
+					$.fn.nuevo()
+				when 69 # Ctrl + Shift + S
+					$.fn.editar()
+				when 68 # Ctrl + Shift + D
+					$.fn.borrar()
+				when 67 # Ctrl + Shift + S
+					$.fn.copiar()
+				when 86 # Ctrl + Shift + D
+					$.fn.pegar()
+				
