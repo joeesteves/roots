@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_libro.nombre %>
+</p>
+
+<p>
+  <strong>Autor:</strong>
+  <%= @rba_libro.autor %>
+</p>
+
+<p>
+  <strong>Categoria:</strong>
+  <%= @rba_libro.categoria %>
+</p>
+
+<p>
+  <strong>Editorial:</strong>
+  <%= @rba_libro.editorial %>
+</p>
+
+<%= link_to 'Editar', edit_rba_libro_path(@rba_libro), :class => "button tiny" %>
+<%= link_to 'Volver', rba_libros_path, :class => "button tiny" %>

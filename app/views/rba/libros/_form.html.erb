@@ -1,0 +1,15 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+  <%= form_for @rba_libro, builder: EstandarFormBuilder do |f| %>
+   
+    <%= render 'form_fields', f:f %>
+    <div class="row">
+      <div class="small-12 columns">
+        <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> /> 
+        <%= f.submit %>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>
