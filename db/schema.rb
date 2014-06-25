@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140624184302) do
+ActiveRecord::Schema.define(version: 20140624230325) do
 
   create_table "rba_arboles", force: true do |t|
     t.string   "nombre"
@@ -85,13 +85,13 @@ ActiveRecord::Schema.define(version: 20140624184302) do
     t.integer  "estado"
     t.text     "desc"
     t.integer  "cuentatipo_id"
-    t.integer  "rba_empresagrupo_id"
+    t.integer  "empresagrupo_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "rco_cuentas", ["cuentatipo_id"], name: "index_rco_cuentas_on_cuentatipo_id", using: :btree
-  add_index "rco_cuentas", ["rba_empresagrupo_id"], name: "index_rco_cuentas_on_rba_empresagrupo_id", using: :btree
+  add_index "rco_cuentas", ["empresagrupo_id"], name: "index_rco_cuentas_on_empresagrupo_id", using: :btree
 
   create_table "rco_cuentatipos", force: true do |t|
     t.string   "codigo"

@@ -38,6 +38,8 @@ gem 'foundation-rails'
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'chosen-rails'
+
+# gem 'roo'
 # Use unicorn as the app server
 # gem 'unicorn'
 

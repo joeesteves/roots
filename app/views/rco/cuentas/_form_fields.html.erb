@@ -15,7 +15,7 @@
 <div class="row">
 
   <div class="small-4 columns">
-    <%= f.collection_select :rba_empresagrupo_id, Rba::Empresagrupo.all, :id, :nombre,
+    <%= f.collection_select :empresagrupo_id, Rba::Empresagrupo.all, :id, :nombre,
     {}, {label: "Grupo"} %>
   </div>
   <div class="small-4 columns">

@@ -1,0 +1,13 @@
+<div id="modal_importar" class="reveal-modal" data-reveal>
+  
+  <h2>Importar <%= controller_name.capitalize %></h2>
+
+ <%= form_tag root_path+controller_path+'/importar', multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import" %>
+<% end %>
+
+
+  <a class="close-reveal-modal">&#215;</a>
+
+</div>

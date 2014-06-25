@@ -40,15 +40,16 @@ $.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 		columnsresize: true,
 		columns: col_props,
 		width: '100%',
-		groupable: true,	
+		groupable: true,
 		sortable: true,
-
 		# selectionmode: 'checkbox',
 		# selectionmode: 'multiplerows',
 		selectionmode: 'multiplerowsextended',
 		filterable: true,
-		pagesizeoptions: ['25','50','100']
-		pageable: true
+		pageable: true,
+		pagesizeoptions: ['25','50','100'],
+		pagesize: 25
+
 	$("#jqxgrid").jqxGrid(opciones)
 	if agrupar != undefined
 		$('#jqxgrid').on 'bindingcomplete', () ->

@@ -15,6 +15,8 @@ $.fn.acciones = () ->
 	else
 		$('#copiar').hide()
 		$('#pegar').hide()
+	$('#importar').click ->
+		$.fn.cerrarMenu()
 
 $.fn.borrar = () ->
 	if confirm('Quiere borrar ' + $.fn.getSelected().length + ' elementos ?')
@@ -70,3 +72,6 @@ $.fn.getSelected = ->
 	$.each(seleccion, (row) ->
 		seleccion_ids.push($('#jqxgrid').jqxGrid('getrowdata', seleccion[row]).id))
 	seleccion_ids
+
+$.fn.cerrarMenu = ->
+	$('.has-dropdown').removeClass('hover')

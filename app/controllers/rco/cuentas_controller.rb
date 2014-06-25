@@ -17,6 +17,15 @@ class Rco::CuentasController < ApplicationController
     define_nodo(params[:nodo])
   end
 
+  def importar
+    begin 
+      Rco::Cuenta.importar(params[:file],controller_path)
+      redirect_to  rco_cuentas_path, notice: "se han importado las cuentas correctamente"
+    rescue Exception => e
+      redirect_to  rco_cuentas_path, notice: "Hubo algun Error! #{e}"
+    end
+  end
+
   # GET /rco/cuentas/1/edit
   def edit
   end
@@ -64,6 +73,6 @@ class Rco::CuentasController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def rco_cuenta_params
       params.require(:rco_cuenta).permit(:codigo, :nombre, 
-        :estado, :desc, :cuentatipo_id, :rba_empresagrupo_id)
+        :estado, :desc, :cuentatipo_id, :empresagrupo_id)
     end
 end

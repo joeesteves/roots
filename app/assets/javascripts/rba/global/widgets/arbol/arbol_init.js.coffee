@@ -36,10 +36,11 @@ $.fn.arbolInit = (modelo) ->
       itemValue = event.args.value;
       $.ajax(
         type: "PATCH"
-        url: 'nodos/'+$('#jqxTree').jqxTree('getSelectedItem').id
+        url: $('#root_path').val()+'rba/nodos/'+$('#jqxTree').jqxTree('getSelectedItem').id
         data:
           rba_nodo:
             padre_id: $('#jqxTree').jqxTree('getSelectedItem').parentElement.id
+          es_drop: true
         dataType: "json"
       )   
       $('#jqxgrid').jqxGrid('updatebounddata')

@@ -6,6 +6,7 @@ Roots::Application.routes.draw do
       post :borrar_seleccion
       get :editar_multiples
       put :actualizar_multiples
+      post :importar
     end
   end
 
