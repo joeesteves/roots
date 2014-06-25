@@ -1,4 +1,4 @@
 class Rba::Catfiscal < ActiveRecord::Base
-	include Habtmnodo
+	include ModeloGlobales
 	habtm_nodo
 end

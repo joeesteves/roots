@@ -27,31 +27,22 @@ $.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 			$('#cargando').css('display', 'none')    
 			$('#jqxgrid').on 'groupschanged', () -> 
 				$('#jqxgrid').jqxGrid('sortby', col_nombres[1].name, 'asc')
-				# para hacer arrastlabes las lineas
-			# gridCells = $('#jqxgrid').find('.jqx-grid-cell')
-			# treeItems = $('#jqxTree').find('.jqx-tree-item')
-			# gridCells.jqxDragDrop
-			# 	appendTo: 'body', dragZIndex: 99999,
-			# 	dropAction: 'none',
-			# 	initFeedback: (feedback) -> 
-			# 		feedback.height(25)
-			# 	dropTarget: treeItems, revert: true
-				#al agrupar debo ordenar para que el indexs quede correcto
 		columnsresize: true,
 		columns: col_props,
 		width: '100%',
 		groupable: true,
 		sortable: true,
-		# selectionmode: 'checkbox',
-		# selectionmode: 'multiplerows',
-		selectionmode: 'multiplerowsextended',
+		selectionmode: 'multiplerowsextended', #'checkbox', 'multiplerows'
 		filterable: true,
 		pageable: true,
 		pagesizeoptions: ['25','50','100'],
 		pagesize: 25
 
 	$("#jqxgrid").jqxGrid(opciones)
+
 	if agrupar != undefined
 		$('#jqxgrid').on 'bindingcomplete', () ->
 			$("#jqxgrid").jqxGrid('addgroup', agrupar)
-			$('#jqxgrid').jqxGrid('sortby', col_nombres[1].name, 'asc') 
+			$('#jqxgrid').jqxGrid('sortby', col_nombres[1].name, 'asc')
+			$("#jqxgrid").jqxGrid('expandallgroups')
+

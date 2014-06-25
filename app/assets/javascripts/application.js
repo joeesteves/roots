@@ -12,8 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require foundation
 //= require turbolinks
+//= require foundation
 //= require rba
 
-$(function(){ $(document).foundation(); });
+// $(function(){ $(document).foundation(); }); //la activacion de foundation la pase a fxActivacion

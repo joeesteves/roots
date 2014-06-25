@@ -2,21 +2,7 @@
 <div class="row">
   <div class="panel">
   <%= form_for @rba_nodo, builder: EstandarFormBuilder do |f| %>
-    <% f.errores %>
-
-    <div class="row">
-      
-      <div class="small-3 columns">
-        <%= f.text_field :nombre %>
-      </div>
-      <div class="small-3 columns">
-        <%= f.collection_select :arbol_id, Rba::Arbol.all, :id, :nombre, {include_blank: true}, {}%>
-      </div>
-      <div class="small-3 columns">
-        <%= f.grouped_collection_select :padre_id, Rba::Arbol.all, :nodos, :nombre,:id, :nombre %>
-      </div>
-      
-    </div>
+    <%= render 'form_fields', f:f %>
  
     <div class="row">
       <div class="small-12 columns">

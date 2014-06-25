@@ -1,6 +1,6 @@
 class Rba::CatfiscalesController < ApplicationController
   before_action :set_rba_catfiscal, only: [:show, :edit, :update, :destroy]
-  include Globales
+  
   # GET /rba/catfiscales
   def index
     arbol_index(params[:nodo])

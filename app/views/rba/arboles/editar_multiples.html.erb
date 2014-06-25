@@ -1,0 +1,23 @@
+<input id="esForm" type="hidden" value=true />
+  <div class="row">
+   <div class="panel">
+    <%= form_tag actualizar_multiples_rba_arboles_path, method: :put do %>
+      <% @rba_arboles.each do |rba_arbol| %>
+
+        <div class="row">
+        <h3>Empresa: <%= rba_arbol.nombre.upcase %></h3>
+          <div class="panel">
+            <%= fields_for "rba_arboles[]", rba_arbol, builder: EstandarFormBuilder do |f| %>
+            <%= render 'form_fields', f:f %>
+            <% end %>
+          </div>
+        </div>
+    <% end %>
+    <div class="row">
+      <div class="small-12 columns">
+        <%= submit_tag "Actualizar", :class => 'button tiny boton_largo' %>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>

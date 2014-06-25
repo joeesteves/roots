@@ -1,5 +1,5 @@
 class Rba::Usuario < ActiveRecord::Base
-	include Habtmnodo
+	include ModeloGlobales
 	habtm_nodo
 	has_secure_password
 	validates_uniqueness_of :usuario

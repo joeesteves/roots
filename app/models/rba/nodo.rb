@@ -1,5 +1,5 @@
 class Rba::Nodo < ActiveRecord::Base
-  include Habtm
+  include ModeloGlobales
 	habtm(%w(rba_empresas rba_arboles rba_empresagrupos 
 		rba_usuarios rba_nodos pruebas rba_libros 
     rco_cuentas rco_cuentatipos))

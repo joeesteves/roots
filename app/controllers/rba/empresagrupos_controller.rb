@@ -1,7 +1,6 @@
 class Rba::EmpresagruposController < ApplicationController
   before_action :set_rba_empresagrupo, only: [:show, :edit, :update, :destroy]
-  include Globales
-
+  
 
   # GET /rba/empresagrupos
   def index

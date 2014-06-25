@@ -1,6 +1,5 @@
 class Rco::CuentatiposController < ApplicationController
   before_action :set_rco_cuentatipo, only: [:show, :edit, :update, :destroy]
-  include Globales
   
   # GET /rco/cuentatipos
   def index

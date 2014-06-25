@@ -1,6 +1,6 @@
 class Rba::ArbolesController < ApplicationController
   before_action :set_rba_arbol, only: [:show, :edit, :update, :destroy]
-  include Globales
+  
   # GET /rba/arboles
   def index
     arbol_index(params[:nodo])

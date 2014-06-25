@@ -1,7 +1,8 @@
 class Rba::UsuariosController < ApplicationController
   before_action :set_rba_usuario, only: [:show, :edit, :update, :destroy]
   skip_before_filter :validar_usuario, only: [:new, :create]
-  include Globales
+ 
+ 
   # GET /rba/usuarios
   # GET /rba/usuarios.json
   def index

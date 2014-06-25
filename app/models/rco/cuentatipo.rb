@@ -1,4 +1,4 @@
 class Rco::Cuentatipo < ActiveRecord::Base
-  include Habtmnodo
+  include ModeloGlobales
   habtm_nodo
 end

@@ -1,4 +1,5 @@
 ready = ->
+	$(this).foundation()
 	$.fn.activarCalcular()
 	if $('#action_name').val() == 'index'	
 		$.fn.acciones()

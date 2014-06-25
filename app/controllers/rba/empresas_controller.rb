@@ -1,6 +1,6 @@
 class Rba::EmpresasController < ApplicationController
   before_action :set_rba_empresa, only: [:show, :edit, :update, :destroy]
-  include Globales
+  
   
   # GET /rba/empresas
   def index

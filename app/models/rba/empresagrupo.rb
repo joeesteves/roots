@@ -1,6 +1,6 @@
 class Rba::Empresagrupo < ActiveRecord::Base
-	include Habtmnodo
-	has_many :empresas, :dependent => :restrict
+	include ModeloGlobales
 	habtm_nodo
+	has_many :empresas, :dependent => :restrict
 
 end

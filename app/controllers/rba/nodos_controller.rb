@@ -1,9 +1,8 @@
 class Rba::NodosController < ApplicationController
   before_action :set_rba_nodo, only: [:show, :edit, :update, :destroy]
-  include Globales
+  
   # GET /rba/nodos
   def index
-
     unless params[:modelo]
       @rba_nodos = Rba::Nodo.all
     else  

@@ -1,7 +1,6 @@
 class Rco::CuentasController < ApplicationController
   before_action :set_rco_cuenta, only: [:show, :edit, :update, :destroy]
-  include Globales
-  
+ 
   # GET /rco/cuentas
   def index
     arbol_index(params[:nodo])
@@ -15,15 +14,6 @@ class Rco::CuentasController < ApplicationController
   def new
     @rco_cuenta = Rco::Cuenta.new
     define_nodo(params[:nodo])
-  end
-
-  def importar
-    begin 
-      Rco::Cuenta.importar(params[:file],controller_path)
-      redirect_to  rco_cuentas_path, notice: "se han importado las cuentas correctamente"
-    rescue Exception => e
-      redirect_to  rco_cuentas_path, notice: "Hubo algun Error! #{e}"
-    end
   end
 
   # GET /rco/cuentas/1/edit

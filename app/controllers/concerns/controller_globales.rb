@@ -1,4 +1,4 @@
-module Globales
+module ControllerGlobales
 	extend ActiveSupport::Concern
 
 	def getVariables(controller_path)
@@ -39,8 +39,7 @@ module Globales
     
     @coleccion = instance_variable_set(v[:coleccion], v[:clase].update(params[v[:metodo]].keys, params[v[:metodo]].values))
     @coleccion.reject! { |p| p.errors.empty? }
-    # @rba_empresas = Rba::Empresa.update(params[:rba_empresas].keys, params[:rba_empresas].values)
-    # @rba_empresas.reject! { |p| p.errors.empty? }
+   
     if @coleccion.empty?
       redirect_to action: :index
     else
@@ -67,4 +66,13 @@ module Globales
   end
 
 
+  def importar
+    v = getVariables(controller_path)
+    begin 
+      v[:clase].importar(params[:file],controller_path)
+      redirect_to  root_path+controller_path, notice: "se han importado las cuentas correctamente"
+    rescue Exception => e
+      redirect_to  root_path+controller_path, notice: "Hubo algun Error! #{e}"
+    end
+  end
 end
