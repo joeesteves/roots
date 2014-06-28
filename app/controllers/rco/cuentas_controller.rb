@@ -3,6 +3,9 @@ class Rco::CuentasController < ApplicationController
  
   # GET /rco/cuentas
   def index
+    if flash[:nodo]
+      @nodo = flash[:nodo]
+    end
     arbol_index(params[:nodo], empresagrupo_id: session[:empresagrupo_id])
   end
 
@@ -26,8 +29,9 @@ class Rco::CuentasController < ApplicationController
     @rco_cuenta.empresagrupo_id = session[:empresagrupo_id]
 
     if @rco_cuenta.save
-      redirect_to rco_cuentas_path, notice: 'Cuenta guardado.'
       ubica_en_nodo(params[:nodo])
+      flash[:nodo] = @rco_cuenta.nodos.first.id rescue nil
+      redirect_to rco_cuentas_path, notice: 'Cuenta guardado.'     
     else
       render action: 'new'
     end
@@ -36,6 +40,7 @@ class Rco::CuentasController < ApplicationController
   # PATCH/PUT /rco/cuentas/1
   def update
     if @rco_cuenta.update(rco_cuenta_params)
+      flash[:nodo] = @rco_cuenta.nodos.first.id rescue nil
       redirect_to rco_cuentas_path, notice: 'Cuenta actualizado.'
     else
       render action: 'edit'
