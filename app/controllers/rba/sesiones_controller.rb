@@ -9,6 +9,8 @@ class Rba::SesionesController < ApplicationController
 		usuario = Rba::Usuario.find_by_usuario(params[:usuario])
 		if usuario && usuario.authenticate(params[:password])
 			session[:usuario_id] = usuario.id
+			session[:empresagrupo_id] = params[:empresagrupo]
+
 		
 			if params[:url] != ''
 				redirect_to params[:url]
@@ -24,7 +26,8 @@ class Rba::SesionesController < ApplicationController
 	end
 
 	def salir
-		session[:usuario_id] = nil
+		reset_session
+		
 		redirect_to root_url
 	end
 

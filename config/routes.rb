@@ -1,6 +1,5 @@
 Roots::Application.routes.draw do
 
-  
  concern :globales do
     collection do
       post :borrar_seleccion
@@ -11,7 +10,9 @@ Roots::Application.routes.draw do
   end
 
   namespace :rco do
-    resources :cuentas, :cuentatipos,  concerns: [:globales]
+    resources :cuentas, :cuentatipos,
+    :registros, :asientos, :cotizaciones,
+    :monedas,  concerns: [:globales]
   end
 
   namespace :rba do

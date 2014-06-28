@@ -1,0 +1,2 @@
+module Rco::AsientosHelper
+end

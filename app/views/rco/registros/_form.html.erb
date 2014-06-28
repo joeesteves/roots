@@ -1,0 +1,44 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+  <%= form_for @rco_registro, builder: EstandarFormBuilder do |f| %>
+   
+<!-- Cortar desde aca y pegar en el partial _form_fields.html.erb -->
+
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.date_select :fecha %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :asiento %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :cuenta %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :debe %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :haber %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.date_select :vencimiento %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_area :desc %>
+  </div>
+      
+</div>
+
+<!-- Cortar hasta aca y pegar en el partial _form_fields.html.erb -->
+
+    <div class="row">
+      <div class="small-12 columns">
+        <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> /> 
+        <%= f.submit %>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>

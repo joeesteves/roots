@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Fecha:</strong>
+  <%= @rco_registro.fecha %>
+</p>
+
+<p>
+  <strong>Asiento:</strong>
+  <%= @rco_registro.asiento %>
+</p>
+
+<p>
+  <strong>Cuenta:</strong>
+  <%= @rco_registro.cuenta %>
+</p>
+
+<p>
+  <strong>Debe:</strong>
+  <%= @rco_registro.debe %>
+</p>
+
+<p>
+  <strong>Haber:</strong>
+  <%= @rco_registro.haber %>
+</p>
+
+<p>
+  <strong>Vencimiento:</strong>
+  <%= @rco_registro.vencimiento %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rco_registro.desc %>
+</p>
+
+<%= link_to 'Editar', edit_rco_registro_path(@rco_registro), :class => "button tiny" %>
+<%= link_to 'Volver', rco_registros_path, :class => "button tiny" %>

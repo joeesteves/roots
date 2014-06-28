@@ -1,9 +1,10 @@
-$.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
-	if query != undefined
-		queryUrl = '?nodo='+ query
-	else if $('#con_arbol').val() == 'true'
-		queryUrl = '?nodo=raiz'
-	else	
+$.fn.gridInit = (col_nombres, col_props, query, agrupar) -> 
+	if $('#con_arbol').val() == 'true'
+		if query == undefined || query == ''
+			queryUrl = '?nodo=raiz'
+		else
+			queryUrl = '?nodo='+ query
+	else
 		queryUrl = ''
 			
 	$("#cargando").css('display', 'block')
@@ -24,9 +25,14 @@ $.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 		ready: ->
 			$('#jqxgrid').jqxGrid('localizestrings', $.fn.gridLoc())
 			$('#gridpagerlistjqxgrid').css('width','auto')
-			$('#cargando').css('display', 'none')    
+			$('#cargando').css('display', 'none')
+			$('#jqxgrid').jqxGrid('sortby', col_nombres[1].name, 'asc')
 			$('#jqxgrid').on 'groupschanged', () -> 
 				$('#jqxgrid').jqxGrid('sortby', col_nombres[1].name, 'asc')
+			$('#jqxgrid').on 'rowdoubleclick', (event) -> 
+    		args = event.args
+    		row = args.rowindex
+    		$.fn.editaRow(row)
 		columnsresize: true,
 		columns: col_props,
 		width: '100%',
@@ -37,6 +43,7 @@ $.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 		pageable: true,
 		pagesizeoptions: ['25','50','100'],
 		pagesize: 25
+		groupsexpandedbydefault: true
 
 	$("#jqxgrid").jqxGrid(opciones)
 
@@ -44,5 +51,3 @@ $.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 		$('#jqxgrid').on 'bindingcomplete', () ->
 			$("#jqxgrid").jqxGrid('addgroup', agrupar)
 			$('#jqxgrid').jqxGrid('sortby', col_nombres[1].name, 'asc')
-			$("#jqxgrid").jqxGrid('expandallgroups')
-

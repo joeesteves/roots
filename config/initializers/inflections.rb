@@ -14,6 +14,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'arbol', 'arboles'
   inflect.irregular 'model', 'modelos'
   inflect.irregular 'cuenta', 'cuentas'
+  inflect.irregular 'cotizacion', 'cotizaciones'
 
 
   

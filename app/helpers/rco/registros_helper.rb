@@ -1,0 +1,2 @@
+module Rco::RegistrosHelper
+end

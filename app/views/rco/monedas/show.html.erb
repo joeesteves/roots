@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rco_moneda.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rco_moneda.nombre %>
+</p>
+
+<%= link_to 'Editar', edit_rco_moneda_path(@rco_moneda), :class => "button tiny" %>
+<%= link_to 'Volver', rco_monedas_path, :class => "button tiny" %>

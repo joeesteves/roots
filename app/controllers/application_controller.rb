@@ -18,6 +18,8 @@ class ApplicationController < ActionController::Base
 			redirect_to root_url + '?url='+ url
 		else 				
 			@usuario_actual ||= Rba::Usuario.find(session[:usuario_id]) 
+			@e_grupo_actual = Rba::Empresagrupo.find(session[:empresagrupo_id])
+
 		end
 	end	
 

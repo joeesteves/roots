@@ -1,0 +1,2 @@
+module Rco::MonedasHelper
+end

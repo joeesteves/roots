@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140624230325) do
+ActiveRecord::Schema.define(version: 20140627212406) do
 
   create_table "rba_arboles", force: true do |t|
     t.string   "nombre"
@@ -79,6 +79,27 @@ ActiveRecord::Schema.define(version: 20140624230325) do
     t.datetime "updated_at"
   end
 
+  create_table "rco_asientos", force: true do |t|
+    t.date     "fecha"
+    t.integer  "moneda_id"
+    t.decimal  "cotizacion", precision: 12, scale: 4
+    t.text     "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rco_asientos", ["moneda_id"], name: "index_rco_asientos_on_moneda_id", using: :btree
+
+  create_table "rco_cotizaciones", force: true do |t|
+    t.date     "fecha"
+    t.decimal  "cotizacion", precision: 12, scale: 4
+    t.integer  "moneda_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rco_cotizaciones", ["moneda_id"], name: "index_rco_cotizaciones_on_moneda_id", using: :btree
+
   create_table "rco_cuentas", force: true do |t|
     t.string   "codigo"
     t.string   "nombre"
@@ -101,5 +122,27 @@ ActiveRecord::Schema.define(version: 20140624230325) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "rco_monedas", force: true do |t|
+    t.string   "codigo"
+    t.string   "nombre"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "rco_registros", force: true do |t|
+    t.date     "fecha"
+    t.integer  "asiento_id"
+    t.integer  "cuenta_id"
+    t.decimal  "debe",        precision: 12, scale: 4
+    t.decimal  "haber",       precision: 12, scale: 4
+    t.date     "vencimiento"
+    t.text     "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rco_registros", ["asiento_id"], name: "index_rco_registros_on_asiento_id", using: :btree
+  add_index "rco_registros", ["cuenta_id"], name: "index_rco_registros_on_cuenta_id", using: :btree
 
 end

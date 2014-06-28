@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Fecha:</strong>
+  <%= @rco_asiento.fecha %>
+</p>
+
+<p>
+  <strong>Moneda:</strong>
+  <%= @rco_asiento.moneda %>
+</p>
+
+<p>
+  <strong>Cotizacion:</strong>
+  <%= @rco_asiento.cotizacion %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rco_asiento.desc %>
+</p>
+
+<%= link_to 'Editar', edit_rco_asiento_path(@rco_asiento), :class => "button tiny" %>
+<%= link_to 'Volver', rco_asientos_path, :class => "button tiny" %>

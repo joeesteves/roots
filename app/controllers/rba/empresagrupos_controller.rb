@@ -4,6 +4,9 @@ class Rba::EmpresagruposController < ApplicationController
 
   # GET /rba/empresagrupos
   def index
+    if flash[:nodo]
+      @nodo = flash[:nodo]
+    end
     arbol_index(params[:nodo])
   end
 
@@ -28,6 +31,7 @@ class Rba::EmpresagruposController < ApplicationController
 
     if @rba_empresagrupo.save
       ubica_en_nodo(params[:nodo])
+      flash[:nodo] = @rba_empresagrupo.nodos.first.id
       redirect_to rba_empresagrupos_path, notice: 'Empresagrupo guardado.'
     else
       render action: 'new'
@@ -37,7 +41,8 @@ class Rba::EmpresagruposController < ApplicationController
   # PATCH/PUT /rba/empresagrupos/1
   def update
     if @rba_empresagrupo.update(rba_empresagrupo_params)
-      redirect_to rba_empresagrupos_path, notice: 'Empresagrupo actualizado.'
+      redirect_to rba_empresagrupos_path  , notice: 'Empresagrupo actualizado.'
+      flash[:nodo] = @rba_empresagrupo.nodos.first.id
     else
       render action: 'edit'
     end

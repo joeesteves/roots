@@ -7,7 +7,7 @@
   </div>	
 
 	<div class="small-8 columns">
-	    <%= text_field_tag :usuario, params[:usuario] %>
+	    <%= text_field_tag :usuario%>
 	</div>
 </div>
 <div class="row collapse"> 
@@ -17,7 +17,17 @@
 	  </span>
   </div>	
 	<div class="small-8 columns">
-	    <%= password_field_tag :password, params[:password] %>
+	    <%= password_field_tag :password %>
+	</div>
+</div>
+<div class="row collapse"> 
+  <div class="small-4 columns">
+	  <span class="prefix">
+		  GRUPO
+	  </span>
+  </div>	
+	<div class="small-8 columns">
+	    <%= select_tag(:empresagrupo, options_from_collection_for_select(Rba::Empresagrupo.all, :id, :nombre)) %>
 	</div>
 </div>
 <input id="url" name="url" type="hidden" value="<%= @url %>">

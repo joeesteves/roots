@@ -1,0 +1,32 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+  <%= form_for @rco_cotizacion, builder: EstandarFormBuilder do |f| %>
+   
+<!-- Cortar desde aca y pegar en el partial _form_fields.html.erb -->
+
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.date_select :fecha %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :cotizacion %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :moneda %>
+  </div>
+      
+</div>
+
+<!-- Cortar hasta aca y pegar en el partial _form_fields.html.erb -->
+
+    <div class="row">
+      <div class="small-12 columns">
+        <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> /> 
+        <%= f.submit %>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>

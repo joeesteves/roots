@@ -12,18 +12,28 @@ module ControllerGlobales
       metodo_ids: metodo_ids, metodo: metodo, clase: clase}
   end
 
-  def arbol_index(nodo)
+  def arbol_index(nodo, args = {})
     v = getVariables(controller_path)
+    empresagrupo = ""
+    if args[:empresagrupo_id]
+      empresagrupo = "empresagrupo_id = #{args[:empresagrupo_id]}"
+    end
+
     if nodo
-      unless nodo == 'raiz' 
-       instance_variable_set(v[:coleccion], Rba::Nodo.find(nodo).send(v[:metodo]))
+      unless nodo == 'raiz' # definido en grid_init
+       instance_variable_set(v[:coleccion], Rba::Nodo.find(nodo).send(v[:metodo]).
+        where(empresagrupo))
       else    
-       instance_variable_set(v[:coleccion], Rba::Arbol.find_by_modelo(controller_path).nodos.first.send(v[:metodo]))
+       instance_variable_set(v[:coleccion], Rba::Arbol.
+        find_by_modelo(controller_path).
+        nodos.first.send(v[:metodo]).where(empresagrupo))
       end
     else  
-     instance_variable_set(v[:coleccion],v[:clase].all)
+     instance_variable_set(v[:coleccion],v[:clase].where(empresagrupo))
     end
-	end
+	
+
+  end
 
 
   def editar_multiples

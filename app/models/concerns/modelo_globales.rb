@@ -1,7 +1,6 @@
 module ModeloGlobales
 	extend ActiveSupport::Concern
 
-
 	module ClassMethods
 		include ControllerGlobales
 		def importar(file, controller_path)
@@ -32,5 +31,27 @@ module ModeloGlobales
 			:foreign_key => "item_id", 
 			:join_table => "rba_items_nodos"			
 		end			
+
+		# filtros por id
+		def deEmpresaXId(empresaId)
+			where(:empresa_id => empresaId)
+		end
+
+		def deEmpresaGrupoXId(empresaId)
+			where(:empresagrupo_id => empresaId)
+		end
+
+	# filtros por codigo
+
+		def deEmpresaXCod(empresaGrupoCodigo)	
+			metodo = self.name.underscore.split('/')[1].pluralize
+			Rba::Empresa.find_by_codigo(empresaGrupoCodigo).send(metodo)
+		end
+
+		def deEmpresaGrupoXCod(empresaCodigo)	
+			metodo = self.name.underscore.split('/')[1].pluralize
+			Rba::Empresa.find_by_codigo(empresaCodigo).send(metodo)
+		end
+		
 	end
 end

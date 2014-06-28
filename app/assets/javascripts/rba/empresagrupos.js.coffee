@@ -1,7 +1,7 @@
 ready = ->
 	if $('#con_arbol').val() == 'true'
 		$.fn.arbolInit()
-	$.fn.gridRequest()
+	$.fn.gridRequest($('#nodo_actual').val())
 
 $.fn.gridRequest = (query) ->
 	nombres = ['id','codigo', 'nombre','desc',]

@@ -3,7 +3,7 @@ class Rco::CuentasController < ApplicationController
  
   # GET /rco/cuentas
   def index
-    arbol_index(params[:nodo])
+    arbol_index(params[:nodo], empresagrupo_id: session[:empresagrupo_id])
   end
 
   # GET /rco/cuentas/1
@@ -23,6 +23,7 @@ class Rco::CuentasController < ApplicationController
   # POST /rco/cuentas
   def create
     @rco_cuenta = Rco::Cuenta.new(rco_cuenta_params)
+    @rco_cuenta.empresagrupo_id = session[:empresagrupo_id]
 
     if @rco_cuenta.save
       redirect_to rco_cuentas_path, notice: 'Cuenta guardado.'
