@@ -37,6 +37,9 @@ module ControllerGlobales
 
 
   def editar_multiples
+    if params[:nodo]
+      @nodo = params[:nodo]
+    end
     v = getVariables(controller_path) # returns hash
     instance_variable_set(v[:coleccion], v[:clase].find(params[:items].split(',')))   
     respond_to do |format|
@@ -51,6 +54,7 @@ module ControllerGlobales
     @coleccion.reject! { |p| p.errors.empty? }
    
     if @coleccion.empty?
+      flash[:nodo] = params[:nodo]
       redirect_to action: :index
     else
       render "editar_multiples"

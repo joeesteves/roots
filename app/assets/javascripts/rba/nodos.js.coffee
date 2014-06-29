@@ -13,7 +13,8 @@ $.fn.gridRequest = () ->
 	$.fn.gridPrepDatos(nombres, propiedades, undefined, agrupar)
 
 filtrarNodosPadres = () ->
-	$('#rba_nodo_padre_id').parent().hide()
+	if $('#action_name').val() == 'new'
+		$('#rba_nodo_padre_id').parent().hide()
 	padres = $('#rba_nodo_padre_id').html()
 	$('#rba_nodo_arbol_id').change ->	
 		arbol = $('#rba_nodo_arbol_id :selected').text()

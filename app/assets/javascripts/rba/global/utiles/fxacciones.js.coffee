@@ -39,7 +39,9 @@ $.fn.nuevo = () ->
 	
 $.fn.editar = () ->
 	items = $.fn.getSelected()
-	$(location).attr('href',$('#controller_full_path').val()+'/editar_multiples?items='+ items)
+	nodo = $('#nodo_actual').val()
+	$(location).attr('href',$('#controller_full_path').val()+
+		'/editar_multiples?items='+ items + '&nodo=' + nodo)
 
 $.fn.copiar = () ->
 		$('#items_seleccionados').val($.fn.getSelected())
