@@ -30,7 +30,6 @@ class Rco::CuentasController < ApplicationController
 
     if @rco_cuenta.save
       ubica_en_nodo(params[:nodo])
-      flash[:nodo] = @rco_cuenta.nodos.first.id rescue nil
       redirect_to rco_cuentas_path, notice: 'Cuenta guardado.'     
     else
       render action: 'new'

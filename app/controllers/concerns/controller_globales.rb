@@ -76,6 +76,8 @@ module ControllerGlobales
     unless nodo == 'undefined'
       v = getVariables(controller_path)
       Rba::Nodo.find(nodo).send(v[:metodo]) << instance_variable_get(v[:member])
+      nodo = Rba::Nodo.find(nodo)
+      flash[:nodo] = nodo.id
     end
   end
 
