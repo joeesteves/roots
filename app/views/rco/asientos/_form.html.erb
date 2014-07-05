@@ -5,22 +5,7 @@
    
 <!-- Cortar desde aca y pegar en el partial _form_fields.html.erb -->
 
-<% f.errores %>
-<div class="row">      
-  <div class="small-3 columns">
-    <%= f.date_select :fecha %>
-  </div>
-  <div class="small-3 columns">
-    <%= f.text_field :moneda %>
-  </div>
-  <div class="small-3 columns">
-    <%= f.text_field :cotizacion %>
-  </div>
-  <div class="small-3 columns">
-    <%= f.text_area :desc %>
-  </div>
-      
-</div>
+  <%= render 'form_fields', f:f %>
 
 <!-- Cortar hasta aca y pegar en el partial _form_fields.html.erb -->
 

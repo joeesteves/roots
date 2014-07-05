@@ -1,13 +1,13 @@
 <input id="esForm" type="hidden" value=true />
   <div class="row">
    <div class="panel">
-    <%= form_tag actualizar_multiples_rba_empresas_path, method: :put do %>
-      <% @rba_empresas.each do |rba_empresa| %>
+    <%= form_tag actualizar_multiples_rba_catfiscales_path, method: :put do %>
+      <% @rba_catfiscales.each do |rba_catfiscal| %>
 
         <div class="row">
-        <h3>Empresa: <%= rba_empresa.nombre.upcase %></h3>
+        <h3>Empresa: <%= rba_catfiscal.nombre.upcase %></h3>
           <div class="panel">
-            <%= fields_for "rba_empresas[]", rba_empresa, builder: EstandarFormBuilder do |f| %>
+            <%= fields_for "rba_catfiscales[]", rba_catfiscal, builder: EstandarFormBuilder do |f| %>
             <%= render 'form_fields', f:f %>
             <% end %>
           </div>
@@ -15,8 +15,7 @@
     <% end %>
     <div class="row">
       <div class="small-12 columns">
-            <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> /> 
-
+      <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> /> 
         <%= submit_tag "Actualizar", :class => 'button tiny boton_largo' %>
       </div>
     </div>

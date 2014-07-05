@@ -37,12 +37,16 @@ class Rba::NodosController < ApplicationController
 
   # PATCH/PUT /rba/nodos/1
   def update
-    
+    if @rba_nodo.id == params[:rba_nodo][:padre_id].to_i
+      params[:rba_nodo][:padre_id] = nil 
+    end
+
     if params[:es_drop] == 'true' 
         @rba_nodo.update(rba_nodo_params)
         render :nothing => true  #se actualiza con el drag and drop en el abm
     elsif  @rba_nodo.update(rba_nodo_params)
-        redirect_to rba_nodos_path, notice: 'Nodo actualizado.'  
+        
+      redirect_to rba_nodos_path, notice: 'Nodo actualizado.'
     else
       render action: 'edit'
     end

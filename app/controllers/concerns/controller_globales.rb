@@ -18,7 +18,9 @@ module ControllerGlobales
     if args[:empresagrupo_id]
       empresagrupo = "empresagrupo_id = #{args[:empresagrupo_id]}"
     end
-
+    if args[:flash_nodo]
+      @nodo = args[:flash_nodo]
+    end
     if nodo
       unless nodo == 'raiz' # definido en grid_init
        instance_variable_set(v[:coleccion], Rba::Nodo.find(nodo).send(v[:metodo]).

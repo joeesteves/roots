@@ -4,10 +4,7 @@ class Rba::EmpresagruposController < ApplicationController
 
   # GET /rba/empresagrupos
   def index
-    if flash[:nodo]
-      @nodo = flash[:nodo]
-    end
-    arbol_index(params[:nodo])
+    arbol_index(params[:nodo], flash_nodo: flash[:nodo])
   end
 
   # GET /rba/empresagrupos/1

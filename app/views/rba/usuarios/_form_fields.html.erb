@@ -1,0 +1,28 @@
+ <%= f.errores %>
+<div class="row">     
+
+  <div class="small-4 columns">    
+    <%= f.text_field :usuario, :tabindex => 1 %>
+  </div>
+
+  <div class="small-4 columns">
+    <%= f.text_field :nombre, :tabindex => 2 %>
+  </div>
+  
+  <div class="small-4 columns">
+    <%= f.text_field :apellido, :tabindex => 3 %>
+  </div>
+  
+  <div class="small-4 columns">    
+    <%= f.text_field :mail, :tabindex => 4 %>
+  </div>
+  
+  <div class="small-4 columns">
+    <%= f.password_field :password, label: "Clave", :tabindex => 5 %>
+  </div>
+  
+  <div class="small-4 columns">
+    <%= f.password_field :password_confirmation, label: "Confirmar Clave", :tabindex => 6 %>
+  </div>
+
+</div>

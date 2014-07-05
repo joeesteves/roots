@@ -3,7 +3,7 @@ class Rco::CuentatiposController < ApplicationController
   
   # GET /rco/cuentatipos
   def index
-    arbol_index(params[:nodo])
+    arbol_index(params[:nodo], flash_nodo: flash[:nodo])
   end
 
   # GET /rco/cuentatipos/1

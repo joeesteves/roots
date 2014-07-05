@@ -1,6 +1,8 @@
 ready = ->
 	$(this).foundation()
-	$.fn.activarCalcular()
+	if $('#esForm').val() == 'true'
+		$.fn.activarCalcular()
+		$.fn.activarFechaAutocompletado()
 	if $('#action_name').val() == 'index'	
 		$.fn.acciones()
 		$.fn.atajos()

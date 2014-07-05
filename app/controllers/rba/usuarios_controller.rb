@@ -6,7 +6,7 @@ class Rba::UsuariosController < ApplicationController
   # GET /rba/usuarios
   # GET /rba/usuarios.json
   def index
-    arbol_index(params[:nodo])
+    arbol_index(params[:nodo], flash_nodo: flash[:nodo])
   end
 
   # GET /rba/usuarios/1
@@ -17,6 +17,7 @@ class Rba::UsuariosController < ApplicationController
   # GET /rba/usuarios/new
   def new
     @rba_usuario = Rba::Usuario.new
+    define_nodo(params[:nodo])
   end
 
   # GET /rba/usuarios/1/edit
@@ -28,28 +29,26 @@ class Rba::UsuariosController < ApplicationController
   def create
     @rba_usuario = Rba::Usuario.new(rba_usuario_params)
 
-    respond_to do |format|
-      if @rba_usuario.save
-        format.html { redirect_to rba_usuarios_path, notice: 'Usuario was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @rba_usuario }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @rba_usuario.errors, status: :unprocessable_entity }
-      end
+    if @rba_usuario.save
+      ubica_en_nodo(params[:nodo])
+      flash[:nodo] = @rba_usuario.nodos.first.id rescue nil
+      redirect_to rba_usuarios_path, notice: 'Usuario guardado'
+    else
+
+      render action: 'new'
     end
+
+   
   end
 
   # PATCH/PUT /rba/usuarios/1
   # PATCH/PUT /rba/usuarios/1.json
   def update
-    respond_to do |format|
-      if @rba_usuario.update(rba_usuario_params)
-        format.html { redirect_to rba_usuarios_path, notice: 'Usuario was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @rba_usuario.errors, status: :unprocessable_entity }
-      end
+    if @rba_usuario.update(rba_usuario_params)
+      flash[:nodo] = @rba_usuario.nodos.first.id rescue nil
+      redirect_to rba_usuarios_path  , notice: 'Usuario actualizado.' 
+    else
+      render action: 'edit'
     end
   end
 

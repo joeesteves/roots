@@ -16,9 +16,21 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 				label = nombre
 			end
 
-			"<span class='prefix postfix'>#{label.to_s.capitalize}</span>".html_safe + 
-			super(nombre,*args)
+			unless options[:sinEtiqueta]
+				"<span class='prefix postfix'>#{label.to_s.capitalize}</span>".html_safe + 
+				super(nombre,*args)
+			else
+				super(nombre,*args)
+			end
 		
+		end
+
+		def date_select(nombre, opciones = {})
+			
+			"<span class='prefix postfix'>#{nombre.to_s.capitalize}</span>".html_safe + 
+			"<input type='date' id=#{object_name}_fecha 
+			name=#{object_name}[fecha] value=#{object.fecha} />".html_safe
+
 		end
 
 		def submit

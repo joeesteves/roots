@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140627212406) do
+ActiveRecord::Schema.define(version: 20140704220110) do
 
   create_table "rba_arboles", force: true do |t|
     t.string   "nombre"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20140627212406) do
     t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "empresa_id"
   end
 
   add_index "rco_asientos", ["moneda_id"], name: "index_rco_asientos_on_moneda_id", using: :btree

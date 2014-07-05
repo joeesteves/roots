@@ -5,7 +5,7 @@
 			<ul>
 				<li class="menu_label"><label>CARGAR</label></li>					
 				<li><a>Operaciones</a></li>
-				<li><a>Asientos</a></li>
+				<li><%= link_to 'Asientos', rco_asientos_path %> </li>
 				<li><a>Cierre de tarjetas</a></li>
 			</ul>
 			<ul>
@@ -16,8 +16,19 @@
 			</ul>
 			<ul>
 				<li class="menu_label"><label>CONFIGURAR</label></li>
-				<li><a>Tipo de operaciones</a></li>
-				<li><a>Plan de cuentas</a></li>
+				<li><%= link_to 'Cuentas', rco_cuentas_path %></li>
+				<li><%= link_to 'Tipos de cuentas', rco_cuentatipos_path %></li>
+				<li><%= link_to 'Empresa', rba_empresas_path %></li>
+				<li><%= link_to 'Empresagrupos', rba_empresagrupos_path %></li>
+				<li><%= link_to 'Categorias Fiscales', rba_catfiscales_path %></li>
+				<li><%= link_to 'Cotizaciones', rco_cotizaciones_path %></li>
+				<li><%= link_to 'Monedas', rco_monedas_path %></li>
+				<li><%= link_to 'Arboles', rba_arboles_path %></li>
+				<li><%= link_to 'Nodos', rba_nodos_path %></li>
+
+
+
+
 			</ul>
 		</li>
 	</ul>

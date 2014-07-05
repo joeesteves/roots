@@ -10,7 +10,7 @@ class Rba::SesionesController < ApplicationController
 		if usuario && usuario.authenticate(params[:password])
 			session[:usuario_id] = usuario.id
 			session[:empresagrupo_id] = params[:empresagrupo]
-
+			session[:empresa_id] =  Rba::Empresa.find(1) # por ahora siempre en la empresa 1 
 		
 			if params[:url] != ''
 				redirect_to params[:url]

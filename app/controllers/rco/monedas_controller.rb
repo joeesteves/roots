@@ -3,7 +3,7 @@ class Rco::MonedasController < ApplicationController
   
   # GET /rco/monedas
   def index
-    arbol_index(params[:nodo])
+    arbol_index(params[:nodo], flash_nodo: flash[:nodo])
   end
 
   # GET /rco/monedas/1

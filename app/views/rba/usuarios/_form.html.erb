@@ -1,38 +1,17 @@
 <input id="esForm" type="hidden" value=true />
-<%= form_for @rba_usuario, builder: EstandarFormBuilder do |f| %>
-
-<%= f.errores %>
-
 <div class="row">
   <div class="panel">
-    <div class="small-4 columns">    
-      <%= f.text_field :usuario, :tabindex => 1 %>
-    </div>
+  <%= form_for @rba_usuario, builder: EstandarFormBuilder do |f| %>
 
-    <div class="small-4 columns">
-      <%= f.text_field :nombre, :tabindex => 2 %>
+   <%= render 'form_fields', f:f %>
+
+    <div class="row">
+      <div class="small-12 columns">
+        <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> />     
+        <%= f.submit %>
+      </div>
     </div>
-    
-    <div class="small-4 columns">
-      <%= f.text_field :apellido, :tabindex => 3 %>
-    </div>
-    
-    <div class="small-4 columns">    
-      <%= f.text_field :mail, :tabindex => 4 %>
-    </div>
-    
-    <div class="small-4 columns">
-      <%= f.password_field :password, label: "Clave", :tabindex => 5 %>
-    </div>
-    
-    <div class="small-4 columns">
-      <%= f.password_field :password_confirmation, label: "Confirmar Clave", :tabindex => 6 %>
-    </div>
-    
-    <%= f.submit %>
-  
+  <% end %>
   </div>
-
 </div>
 
-<% end %>

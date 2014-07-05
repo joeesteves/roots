@@ -1,23 +1,41 @@
 <% f.errores %>
-<div class="row">
-  <div class="small-4 columns">
-    <%= f.text_field :codigo %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.date_select :fecha%>
   </div>
-  <div class="small-4 columns">
-    <%= f.text_field :nombre %>
+  <div class="small-3 columns">
+    <%= f.collection_select :moneda_id, Rco::Moneda.all, :id, :nombre %>
   </div>
-  
-  <div class="small-4 columns">
-    <%= f.collection_select :cuentatipo_id, Rco::Cuentatipo.all, :id, :nombre, 
-    {}, {label: "Tipo"}%>
+  <div class="small-3 columns">
+    <%= f.text_field :cotizacion %>
   </div>
-</div>
-<div class="row">
-
-  <div class="small-8 columns">
+  <div class="small-3 columns">
     <%= f.text_area :desc %>
-  </div>
-  <div class="small-4 columns">
-    <%= f.check_box :estado, {}, {label: "Activo?"} %>
-  </div>
+  </div>  
 </div>
+<div class="row">      
+
+  <div class="small-3 columns">
+ <h4 style='text-align:center'>DEBE</h4>
+  </div>
+  <div class="small-3 columns">
+<h4 style='text-align:center'>HABER</h4>
+  </div>
+  <div class="small-5 columns">
+<h4 style='text-align:center'>DESCRIPCION</h4>
+  </div>
+  <div class="small-1 columns">
+
+  </div>
+
+</div>     
+  <%= f.fields_for :registros do |builder| %>
+    <%= render 'registros_campos', f: builder %>
+    <% end %>
+<div id="container">
+</div>
+ <div class="row">
+  <div class="small-1 columns" style="float:right">
+    <h4 style='widht:100%;text-align:center'> <%= agregar_linea "O  ", f, :registros %></h4>
+  </div>
+ </div>

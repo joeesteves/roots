@@ -3,4 +3,5 @@ class Rco::Registro < ActiveRecord::Base
   habtm_nodo
   belongs_to :asiento
   belongs_to :cuenta
+  
 end

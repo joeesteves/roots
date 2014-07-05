@@ -3,10 +3,8 @@ class Rco::CuentasController < ApplicationController
  
   # GET /rco/cuentas
   def index
-    if flash[:nodo]
-      @nodo = flash[:nodo]
-    end
-    arbol_index(params[:nodo], empresagrupo_id: session[:empresagrupo_id])
+    arbol_index(params[:nodo], empresagrupo_id: session[:empresagrupo_id], 
+      flash_nodo: flash[:nodo])
   end
 
   # GET /rco/cuentas/1
