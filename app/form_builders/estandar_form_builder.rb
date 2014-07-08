@@ -10,26 +10,36 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 
 		define_method(method_name) do |nombre,*args|	
 			options = args.extract_options!
+
 			if options[:label]
 				label = options[:label]
 			else
 				label = nombre
 			end
 
+			
 			unless options[:sinEtiqueta]
 				"<span class='prefix postfix'>#{label.to_s.capitalize}</span>".html_safe + 
-				super(nombre,*args)
+				super(nombre,*args, options)
 			else
-				super(nombre,*args)
+				options.delete(:sinEtiqueta)
+				super(nombre,*args, options)
 			end
 		
 		end
 
 		def date_select(nombre, opciones = {})
+			html_options = ""
+			opciones.each do |k,v|
+				
+				html_options += k.to_s + "=" + v.to_s + ""
+				p html_options			
+			end
+			
 			
 			"<span class='prefix postfix'>#{nombre.to_s.capitalize}</span>".html_safe + 
 			"<input type='date' id=#{object_name}_fecha 
-			name=#{object_name}[fecha] value=#{object.fecha} />".html_safe
+			name=#{object_name}[fecha] value='#{object.fecha}' #{html_options} />".html_safe
 
 		end
 
@@ -53,5 +63,9 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 			end
 		end
 	end
+
+	def objectify_options(options)
+    super.except(:label, :sinEtiqueta)
+  end
 
 end

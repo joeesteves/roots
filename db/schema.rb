@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140704220110) do
+ActiveRecord::Schema.define(version: 20140707140437) do
 
   create_table "rba_arboles", force: true do |t|
     t.string   "nombre"
@@ -135,8 +135,8 @@ ActiveRecord::Schema.define(version: 20140704220110) do
     t.date     "fecha"
     t.integer  "asiento_id"
     t.integer  "cuenta_id"
-    t.decimal  "debe",        precision: 12, scale: 4
-    t.decimal  "haber",       precision: 12, scale: 4
+    t.decimal  "debe",        precision: 12, scale: 4, default: 0.0, null: false
+    t.decimal  "haber",       precision: 12, scale: 4, default: 0.0, null: false
     t.date     "vencimiento"
     t.text     "desc"
     t.datetime "created_at"

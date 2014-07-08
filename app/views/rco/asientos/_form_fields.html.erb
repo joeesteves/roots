@@ -1,27 +1,44 @@
-<% f.errores %>
+<%= f.errores %>
 <div class="row">      
   <div class="small-3 columns">
-    <%= f.date_select :fecha%>
+    <%= f.date_select :fecha %>
   </div>
-  <div class="small-3 columns">
-    <%= f.collection_select :moneda_id, Rco::Moneda.all, :id, :nombre %>
+  <div class="small-2 columns">
+
+  <span class='prefix postfix'>DEBE SUMA</span>
+    <input type="text" id="debe" readonly tabindex="-1" />
   </div>
-  <div class="small-3 columns">
-    <%= f.text_field :cotizacion %>
+  <div class="small-2 columns">
+  <span class='prefix postfix'>HABER SUMA</span>
+ 
+   <input type="text" id="haber" readonly tabindex="-1" />
   </div>
-  <div class="small-3 columns">
-    <%= f.text_area :desc %>
-  </div>  
+  <div class="small-2 columns">
+  <span class='prefix postfix'>DIF.</span>
+ 
+   <input type="text" id="diferencia" readonly tabindex="-1" />
+  </div>
+  <div class="small-2 columns">
+    <%= f.collection_select :moneda_id, Rco::Moneda.all, :id, :nombre, label: "Moneda" %>
+  </div>
+   <div class="small-1 columns" style="float:right">
+    <span class='prefix postfix'></span>
+    <h4 style='widht:100%;text-align:center'> 
+      <%= agregar_linea "O  ", f, :registros %>
+    </h4>
+  </div>
 </div>
 <div class="row">      
-
-  <div class="small-3 columns">
+ <div class="small-3 columns">
+ <h4 style='text-align:center'>CUENTA</h4>
+  </div>
+  <div class="small-2 columns">
  <h4 style='text-align:center'>DEBE</h4>
   </div>
-  <div class="small-3 columns">
+  <div class="small-2 columns">
 <h4 style='text-align:center'>HABER</h4>
   </div>
-  <div class="small-5 columns">
+  <div class="small-4 columns">
 <h4 style='text-align:center'>DESCRIPCION</h4>
   </div>
   <div class="small-1 columns">
@@ -34,8 +51,14 @@
     <% end %>
 <div id="container">
 </div>
- <div class="row">
-  <div class="small-1 columns" style="float:right">
-    <h4 style='widht:100%;text-align:center'> <%= agregar_linea "O  ", f, :registros %></h4>
+ 
+ 
+ 
+<div class="row">
+  <div class="small-6 columns">
+    <%= f.text_field :cotizacion, class: "hola" %>
   </div>
- </div>
+  <div class="small-6 columns">
+    <%= f.text_area :desc %>
+  </div>  
+</div>
