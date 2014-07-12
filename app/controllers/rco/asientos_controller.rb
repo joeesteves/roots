@@ -13,6 +13,7 @@ class Rco::AsientosController < ApplicationController
   # GET /rco/asientos/new
   def new
     @rco_asiento = Rco::Asiento.new
+    @rco_asiento.cotizacion = '1'
     define_nodo(params[:nodo])
   end
 
@@ -26,7 +27,7 @@ class Rco::AsientosController < ApplicationController
     @rco_asiento.empresa_id = session[:empresa_id] 
 
     if @rco_asiento.valid_save
-      redirect_to rco_asientos_path, notice: 'Asiento guardado.'
+      redirect_to rco_asientos_path, notice: 'Asiento guardado'
       ubica_en_nodo(params[:nodo])     
     else
       render action: 'new'
@@ -36,7 +37,7 @@ class Rco::AsientosController < ApplicationController
   # PATCH/PUT /rco/asientos/1
   def update
     if @rco_asiento.valid_update(rco_asiento_params)
-      redirect_to rco_asientos_path, notice: 'Asiento guardado.'
+      redirect_to rco_asientos_path, notice: 'Asiento guardado'
     else
       render action: 'edit'
     end
@@ -45,7 +46,7 @@ class Rco::AsientosController < ApplicationController
   # DELETE /rco/asientos/1
   def destroy
     @rco_asiento.destroy
-    redirect_to rco_asientos_url, notice: 'Asiento eliminado.'
+    redirect_to rco_asientos_url, notice: 'Asiento eliminado'
   end
 
   def borrar_seleccion
@@ -64,6 +65,6 @@ class Rco::AsientosController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def rco_asiento_params
       params.require(:rco_asiento).permit(:fecha, :moneda_id, :cotizacion, :desc, 
-        registros_attributes: [:id, :cuenta_id, :debe, :haber, :desc, :_destroy])
+        registros_attributes: [:id, :cuenta_id, :debe, :haber, :debe_op, :haber_op, :desc, :_destroy])
     end
 end

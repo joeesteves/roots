@@ -5,11 +5,16 @@ class Rco::Asiento < ActiveRecord::Base
   accepts_nested_attributes_for :registros, allow_destroy: true
   belongs_to :empresa, class_name: "Rba::Empresa"
   belongs_to :moneda
-  #validates :cotizacion, :presence => true
+  validates :cotizacion, :presence => true
   validates_associated :registros
 
  	def valid_save
- 		transaction do
+    registros.each do |r|
+      r.debe = r.debe_op * cotizacion
+      r.haber = r.haber_op * cotizacion
+    end
+
+ 		transaction do      
  			if save
 	 			unless balancea?
 	 				raise ActiveRecord::Rollback

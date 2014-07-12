@@ -19,12 +19,13 @@
    <input type="text" id="diferencia" readonly tabindex="-1" />
   </div>
   <div class="small-2 columns">
-    <%= f.collection_select :moneda_id, Rco::Moneda.all, :id, :nombre, label: "Moneda" %>
+  <!--   <%= f.collection_select :moneda_id, Rco::Moneda.all, :id, :nombre, label: "Moneda" %> -->
+  <%= f.select :moneda_id, Rco::Moneda.all.map {|c| [c.nombre, c.id, {data: {cot: c.cotizaciones.last.cotizacion}}]}, {}, {label: "Moneda"} %>
   </div>
    <div class="small-1 columns" style="float:right">
     <span class='prefix postfix'></span>
     <h4 style='widht:100%;text-align:center'> 
-      <%= agregar_linea "O  ", f, :registros %>
+      <%= agregar_linea "O", f, :registros %>
     </h4>
   </div>
 </div>
@@ -56,7 +57,7 @@
  
 <div class="row">
   <div class="small-6 columns">
-    <%= f.text_field :cotizacion, class: "hola" %>
+    <%= f.text_field :cotizacion, {class: "hola"} %>
   </div>
   <div class="small-6 columns">
     <%= f.text_area :desc %>

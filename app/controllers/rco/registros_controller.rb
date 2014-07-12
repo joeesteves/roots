@@ -3,7 +3,7 @@ class Rco::RegistrosController < ApplicationController
   
   # GET /rco/registros
   def index
-    arbol_index(params[:nodo])
+    arbol_index(params[:nodo],order: 'cuenta_id asc')
   end
 
   # GET /rco/registros/1
@@ -42,10 +42,10 @@ class Rco::RegistrosController < ApplicationController
   end
 
   # DELETE /rco/registros/1
-  def destroy
-    @rco_registro.destroy
-    redirect_to rco_registros_url, notice: 'Registro eliminado.'
-  end
+  # def destroy
+  #   @rco_registro.destroy
+  #   redirect_to rco_registros_url, notice: 'Registro eliminado.'
+  # end
 
   def borrar_seleccion
     Rco::Registro.destroy(params[:ids]) 

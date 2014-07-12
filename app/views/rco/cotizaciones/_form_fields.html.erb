@@ -1,23 +1,14 @@
-<% f.errores %>
-<div class="row">
-  <div class="small-4 columns">
-    <%= f.text_field :codigo %>
-  </div>
-  <div class="small-4 columns">
-    <%= f.text_field :nombre %>
-  </div>
-  
-  <div class="small-4 columns">
-    <%= f.collection_select :cuentatipo_id, Rco::Cuentatipo.all, :id, :nombre, 
-    {}, {label: "Tipo"}%>
-  </div>
-</div>
-<div class="row">
 
-  <div class="small-8 columns">
-    <%= f.text_area :desc %>
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.date_select :fecha %>
   </div>
-  <div class="small-4 columns">
-    <%= f.check_box :estado, {}, {label: "Activo?"} %>
+  <div class="small-3 columns">
+    <%= f.text_field :cotizacion %>
   </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :moneda_id, Rco::Moneda.all, :id, :nombre, {}, {:label => "Moneda"} %>
+  </div>
+      
 </div>

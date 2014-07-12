@@ -4,6 +4,7 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 		text_area 
 		password_field 
 		collection_select
+		select
 		number_field
 		grouped_collection_select
 		check_box].each do |method_name|

@@ -5,6 +5,6 @@ module ApplicationHelper
     fields = f.fields_for(asociacion, new_object, child_index: id) do |builder|
       render(asociacion.to_s + "_campos", f: builder)
 		end
-		link_to(nombre, '#', class: "agregar_campos", data: {id: id, fields: fields.gsub("\n", "")})
+		link_to(nombre, '#', class: "agregar_campos", data: {id: id, fields: fields.gsub("\n", "")}, remote:true)
 	end
 end

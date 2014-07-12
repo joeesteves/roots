@@ -1,4 +1,17 @@
+saldo = 0
+cuenta_ant_id = 0
 json.array!(@rco_registros) do |rco_registro|
-  json.extract! rco_registro, :id, :fecha, :asiento_id, :cuenta_id, :debe, :haber, :vencimiento, :desc
-  json.url rco_registro_url(rco_registro, format: :json)
+  id = rco_registro.id
+  json.id id
+  json.extract! rco_registro, :debe, :haber, :vencimiento, :desc
+  json.fecha rco_registro.asiento.fecha.strftime("%d/%m/%Y")
+	cuenta = rco_registro.cuenta
+	if cuenta.id == cuenta_ant_id
+		saldo += rco_registro.debe - rco_registro.haber
+	else
+		saldo = rco_registro.debe - rco_registro.haber
+	end
+	json.cuenta cuenta.nombre
+  json.saldo saldo
+  cuenta_ant_id = cuenta.id
 end

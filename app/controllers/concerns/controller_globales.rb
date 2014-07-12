@@ -24,17 +24,15 @@ module ControllerGlobales
     if nodo
       unless nodo == 'raiz' # definido en grid_init
        instance_variable_set(v[:coleccion], Rba::Nodo.find(nodo).send(v[:metodo]).
-        where(empresagrupo))
+        where(empresagrupo).order(args[:order]))
       else    
        instance_variable_set(v[:coleccion], Rba::Arbol.
         find_by_modelo(controller_path).
-        nodos.first.send(v[:metodo]).where(empresagrupo))
+        nodos.first.send(v[:metodo]).where(empresagrupo).order(args[:order]))
       end
     else  
-     instance_variable_set(v[:coleccion],v[:clase].where(empresagrupo))
+     instance_variable_set(v[:coleccion],v[:clase].where(empresagrupo).order(args[:order]))
     end
-	
-
   end
 
 
@@ -75,7 +73,7 @@ module ControllerGlobales
     end
   end  
   def ubica_en_nodo(nodo)
-    unless nodo == 'undefined'
+    unless nodo == 'undefined' || nodo == '/'
       v = getVariables(controller_path)
       Rba::Nodo.find(nodo).send(v[:metodo]) << instance_variable_get(v[:member])
       nodo = Rba::Nodo.find(nodo)
