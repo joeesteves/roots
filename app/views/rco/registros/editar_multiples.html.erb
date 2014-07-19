@@ -1,13 +1,13 @@
 <input id="esForm" type="hidden" value=true />
   <div class="row">
    <div class="panel">
-    <%= form_tag actualizar_multiples_rco_cuentas_path, method: :put do %>
-      <% @rco_cuentas.each do |rco_cuenta| %>
+    <%= form_tag actualizar_multiples_rco_registros_path, method: :put do %>
+      <% @rco_registros.each do |rco_registro| %>
 
         <div class="row">
-        <h3>Empresa: <%= rco_cuenta.nombre.upcase %></h3>
+        <h3>Empresa: <%= rco_registro.id %></h3>
           <div class="panel">
-            <%= fields_for "rco_cuentas[]", rco_cuenta, builder: EstandarFormBuilder do |f| %>
+            <%= fields_for "rco_registros[]", rco_registro, builder: EstandarFormBuilder do |f| %>
             <%= render 'form_fields', f:f %>
             <% end %>
           </div>

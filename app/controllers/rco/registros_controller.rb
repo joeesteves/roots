@@ -3,7 +3,15 @@ class Rco::RegistrosController < ApplicationController
   
   # GET /rco/registros
   def index
-    arbol_index(params[:nodo],order: 'cuenta_id asc')
+   
+    @rco_registros = Rco::Registro.all
+    si = Rco::Registro.new(:id =>-1, :cuenta_id => 315, :debe => 500,:haber => 0, :desc => "jejejej")
+    sii = Rco::Registro.new(:id =>1, :cuenta_id => 352, :debe => 500,:haber => 0, :desc => "jejejej")
+    @rco_registros.push(si)
+    @rco_registros.push(sii)
+    @rco_registros.sort_by!{ |a| [a.cuenta_id, a.id]}
+
+    
   end
 
   # GET /rco/registros/1

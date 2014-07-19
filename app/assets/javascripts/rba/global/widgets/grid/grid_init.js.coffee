@@ -17,7 +17,6 @@ $.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 	datafields: col_nombres
 	id: 'id'
 	url: url
-	sortcolumn: 'id'
 	
 	dataAdapter = new $.jqx.dataAdapter(source)
 	opciones = 
@@ -27,9 +26,9 @@ $.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 			$('#jqxgrid').jqxGrid('localizestrings', $.fn.gridLoc())
 			$('#gridpagerlistjqxgrid').css('width','auto')
 			$('#cargando').css('display', 'none')
-			#  $('#jqxgrid').jqxGrid('sortby', col_nombres[0].name, 'asc')
+			$('#jqxgrid').jqxGrid('sortby', col_nombres[0].name, 'asc')
 			$('#jqxgrid').on 'groupschanged', () -> 
-				#$('#jqxgrid').jqxGrid('sortby', col_nombres[0].name, 'asc')
+				$('#jqxgrid').jqxGrid('sortby', col_nombres[0].name, 'asc')
 			$('#jqxgrid').on 'rowdoubleclick', (event) -> 
     		args = event.args
     		row = args.rowindex
