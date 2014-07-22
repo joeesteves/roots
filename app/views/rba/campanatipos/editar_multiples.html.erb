@@ -1,0 +1,25 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+    <%= form_tag actualizar_multiples_rba_campanatipos_path, method: :put do %>
+    <% @rba_campanatipos.each do |rba_campanatipo| %>
+
+    <div class="row">
+    <h3>Grupo: <%= rba_campanatipo.nombre.upcase %></h3>
+<div class="panel">
+<%= fields_for "rba_campanatipos[]", rba_campanatipo, builder: EstandarFormBuilder do |f| %>
+<%= render 'form_fields', f:f %>
+<% end %>
+</div>
+</div>
+<% end %>
+<div class="row">
+<div class="small-12 columns">
+      <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> /> 
+
+<%= submit_tag "Actualizar", :class => 'button tiny boton_largo' %>
+</div>
+</div>
+<% end %>
+</div>
+</div>

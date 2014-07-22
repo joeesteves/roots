@@ -13,7 +13,7 @@ $.fn.gridRequest = (query) ->
 		['empresagrupo', 'auto', 'Grupo']
 	]
 	
-	$.fn.gridPrepDatos(nombres, propiedades, query, undefined)
+	$.fn.gridPrepDatos(nombres, propiedades, query)
 	
 $(document).on('page:load', ready)
 $(document).ready(ready)

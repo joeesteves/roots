@@ -41,7 +41,7 @@ class <%= controller_class_name %>Controller < ApplicationController
   # PATCH/PUT <%= route_url %>/1
   def update
     if @<%= orm_instance.update("#{singular_table_name}_params") %>
-      flash[:nodo] = @<%= orm_instance%>.nodos.first.id rescue nil
+      flash[:nodo] = @<%= singular_table_name %>.nodos.first.id rescue nil
       redirect_to <%= plural_table_name %>_path, notice: <%= "'#{human_name} actualizado.'" %>
     else
       render action: 'edit'

@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rba_establecimiento.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_establecimiento.nombre %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rba_establecimiento.desc %>
+</p>
+
+<p>
+  <strong>Superficie:</strong>
+  <%= @rba_establecimiento.superficie %>
+</p>
+
+<%= link_to 'Editar', edit_rba_establecimiento_path(@rba_establecimiento), :class => "button tiny" %>
+<%= link_to 'Volver', rba_establecimientos_path, :class => "button tiny" %>

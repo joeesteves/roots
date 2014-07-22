@@ -15,9 +15,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.irregular 'model', 'modelos'
   inflect.irregular 'cuenta', 'cuentas'
   inflect.irregular 'cotizacion', 'cotizaciones'
-
-
-  
+  inflect.irregular 'actividad', 'actividades'
 end
 
 # These inflection rules are supported but not enabled by default:

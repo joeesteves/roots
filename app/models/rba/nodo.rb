@@ -1,9 +1,11 @@
 class Rba::Nodo < ActiveRecord::Base
   include ModeloGlobales
-	habtm(%w(rba_empresas rba_arboles rba_empresagrupos 
-		rba_usuarios rba_nodos pruebas rba_libros 
-    rco_cuentas rco_cuentatipos rco_monedas
-    rco_cotizaciones rco_asientos rco_registros))
+	habtm(%w(rba_actividadtipos rba_actividades 
+    rba_arboles rco_asientos rba_campana 
+    rba_campanatipos rco_cuentas rco_cuentatipos
+    rba_empresas rba_empresagrupos rba_usuarios 
+    rba_nodos rba_establecimientos rba_lotes 
+    rba_temporadas rco_monedas rco_cotizaciones rco_registros))
   belongs_to :arbol
   has_many :nodos, :foreign_key => "padre_id", :dependent => :destroy
   

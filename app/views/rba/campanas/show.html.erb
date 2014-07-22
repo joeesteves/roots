@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rba_campana.estado %>
+</p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rba_campana.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_campana.nombre %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rba_campana.desc %>
+</p>
+
+<p>
+  <strong>Temporada:</strong>
+  <%= @rba_campana.temporada %>
+</p>
+
+<p>
+  <strong>Campanatipo:</strong>
+  <%= @rba_campana.campanatipo %>
+</p>
+
+<%= link_to 'Editar', edit_rba_campana_path(@rba_campana), :class => "button tiny" %>
+<%= link_to 'Volver', rba_campanas_path, :class => "button tiny" %>

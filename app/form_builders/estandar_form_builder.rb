@@ -40,7 +40,7 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 			
 			"<span class='prefix postfix'>#{nombre.to_s.capitalize}</span>".html_safe + 
 			"<input type='date' id=#{object_name}_fecha 
-			name=#{object_name}[fecha] value='#{object.fecha}' #{html_options} />".html_safe
+			name=#{object_name}[#{nombre}] value='#{object.send(nombre)}' #{html_options} />".html_safe
 
 		end
 

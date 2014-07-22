@@ -13,8 +13,15 @@ module ControllerGlobales
   end
 
   def arbol_index(nodo, args = {})
+    #argumentos opcionales [:empresagrupo_id] filtra por grupo
+    #argumentos opcionales [:includes] eager loading
+    
     v = getVariables(controller_path)
     empresagrupo = ""
+    includes = ""
+    if args[:includes]
+      includes = args[:includes]
+    end
     if args[:empresagrupo_id]
       empresagrupo = "empresagrupo_id = #{args[:empresagrupo_id]}"
     end
@@ -28,10 +35,12 @@ module ControllerGlobales
       else    
        instance_variable_set(v[:coleccion], Rba::Arbol.
         find_by_modelo(controller_path).
-        nodos.first.send(v[:metodo]).where(empresagrupo).order(args[:order]))
+        nodos.first.send(v[:metodo]).
+        where(empresagrupo).order(args[:order]))
       end
     else  
-     instance_variable_set(v[:coleccion],v[:clase].where(empresagrupo).order(args[:order]))
+     instance_variable_set(v[:coleccion],v[:clase].
+      where(empresagrupo).includes(includes).order(args[:order]))
     end
   end
 

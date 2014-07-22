@@ -11,7 +11,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140708172742) do
+ActiveRecord::Schema.define(version: 20140722144027) do
+
+  create_table "rba_actividades", force: true do |t|
+    t.string   "codigo"
+    t.string   "nombre"
+    t.integer  "estado"
+    t.text     "desc"
+    t.integer  "actividadtipo_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rba_actividades", ["actividadtipo_id"], name: "index_rba_actividades_on_actividadtipo_id", using: :btree
+
+  create_table "rba_actividadtipos", force: true do |t|
+    t.string   "codigo"
+    t.string   "nombre"
+    t.integer  "estado"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rba_arboles", force: true do |t|
     t.string   "nombre"
@@ -21,6 +41,29 @@ ActiveRecord::Schema.define(version: 20140708172742) do
   end
 
   add_index "rba_arboles", ["modelo"], name: "index_rba_arboles_on_modelo", using: :btree
+
+  create_table "rba_campanas", force: true do |t|
+    t.string   "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.integer  "temporada_id"
+    t.integer  "campanatipo_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rba_campanas", ["campanatipo_id"], name: "index_rba_campanas_on_campanatipo_id", using: :btree
+  add_index "rba_campanas", ["temporada_id"], name: "index_rba_campanas_on_temporada_id", using: :btree
+
+  create_table "rba_campanatipos", force: true do |t|
+    t.string   "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rba_catfiscales", force: true do |t|
     t.string   "codigo"
@@ -51,6 +94,17 @@ ActiveRecord::Schema.define(version: 20140708172742) do
   add_index "rba_empresas", ["catfiscal_id"], name: "index_rba_empresas_on_catfiscal_id", using: :btree
   add_index "rba_empresas", ["empresagrupo_id"], name: "index_rba_empresas_on_empresagrupo_id", using: :btree
 
+  create_table "rba_establecimientos", force: true do |t|
+    t.string   "codigo"
+    t.string   "nombre"
+    t.text     "desc"
+    t.decimal  "superficie",      precision: 6, scale: 2, default: 0.0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "empresagrupo_id"
+    t.integer  "estado"
+  end
+
   create_table "rba_items_nodos", force: true do |t|
     t.integer "item_id"
     t.integer "nodo_id"
@@ -58,6 +112,18 @@ ActiveRecord::Schema.define(version: 20140708172742) do
 
   add_index "rba_items_nodos", ["item_id"], name: "index_rba_items_nodos_on_item_id", using: :btree
   add_index "rba_items_nodos", ["nodo_id"], name: "index_rba_items_nodos_on_nodo_id", using: :btree
+
+  create_table "rba_lotes", force: true do |t|
+    t.integer  "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.text     "desc"
+    t.integer  "establecimiento_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rba_lotes", ["establecimiento_id"], name: "index_rba_lotes_on_establecimiento_id", using: :btree
 
   create_table "rba_nodos", force: true do |t|
     t.string   "nombre"
@@ -68,6 +134,17 @@ ActiveRecord::Schema.define(version: 20140708172742) do
   end
 
   add_index "rba_nodos", ["arbol_id"], name: "index_rba_nodos_on_arbol_id", using: :btree
+
+  create_table "rba_temporadas", force: true do |t|
+    t.string   "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.date     "desde"
+    t.date     "hasta"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rba_usuarios", force: true do |t|
     t.string   "usuario"

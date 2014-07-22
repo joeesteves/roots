@@ -1,0 +1,2 @@
+module Rba::LotesHelper
+end

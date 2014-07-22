@@ -1,0 +1,2 @@
+module Rba::CampanasHelper
+end

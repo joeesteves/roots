@@ -1,0 +1,19 @@
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.check_box :estado, :label => "Activo?" %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :codigo %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :nombre %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_area :desc %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :establecimiento_id, Rba::Establecimiento.all, :id, :nombre, {}, {label: "Establecimiento"} %>
+  </div>
+      
+</div>

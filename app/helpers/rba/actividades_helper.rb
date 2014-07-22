@@ -1,0 +1,2 @@
+module Rba::ActividadesHelper
+end

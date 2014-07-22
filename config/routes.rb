@@ -17,7 +17,10 @@ Roots::Application.routes.draw do
 
   namespace :rba do
     resources :usuarios,:empresagrupos, :empresas,
-     :catfiscales, :arboles, :nodos, :libros, concerns: [:globales]
+    :catfiscales, :arboles, :nodos, :libros,
+    :establecimientos, :actividadtipos, :actividades,
+    :lotes, :campanas, :campanatipos, :temporadas,
+    concerns: [:globales]
     resources :sesiones
   end
 

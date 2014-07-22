@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rba_actividad.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_actividad.nombre %>
+</p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rba_actividad.estado %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rba_actividad.desc %>
+</p>
+
+<p>
+  <strong>Actividadtipo:</strong>
+  <%= @rba_actividad.actividadtipo %>
+</p>
+
+<%= link_to 'Editar', edit_rba_actividad_path(@rba_actividad), :class => "button tiny" %>
+<%= link_to 'Volver', rba_actividades_path, :class => "button tiny" %>

@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 	before_filter :validar_usuario, :conArbol
 	include ControllerGlobales
 	
+
 	def conArbol
 		if action_name == 'index'
 			 @conArbol = Rba::Arbol.exists?(:modelo => controller_path)

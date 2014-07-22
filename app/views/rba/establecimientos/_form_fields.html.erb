@@ -1,0 +1,34 @@
+<%= f.errores %>
+
+<div class="row">     
+
+    <div class="small-4 columns">    
+      <%= f.text_field :codigo, :tabindex => 1 %>
+    </div>
+
+    <div class="small-4 columns">
+      <%= f.text_field :nombre, :tabindex => 2 %>
+    </div>
+
+    <div class="small-4 columns">
+      <%= f.text_field :desc, :tabindex => 3 %>
+    </div>
+        <div class="small-4 columns">
+      <%= f.text_field :superficie, :tabindex => 4 %>
+    </div>
+    <div class="small-3 columns">
+      <%= f.check_box :estado, label: "Activo?" %>
+    </div>
+    <div class="small-1 columns" style="float:left">
+      <span class='prefix postfix'></span>
+      <h4 style='widht:100%;text-align:center'> 
+        <%= agregar_linea "O", f, :lotes %>
+      </h4>
+    </div>
+    
+</div> 
+    <%= f.fields_for :lotes do |builder| %>
+      <%= render 'lotes_campos', f: builder %>
+    <% end %>
+  <div id="container">
+  </div>
