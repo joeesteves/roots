@@ -1,0 +1,2 @@
+module Rga::EventotiposHelper
+end

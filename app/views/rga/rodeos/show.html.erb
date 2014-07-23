@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rga_rodeo.estado %>
+</p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rga_rodeo.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rga_rodeo.nombre %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rga_rodeo.desc %>
+</p>
+
+<%= link_to 'Editar', edit_rga_rodeo_path(@rga_rodeo), :class => "button tiny" %>
+<%= link_to 'Volver', rga_rodeos_path, :class => "button tiny" %>

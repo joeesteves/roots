@@ -1,0 +1,25 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+    <%= form_tag actualizar_multiples_rga_eventotipos_path, method: :put do %>
+    <% @rga_eventotipos.each do |rga_eventotipo| %>
+
+    <div class="row">
+    <h3>Grupo: <%= rga_eventotipo.nombre.upcase %></h3>
+<div class="panel">
+<%= fields_for "rga_eventotipos[]", rga_eventotipo, builder: EstandarFormBuilder do |f| %>
+<%= render 'form_fields', f:f %>
+<% end %>
+</div>
+</div>
+<% end %>
+<div class="row">
+<div class="small-12 columns">
+      <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> /> 
+
+<%= submit_tag "Actualizar", :class => 'button tiny boton_largo' %>
+</div>
+</div>
+<% end %>
+</div>
+</div>

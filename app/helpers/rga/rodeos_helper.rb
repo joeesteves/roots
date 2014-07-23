@@ -1,0 +1,2 @@
+module Rga::RodeosHelper
+end

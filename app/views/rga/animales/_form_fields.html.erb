@@ -1,0 +1,31 @@
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.check_box :estado, label: "Activo?" %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :codigo %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :nombre %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :alias %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :rp %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :color %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :desc %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :madre_id, Rga::Animal.all, :id, :nombre, {}, {label: "Madre"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :padre_id, Rga::Animal.all, :id, :nombre, {}, {label: "Padre"} %>
+  </div>
+      
+</div>

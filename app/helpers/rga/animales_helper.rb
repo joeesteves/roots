@@ -1,0 +1,2 @@
+module Rga::AnimalesHelper
+end

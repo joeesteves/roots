@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rga_eventotipo.estado %>
+</p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rga_eventotipo.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rga_eventotipo.nombre %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rga_eventotipo.desc %>
+</p>
+
+<%= link_to 'Editar', edit_rga_eventotipo_path(@rga_eventotipo), :class => "button tiny" %>
+<%= link_to 'Volver', rga_eventotipos_path, :class => "button tiny" %>

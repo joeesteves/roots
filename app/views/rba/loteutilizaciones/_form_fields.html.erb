@@ -1,0 +1,29 @@
+
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.check_box :estado, label: "Activo?" %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :codigo %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :nombre %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :desc %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :lote_id, Rba::Lote.all, :id, :nombre, {}, {label: "Lote"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :campana_id, Rba::Campana.all, :id, :nombre, {}, {label: "Campaña"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :actividad_id, Rba::Actividad.all, :id, :nombre, {}, {label: "Actividad"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :superficie %>
+  </div>
+      
+</div>

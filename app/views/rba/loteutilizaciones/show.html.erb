@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rba_loteutilizacion.estado %>
+</p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rba_loteutilizacion.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_loteutilizacion.nombre %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rba_loteutilizacion.desc %>
+</p>
+
+<p>
+  <strong>Lote:</strong>
+  <%= @rba_loteutilizacion.lote %>
+</p>
+
+<p>
+  <strong>Campana:</strong>
+  <%= @rba_loteutilizacion.campana %>
+</p>
+
+<p>
+  <strong>Actividad:</strong>
+  <%= @rba_loteutilizacion.actividad %>
+</p>
+
+<p>
+  <strong>Superficie:</strong>
+  <%= @rba_loteutilizacion.superficie %>
+</p>
+
+<%= link_to 'Editar', edit_rba_loteutilizacion_path(@rba_loteutilizacion), :class => "button tiny" %>
+<%= link_to 'Volver', rba_loteutilizaciones_path, :class => "button tiny" %>

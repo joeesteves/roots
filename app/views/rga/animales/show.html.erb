@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rga_animal.estado %>
+</p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rga_animal.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rga_animal.nombre %>
+</p>
+
+<p>
+  <strong>Alias:</strong>
+  <%= @rga_animal.alias %>
+</p>
+
+<p>
+  <strong>Rp:</strong>
+  <%= @rga_animal.rp %>
+</p>
+
+<p>
+  <strong>Color:</strong>
+  <%= @rga_animal.color %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rga_animal.desc %>
+</p>
+
+<p>
+  <strong>Madre:</strong>
+  <%= @rga_animal.madre %>
+</p>
+
+<p>
+  <strong>Padre:</strong>
+  <%= @rga_animal.padre %>
+</p>
+
+<%= link_to 'Editar', edit_rga_animal_path(@rga_animal), :class => "button tiny" %>
+<%= link_to 'Volver', rga_animales_path, :class => "button tiny" %>

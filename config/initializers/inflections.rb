@@ -8,14 +8,28 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.singular /^(ox)en/i, '\1'
 #   inflect.irregular 'person', 'people'
 #   inflect.uncountable %w( fish sheep )
-	inflect.irregular 'nota', 'notas'
-  inflect.irregular 'catfiscal', 'catfiscales'
-  inflect.irregular 'sesion', 'sesiones'
-  inflect.irregular 'arbol', 'arboles'
-  inflect.irregular 'model', 'modelos'
-  inflect.irregular 'cuenta', 'cuentas'
-  inflect.irregular 'cotizacion', 'cotizaciones'
-  inflect.irregular 'actividad', 'actividades'
+
+	inflecciones = {
+		'accion' => 'acciones',
+		'actividad' => 'actividades',
+		'animal' => 'animales',
+		'arbol' => 'arboles',
+		'categoria' => 'categorias',
+		'catfiscal' => 'catfiscales',
+		'cotizacion' => 'cotizaciones',
+		'cuenta' => 'cuentas',
+		'loteutilizacion' => 'loteutilizaciones',
+		'model' => 'modelos',
+		'nota' => 'notas',
+		'operacion' => 'operaciones',
+		'operacionorigen' => 'operacionorigenes',
+		'sesion' => 'sesiones',
+		'unidad' => 'unidades',
+	}
+	
+	inflecciones.each do |k,v|
+		inflect.irregular k, v
+	end
 end
 
 # These inflection rules are supported but not enabled by default:

@@ -9,24 +9,45 @@ Roots::Application.routes.draw do
     end
   end
 
+  get 'salir', to: 'rba/sesiones#salir', :as => :salir
+  post 'rba/mover_items', to: 'rba/nodos#mover_items'
+  root 'rba/bienvenidos#inicio'
+
+  namespace :rba do
+    resources :usuarios,
+    :empresagrupos, 
+    :empresas,
+    :catfiscales, 
+    :arboles, 
+    :nodos, 
+    :libros,
+    :establecimientos, 
+    :actividadtipos, 
+    :actividades,
+    :lotes, 
+    :campanas, 
+    :campanatipos, 
+    :temporadas,
+    :loteutilizaciones,
+    concerns: [:globales]
+    resources :sesiones
+  end
+
   namespace :rco do
     resources :cuentas, :cuentatipos,
     :registros, :asientos, :cotizaciones,
     :monedas,  concerns: [:globales]
   end
 
-  namespace :rba do
-    resources :usuarios,:empresagrupos, :empresas,
-    :catfiscales, :arboles, :nodos, :libros,
-    :establecimientos, :actividadtipos, :actividades,
-    :lotes, :campanas, :campanatipos, :temporadas,
+  namespace :rga do
+    resources :animales,
+    :estados,
+    :eventos,
+    :eventotipos,
+    :rodeos,
     concerns: [:globales]
-    resources :sesiones
   end
 
-	get 'salir', to: 'rba/sesiones#salir', :as => :salir
-  post 'rba/mover_items', to: 'rba/nodos#mover_items'
-  root 'rba/bienvenidos#inicio'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140722144027) do
+ActiveRecord::Schema.define(version: 20140723220559) do
 
   create_table "rba_actividades", force: true do |t|
     t.string   "codigo"
@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(version: 20140722144027) do
     t.string   "codigo"
     t.string   "nombre"
     t.text     "desc"
-    t.decimal  "superficie",      precision: 6, scale: 2, default: 0.0, null: false
+    t.decimal  "superficie",      precision: 8, scale: 2, default: 0.0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "empresagrupo_id"
@@ -124,6 +124,23 @@ ActiveRecord::Schema.define(version: 20140722144027) do
   end
 
   add_index "rba_lotes", ["establecimiento_id"], name: "index_rba_lotes_on_establecimiento_id", using: :btree
+
+  create_table "rba_loteutilizaciones", force: true do |t|
+    t.integer  "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.integer  "lote_id"
+    t.integer  "campana_id"
+    t.integer  "actividad_id"
+    t.decimal  "superficie",   precision: 8, scale: 2, default: 0.0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rba_loteutilizaciones", ["actividad_id"], name: "index_rba_loteutilizaciones_on_actividad_id", using: :btree
+  add_index "rba_loteutilizaciones", ["campana_id"], name: "index_rba_loteutilizaciones_on_campana_id", using: :btree
+  add_index "rba_loteutilizaciones", ["lote_id"], name: "index_rba_loteutilizaciones_on_lote_id", using: :btree
 
   create_table "rba_nodos", force: true do |t|
     t.string   "nombre"
@@ -224,5 +241,59 @@ ActiveRecord::Schema.define(version: 20140722144027) do
 
   add_index "rco_registros", ["asiento_id"], name: "index_rco_registros_on_asiento_id", using: :btree
   add_index "rco_registros", ["cuenta_id"], name: "index_rco_registros_on_cuenta_id", using: :btree
+
+  create_table "rga_animales", force: true do |t|
+    t.integer  "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "alias"
+    t.string   "rp"
+    t.string   "color"
+    t.string   "desc"
+    t.integer  "madre_id"
+    t.integer  "padre_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rga_animales", ["madre_id"], name: "index_rga_animales_on_madre_id", using: :btree
+  add_index "rga_animales", ["padre_id"], name: "index_rga_animales_on_padre_id", using: :btree
+
+  create_table "rga_estados", force: true do |t|
+    t.integer  "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "rga_eventos", force: true do |t|
+    t.integer  "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "eventotipo_id"
+  end
+
+  create_table "rga_eventotipos", force: true do |t|
+    t.integer  "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "rga_rodeos", force: true do |t|
+    t.integer  "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end

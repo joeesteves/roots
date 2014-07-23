@@ -1,0 +1,25 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+    <%= form_tag actualizar_multiples_rga_rodeos_path, method: :put do %>
+    <% @rga_rodeos.each do |rga_rodeo| %>
+
+    <div class="row">
+    <h3>Grupo: <%= rga_rodeo.nombre.upcase %></h3>
+<div class="panel">
+<%= fields_for "rga_rodeos[]", rga_rodeo, builder: EstandarFormBuilder do |f| %>
+<%= render 'form_fields', f:f %>
+<% end %>
+</div>
+</div>
+<% end %>
+<div class="row">
+<div class="small-12 columns">
+      <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> /> 
+
+<%= submit_tag "Actualizar", :class => 'button tiny boton_largo' %>
+</div>
+</div>
+<% end %>
+</div>
+</div>

@@ -1,0 +1,2 @@
+module Rga::EstadosHelper
+end
