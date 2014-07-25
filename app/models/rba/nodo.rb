@@ -37,6 +37,8 @@ class Rba::Nodo < ActiveRecord::Base
   rco_monedas
   rco_registros
   rga_animales
+  rga_categorias
+  rga_categoriatipos
   rga_estados
   rga_eventos
   rga_eventotipos

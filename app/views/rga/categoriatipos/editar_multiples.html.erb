@@ -1,0 +1,25 @@
+<input id="esForm" type="hidden" value=true />
+<div class="row">
+  <div class="panel">
+    <%= form_tag actualizar_multiples_rga_categoriatipos_path, method: :put do %>
+    <% @rga_categoriatipos.each do |rga_categoriatipo| %>
+
+    <div class="row">
+    <h3>Grupo: <%= rga_categoriatipo.nombre.upcase %></h3>
+<div class="panel">
+<%= fields_for "rga_categoriatipos[]", rga_categoriatipo, builder: EstandarFormBuilder do |f| %>
+<%= render 'form_fields', f:f %>
+<% end %>
+</div>
+</div>
+<% end %>
+<div class="row">
+<div class="small-12 columns">
+      <input id="nodo" name="nodo" type="hidden" value=<%= @nodo %> /> 
+
+<%= submit_tag "Actualizar", :class => 'button tiny boton_largo' %>
+</div>
+</div>
+<% end %>
+</div>
+</div>

@@ -1,5 +1,9 @@
 Roots::Application.routes.draw do
 
+  namespace :rga do
+    resources :estados_eventos
+  end
+
  concern :globales do
     collection do
       post :borrar_seleccion
@@ -41,6 +45,8 @@ Roots::Application.routes.draw do
 
   namespace :rga do
     resources :animales,
+    :categorias,
+    :categoriatipos,
     :estados,
     :eventos,
     :eventotipos,

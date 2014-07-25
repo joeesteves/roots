@@ -18,6 +18,7 @@ class Rga::EventosController < ApplicationController
 
   # GET /rga/eventos/1/edit
   def edit
+    @eventoTipoCodigo = @rga_evento.eventotipo.codigo
   end
 
   # POST /rga/eventos
@@ -25,6 +26,7 @@ class Rga::EventosController < ApplicationController
     @rga_evento = Rga::Evento.new(rga_evento_params)
 
     if @rga_evento.save
+      actualizar_estados(@rga_evento, params[:rga_evento][:origestado_ids], params[:rga_evento][:destestado_ids])
       redirect_to rga_eventos_path, notice: 'Evento guardado.'
       ubica_en_nodo(params[:nodo])
     else
@@ -35,6 +37,7 @@ class Rga::EventosController < ApplicationController
   # PATCH/PUT /rga/eventos/1
   def update
     if @rga_evento.update(rga_evento_params)
+      actualizar_estados(@rga_evento, params[:rga_evento][:origestado_ids], params[:rga_evento][:destestado_ids])
       flash[:nodo] = @rga_evento.nodos.first.id rescue nil
       redirect_to rga_eventos_path, notice: 'Evento actualizado.'
     else
@@ -59,10 +62,32 @@ class Rga::EventosController < ApplicationController
       @rga_evento = Rga::Evento.find(params[:id])
     end
 
+  def actualizar_estados(rga_evento, origestados, destestados)
+    comunestados = origestados & destestados
+    origestados -= comunestados
+    destestados -= comunestados
 
+    todos = comunestados + origestados + destestados
+    rga_evento.update_attributes(:estado_ids => todos)
+    unless origestados.empty?
+      rga_evento.estados_eventos.where(:estado_id => origestados).each do |o|
+        o.update_attributes(:codigo => 'O')
+      end
+    end
+    unless destestados.empty?
+      rga_evento.estados_eventos.where(:estado_id => destestados).each do |o|
+        o.update_attributes(:codigo => 'D')
+      end
+    end
+    unless comunestados.empty?
+      rga_evento.estados_eventos.where(:estado_id => comunestados).each do |o|
+        o.update_attributes(:codigo => 'OD')
+      end
+    end
+  end
 
     # Only allow a trusted parameter "white list" through.
     def rga_evento_params
-      params.require(:rga_evento).permit(:estado, :codigo, :nombre, :desc, :eventotipo_id)
+      params.require(:rga_evento).permit(:estado, :codigo, :nombre, :desc, :eventotipo_id, :estado_ids)
     end
 end

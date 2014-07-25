@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140723220559) do
+ActiveRecord::Schema.define(version: 20140725004936) do
 
   create_table "rba_actividades", force: true do |t|
     t.string   "codigo"
@@ -259,6 +259,44 @@ ActiveRecord::Schema.define(version: 20140723220559) do
   add_index "rga_animales", ["madre_id"], name: "index_rga_animales_on_madre_id", using: :btree
   add_index "rga_animales", ["padre_id"], name: "index_rga_animales_on_padre_id", using: :btree
 
+  create_table "rga_categorias", force: true do |t|
+    t.integer  "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.integer  "categoriatipo_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.decimal  "pesopromedio",     precision: 12, scale: 4, default: 0.0, null: false
+  end
+
+  add_index "rga_categorias", ["categoriatipo_id"], name: "index_rga_categorias_on_categoriatipo_id", using: :btree
+
+  create_table "rga_categoriatipos", force: true do |t|
+    t.integer  "estado"
+    t.string   "codigo"
+    t.string   "nombre"
+    t.string   "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "rga_categoriatipos_estados", force: true do |t|
+    t.integer "categoriatipo_id"
+    t.integer "estado_id"
+  end
+
+  add_index "rga_categoriatipos_estados", ["categoriatipo_id"], name: "index_rga_categoriatipos_estados_on_categoriatipo_id", using: :btree
+  add_index "rga_categoriatipos_estados", ["estado_id"], name: "index_rga_categoriatipos_estados_on_estado_id", using: :btree
+
+  create_table "rga_categoriatipos_eventos", force: true do |t|
+    t.integer "categoriatipo_id"
+    t.integer "evento_id"
+  end
+
+  add_index "rga_categoriatipos_eventos", ["categoriatipo_id"], name: "index_rga_categoriatipos_eventos_on_categoriatipo_id", using: :btree
+  add_index "rga_categoriatipos_eventos", ["evento_id"], name: "index_rga_categoriatipos_eventos_on_evento_id", using: :btree
+
   create_table "rga_estados", force: true do |t|
     t.integer  "estado"
     t.string   "codigo"
@@ -267,6 +305,17 @@ ActiveRecord::Schema.define(version: 20140723220559) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "rga_estados_eventos", force: true do |t|
+    t.string   "codigo"
+    t.integer  "estado_id"
+    t.integer  "evento_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rga_estados_eventos", ["estado_id"], name: "index_rga_estados_eventos_on_estado_id", using: :btree
+  add_index "rga_estados_eventos", ["evento_id"], name: "index_rga_estados_eventos_on_evento_id", using: :btree
 
   create_table "rga_eventos", force: true do |t|
     t.integer  "estado"

@@ -1,0 +1,21 @@
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.check_box :estado, label: "Activo?" %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :codigo %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :nombre %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :desc %>
+  </div>
+  <div class="small-6 columns">
+    <%= f.collection_select :estado_ids, Rga::Estado.all, :id, :nombre, {}, { :multiple => true, :label => "Estados permitidos" } %>
+  </div>     
+  <div class="small-6 columns">
+    <%= f.collection_select :evento_ids, Rga::Evento.all, :id, :nombre, {}, { :multiple => true, :label => "Eventos permitidos" } %>
+  </div>
+</div>

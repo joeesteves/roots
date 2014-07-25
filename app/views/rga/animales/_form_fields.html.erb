@@ -4,28 +4,28 @@
     <%= f.check_box :estado, label: "Activo?" %>
   </div>
   <div class="small-3 columns">
-    <%= f.text_field :codigo %>
+    <%= f.text_field :codigo, placeholder: "Codigo" %>
   </div>
   <div class="small-3 columns">
-    <%= f.text_field :nombre %>
+    <%= f.text_field :nombre, placeholder: "Nombre" %>
   </div>
   <div class="small-3 columns">
-    <%= f.text_field :alias %>
+    <%= f.text_field :alias, placeholder: "Alias" %>
   </div>
   <div class="small-3 columns">
-    <%= f.text_field :rp %>
+    <%= f.text_field :rp, placeholder: "Rp" %>
   </div>
   <div class="small-3 columns">
-    <%= f.text_field :color %>
+    <%= f.text_field :color, placeholder: "Color" %>
   </div>
   <div class="small-3 columns">
-    <%= f.text_field :desc %>
+    <%= f.text_field :desc, placeholder: "Descripción" %>
   </div>
   <div class="small-3 columns">
-    <%= f.collection_select :madre_id, Rga::Animal.all, :id, :nombre, {}, {label: "Madre"} %>
+    <%= f.collection_select :madre_id, Rga::Animal.all, :id, :nombre, {include_blank:"RP MADRE"}, {label: "Madre"} %>
   </div>
   <div class="small-3 columns">
-    <%= f.collection_select :padre_id, Rga::Animal.all, :id, :nombre, {}, {label: "Padre"} %>
+    <%= f.collection_select :padre_id, Rga::Animal.all, :id, :nombre, {include_blank:"RP PADRE"}, {label: "Padre"} %>
   </div>
       
 </div>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rga_categoria.estado %>
+</p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rga_categoria.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rga_categoria.nombre %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rga_categoria.desc %>
+</p>
+
+<p>
+  <strong>Categoriatipo:</strong>
+  <%= @rga_categoria.categoriatipo %>
+</p>
+
+<%= link_to 'Editar', edit_rga_categoria_path(@rga_categoria), :class => "button tiny" %>
+<%= link_to 'Volver', rga_categorias_path, :class => "button tiny" %>

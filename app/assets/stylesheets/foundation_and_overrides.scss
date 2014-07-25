@@ -9,14 +9,25 @@
 @import "foundation/functions";
 
 
-
-
 //Chosen override
 .chosen-container-single .chosen-single {
 	height: 2.3125rem;
 	padding: 0.5rem;
 	margin: 0 0 0 0;
 }
+
+.chosen-container-single, .chosen-container-multi {
+	margin-bottom: 1rem;
+}
+
+.chosen-container-multi .chosen-choices {
+	padding: 0.5rem;
+	border: 1px;
+}
+.chosen-container-multi .chosen-choices li.search-choice {
+	margin: 0 0 0 3px;
+}
+
 // Particularizaciones
 .has-dropdown, .dropdown, .top-bar,div .sticky,div .fixed {
 z-index: 200;

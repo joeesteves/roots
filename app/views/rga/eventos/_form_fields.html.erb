@@ -1,9 +1,9 @@
 <% f.errores %>
 <div class="row">      
-  <div class="small-3 columns">
+  <div class="small-2 columns">
     <%= f.check_box :estado, label: "Activo?" %>
   </div>
-  <div class="small-3 columns">
+  <div class="small-2 columns">
     <%= f.text_field :codigo %>
   </div>
   <div class="small-3 columns">
@@ -12,8 +12,13 @@
   <div class="small-3 columns">
     <%= f.text_field :desc %>
   </div>
-    <div class="small-3 columns">
-    <%= f.collection_select :eventotipo_id, Rga::Eventotipo.all, :id, :nombre, {}, {label: "Tipo"} %>
+  <div class="small-2 columns">
+    <%= f.select :eventotipo_id, Rga::Eventotipo.all.map {|c| [c.nombre, c.id, {data: {codigo: c.codigo}}]}, { include_blank: true}, {label: "Tipo"} %>
   </div>
-      
+  <div id="origestados" class="small-6 columns">
+    <%= f.collection_select :origestado_ids, Rga::Estado.all, :id, :nombre, {}, {label: "Estados permitidos en origen", multiple: true} %>
+  </div>
+  <div id="destestados" class="small-6 columns">
+    <%= f.collection_select :destestado_ids, Rga::Estado.all, :id, :nombre, {}, {label: "Estados permitidos en destino", multiple: true} %>
+  </div>
 </div>

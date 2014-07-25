@@ -1,13 +1,24 @@
 <input id="esForm" type="hidden" value=true />
-<input id="eventoTipoCodigo" type="hidden" value="<%= @eventoTipoCodigo %>" />
 <div class="row">
   <div class="panel">
-  <%= form_for @rga_evento, builder: EstandarFormBuilder do |f| %>
+  <%= form_for @rga_estados_evento, builder: EstandarFormBuilder do |f| %>
    
 <!-- Cortar desde aca y pegar en el partial _form_fields.html.erb -->
 
-
-<%= render 'form_fields', f:f  %>
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.text_field :codigo %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :estado %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :evento %>
+  </div>
+      
+</div>
+<!-- <%= render 'form_fields', f:f  %> -->
 <!-- Cortar hasta aca y pegar en el partial _form_fields.html.erb -->
 
     <div class="row">
