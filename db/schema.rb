@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140725004936) do
+ActiveRecord::Schema.define(version: 20140726045503) do
 
   create_table "rba_actividades", force: true do |t|
     t.string   "codigo"
@@ -259,6 +259,16 @@ ActiveRecord::Schema.define(version: 20140725004936) do
   add_index "rga_animales", ["madre_id"], name: "index_rga_animales_on_madre_id", using: :btree
   add_index "rga_animales", ["padre_id"], name: "index_rga_animales_on_padre_id", using: :btree
 
+  create_table "rga_animales_registros", force: true do |t|
+    t.integer  "animal_id"
+    t.integer  "registro_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rga_animales_registros", ["animal_id"], name: "index_rga_animales_registros_on_animal_id", using: :btree
+  add_index "rga_animales_registros", ["registro_id"], name: "index_rga_animales_registros_on_registro_id", using: :btree
+
   create_table "rga_categorias", force: true do |t|
     t.integer  "estado"
     t.string   "codigo"
@@ -335,6 +345,34 @@ ActiveRecord::Schema.define(version: 20140725004936) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "rga_registros", force: true do |t|
+    t.date     "fecha"
+    t.integer  "empresa_id"
+    t.integer  "establecimiento_id"
+    t.integer  "evento_id"
+    t.integer  "origcategoria_id"
+    t.integer  "origrodeo_id"
+    t.integer  "origestado_id"
+    t.integer  "destcategoria_id"
+    t.integer  "destrodeo_id"
+    t.integer  "destestado_id"
+    t.integer  "cantidad"
+    t.decimal  "peso",               precision: 8, scale: 2, default: 0.0, null: false
+    t.text     "desc"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rga_registros", ["destcategoria_id"], name: "index_rga_registros_on_destcategoria_id", using: :btree
+  add_index "rga_registros", ["destestado_id"], name: "index_rga_registros_on_destestado_id", using: :btree
+  add_index "rga_registros", ["destrodeo_id"], name: "index_rga_registros_on_destrodeo_id", using: :btree
+  add_index "rga_registros", ["empresa_id"], name: "index_rga_registros_on_empresa_id", using: :btree
+  add_index "rga_registros", ["establecimiento_id"], name: "index_rga_registros_on_establecimiento_id", using: :btree
+  add_index "rga_registros", ["evento_id"], name: "index_rga_registros_on_evento_id", using: :btree
+  add_index "rga_registros", ["origcategoria_id"], name: "index_rga_registros_on_origcategoria_id", using: :btree
+  add_index "rga_registros", ["origestado_id"], name: "index_rga_registros_on_origestado_id", using: :btree
+  add_index "rga_registros", ["origrodeo_id"], name: "index_rga_registros_on_origrodeo_id", using: :btree
 
   create_table "rga_rodeos", force: true do |t|
     t.integer  "estado"

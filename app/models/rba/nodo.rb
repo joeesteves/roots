@@ -42,6 +42,7 @@ class Rba::Nodo < ActiveRecord::Base
   rga_estados
   rga_eventos
   rga_eventotipos
+  rga_registros
   rga_rodeos
   )
   habtm(modelos_incluidos)

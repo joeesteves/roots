@@ -50,6 +50,7 @@ Roots::Application.routes.draw do
     :estados,
     :eventos,
     :eventotipos,
+    :registros,
     :rodeos,
     concerns: [:globales]
   end

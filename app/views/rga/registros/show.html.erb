@@ -1,0 +1,69 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Fecha:</strong>
+  <%= @rga_registro.fecha %>
+</p>
+
+<p>
+  <strong>Empresa:</strong>
+  <%= @rga_registro.empresa %>
+</p>
+
+<p>
+  <strong>Establecimiento:</strong>
+  <%= @rga_registro.establecimiento %>
+</p>
+
+<p>
+  <strong>Evento:</strong>
+  <%= @rga_registro.evento %>
+</p>
+
+<p>
+  <strong>Origcategoria:</strong>
+  <%= @rga_registro.origcategoria %>
+</p>
+
+<p>
+  <strong>Origrodeo:</strong>
+  <%= @rga_registro.origrodeo %>
+</p>
+
+<p>
+  <strong>Origestado:</strong>
+  <%= @rga_registro.origestado %>
+</p>
+
+<p>
+  <strong>Destcategoria:</strong>
+  <%= @rga_registro.destcategoria %>
+</p>
+
+<p>
+  <strong>Destrodeo:</strong>
+  <%= @rga_registro.destrodeo %>
+</p>
+
+<p>
+  <strong>Destestado:</strong>
+  <%= @rga_registro.destestado %>
+</p>
+
+<p>
+  <strong>Cantidad:</strong>
+  <%= @rga_registro.cantidad %>
+</p>
+
+<p>
+  <strong>Peso:</strong>
+  <%= @rga_registro.peso %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rga_registro.desc %>
+</p>
+
+<%= link_to 'Editar', edit_rga_registro_path(@rga_registro), :class => "button tiny" %>
+<%= link_to 'Volver', rga_registros_path, :class => "button tiny" %>

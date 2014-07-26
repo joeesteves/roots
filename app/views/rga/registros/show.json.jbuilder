@@ -1,0 +1,1 @@
+json.extract! @rga_registro, :id, :fecha, :empresa_id, :establecimiento_id, :evento_id, :origcategoria_id, :origrodeo_id, :origestado_id, :destcategoria_id, :destrodeo_id, :destestado_id, :cantidad, :peso, :desc, :created_at, :updated_at

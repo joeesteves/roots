@@ -1,0 +1,44 @@
+
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.date_select :fecha %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :empresa %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :establecimiento %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :evento_id, Rga::Evento.all, :id, :nombre, {}, {label: "Evento"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :origcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Origen"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :origrodeo_id, Rga::Rodeo.all, :id, :nombre, {}, {label:"Rodeo Origen"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :origestado_id, Rga::Estado.all, :id, :nombre, {}, {label:"Estado Origen"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :destcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Destino"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :destrodeo_id, Rga::Rodeo.all, :id, :nombre, {}, {label:"Rodeo Destino"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :destestado_id, Rga::Estado.all, :id, :nombre, {}, {label:"Estado Destino"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.number_field :cantidad %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :peso %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_area :desc %>
+  </div>
+      
+</div>
