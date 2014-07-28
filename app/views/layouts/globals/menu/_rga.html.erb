@@ -5,7 +5,7 @@
 		<li>
 			<ul>
 				<li class="menu_label"><label>CARGAR</label></li>					
-				<li><a>Movimientos</a></li> 		
+				<li><%= link_to 'REGISTOS', rga_registros_path%></li>
 			</ul>
 			<ul>
 				<li class="menu_label"><label>ANALIZAR</label></li>		
@@ -14,11 +14,13 @@
 			</ul>
 			<ul>
 				<li class="menu_label"><label>CONFIGURAR</label></li>
-				<li><a>CATEGORÍAS</a></li>			
-				<li><a>RODEOS</a></li>			
-				<li><a>ESTADOS</a></li>			
-				<li><a>ACCIONES</a></li>
-				<li><a>TIPOS DE CATEGORÍAS</a></li>			
+				<li><%= link_to 'CATEGORÍAS', rga_categorias_path%></li>			
+				<li><%= link_to 'RODEOS', rga_rodeos_path%></li>			
+				<li><%= link_to 'ESTADOS', rga_estados_path%></li>			
+				<li><%= link_to 'EVENTOS', rga_eventos_path%></li>
+				<li><%= link_to 'TIPOS DE CATEGORÍAS', rga_categoriatipos_path%></li>			
+				<li><%= link_to 'TIPOS DE EVENTOS', rga_eventotipos_path%></li>	
+
 			</ul>
 		</li>
 	</ul>
