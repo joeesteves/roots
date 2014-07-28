@@ -1,8 +1,13 @@
 $.fn.gridPrepDatos = (columnas_datos_array, columnas_prop_array, query, agrupar) ->
 	if $('#action_name').val() == 'index'		
 		columnas_datos_json = []
-		columnas_datos_json.push({name: nombre}) for nombre in columnas_datos_array
-
+		for nombre in columnas_datos_array
+			do (nombre) -> 
+				if $.isArray(nombre)
+	   			columnas_datos_json.push({name: nombre[0], type: nombre[1]}) 
+	  		else
+	   			columnas_datos_json.push({name: nombre})
+		
 		columnas_prop_json = []
 		for dato in columnas_prop_array
 			if dato[2] != undefined
@@ -10,6 +15,7 @@ $.fn.gridPrepDatos = (columnas_datos_array, columnas_prop_array, query, agrupar)
 			else
 				titulo = dato[0]
 			columnas_prop_json.push({text: titulo, datafield: dato[0].toLowerCase(), width: dato[1]}) 
+		
 		# CODIGO PARA ACTIVAR UNA COLUMNA CON EL BOTON EDITAR
 		# FUE REEMPLAZADO POR DOBLE-CLICK
 		# columnas_prop_json.push
