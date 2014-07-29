@@ -52,7 +52,22 @@ class Rga::AnimalesController < ApplicationController
     Rga::Animal.destroy(params[:ids]) 
     render nothing: true  
   end
- 
+
+  def disponibles
+    empresa_id = params[:empresa_id]
+    establecimiento_id = params[:establecimiento_id]
+    origcategoria_id = params[:origcategoria_id]
+    origrodeo_id = params[:origrodeo_id]
+    origestado_id = params[:origestado_id]
+    animales = Rga::Animal.disponibles(empresa_id, establecimiento_id, origcategoria_id, origrodeo_id, origestado_id)
+    @disponibles = animales.count
+   
+    respond_to do |format|
+      format.js {}
+    end
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_rga_animal

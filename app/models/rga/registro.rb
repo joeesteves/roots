@@ -10,6 +10,6 @@ class Rga::Registro < ActiveRecord::Base
   belongs_to :destcategoria, class_name: "Rga::Categoria"
   belongs_to :destrodeo, class_name: "Rga::Rodeo"
   belongs_to :destestado, class_name: "Rga::Estado"
-  has_many :animales_registros, dependent: :destroy
-  has_many :animales, through: :animales_registros
+  has_many :animales_registros
+  has_many :animales, through: :animales_registros, dependent: :restrict
 end

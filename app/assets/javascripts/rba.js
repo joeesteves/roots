@@ -9,6 +9,7 @@
 //= require rba/global/utiles/fxActivacion
 //= require rba/global/utiles/chosen_init
 //= require rba/global/utiles/jquery.inputmask.bundle.min
+//= require rga/utiles/datos
 
 
 

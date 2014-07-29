@@ -47,18 +47,18 @@ $.fn.copiar = () ->
 		$('#items_seleccionados').val($.fn.getSelected())
 
 $.fn.pegar = () ->
-		$.ajax
-			type: "POST"
-			url: $('#root_path').val() + 'rba/mover_items'
-			data:
-				controller_path: $('#controller_path').val()
-				nodo: $('#nodo_actual').val()
-				items: $('#items_seleccionados').val()
-			dataType: "script"
-			complete: ->
-				$('#jqxgrid').jqxGrid('updatebounddata')
-				$("#jqxgrid").jqxGrid('clearselection')
-				$('#items_seleccionados').val('')
+	$.ajax
+		type: "POST"
+		url: $('#root_path').val() + 'rba/mover_items'
+		data:
+			controller_path: $('#controller_path').val()
+			nodo: $('#nodo_actual').val()
+			items: $('#items_seleccionados').val()
+		dataType: "script"
+		complete: ->
+			$('#jqxgrid').jqxGrid('updatebounddata')
+			$("#jqxgrid").jqxGrid('clearselection')
+			$('#items_seleccionados').val('')
 	
 
 #Funcion le da funcionalidad al boton editar de la grilla def en grid_prep_datos

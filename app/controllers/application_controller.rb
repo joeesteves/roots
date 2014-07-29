@@ -24,6 +24,7 @@ class ApplicationController < ActionController::Base
 				@usuario_actual ||= Rba::Usuario.find(session[:usuario_id]) 
 				@e_grupo_actual = Rba::Empresagrupo.find(session[:empresagrupo_id])
 				@empresa_actual = Rba::Empresa.find(session[:empresa_id])
+				@establecimiento_actual = Rba::Establecimiento.find(session[:establecimiento_id])
 
 			end
 		end

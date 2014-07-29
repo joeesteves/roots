@@ -13,6 +13,8 @@ class Rga::RegistrosController < ApplicationController
   # GET /rga/registros/new
   def new
     @rga_registro = Rga::Registro.new
+    @rga_registro.establecimiento = @establecimiento_actual
+    @rga_registro.empresa = @empresa_actual
     define_nodo(params[:nodo])
   end
 
@@ -23,11 +25,13 @@ class Rga::RegistrosController < ApplicationController
   # POST /rga/registros
   def create
     @rga_registro = Rga::Registro.new(rga_registro_params)
+   
 
     if @rga_registro.save
       @rga_registro.cantidad.times do
         @rga_registro.animales.create()
       end
+      
       redirect_to rga_registros_path, notice: 'Registro guardado.'
       ubica_en_nodo(params[:nodo])
     else
@@ -37,7 +41,38 @@ class Rga::RegistrosController < ApplicationController
 
   # PATCH/PUT /rga/registros/1
   def update
+    # El codigo del evento determina el comportamiento
+    #  -1 Egresos // 0 Partos // 1 Ingresos // 2 Cambios de categoria
+
+    codigoEvento = @rga_registro.evento.eventotipo.codigo.to_i
+    cantidadInicial = @rga_registro.cantidad
+    cantidadFinal = (params[:rga_registro][:cantidad]).to_i
+    diferencia = cantidadFinal - cantidadInicial
+    animales = @rga_registro.animales
+    case codigoEvento
+      when 1 # Ingresos si se actualiza en menos borra los animales excendentes
+        if diferencia > 0
+           diferencia.times do
+            @rga_registro.animales.create()
+          end
+        elsif diferencia < 0 
+          @rga_registro.animales.last(diferencia.abs).each(&:destroy)
+        end
+      when 2 # Cambios de cateogria si se actualiza en menos borra los animales excendentes
+        # Si la diferencia es + Buscar animales en orgien, si hay disponibles agregarlos
+        # Si la diferencia es - solo borrar la relacion
+        if diferencia < 0 
+          @rga_registro.animales.delete(animales.last(diferencia.abs))
+        end
+    
+    end
+
+
     if @rga_registro.update(rga_registro_params)
+      
+      
+
+
       flash[:nodo] = @rga_registro.nodos.first.id rescue nil
       redirect_to rga_registros_path, notice: 'Registro actualizado.'
     else

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140726045503) do
+ActiveRecord::Schema.define(version: 20140728225556) do
 
   create_table "rba_actividades", force: true do |t|
     t.string   "codigo"
@@ -357,7 +357,7 @@ ActiveRecord::Schema.define(version: 20140726045503) do
     t.integer  "destcategoria_id"
     t.integer  "destrodeo_id"
     t.integer  "destestado_id"
-    t.integer  "cantidad"
+    t.integer  "cantidad",                                   default: 1,   null: false
     t.decimal  "peso",               precision: 8, scale: 2, default: 0.0, null: false
     t.text     "desc"
     t.datetime "created_at"

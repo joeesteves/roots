@@ -8,7 +8,10 @@
 // Allows the use of rem-calc() or lower-bound() in your settings
 @import "foundation/functions";
 
-
+span.noborder {
+	border-style: hidden;
+	margin-bottom: 1rem;
+}
 //Chosen override
 .chosen-container-single .chosen-single {
 	height: 2.3125rem;

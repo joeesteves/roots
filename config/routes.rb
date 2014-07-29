@@ -44,17 +44,18 @@ Roots::Application.routes.draw do
   end
 
   namespace :rga do
-    resources :animales,
-    :categorias,
+    resources :categorias,
     :categoriatipos,
     :estados,
     :eventos,
     :eventotipos,
-    :registros,
     :rodeos,
-    concerns: [:globales]
+    :registros, concerns: [:globales]
+    resources :animales do
+      post :disponibles, on: :collection
+      concerns [:globales]
+    end
   end
-
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
