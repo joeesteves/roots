@@ -9,3 +9,9 @@ $.fn.animalesDisponibles = (empresa_id, establecimiento_id, origcategoria_id, or
 			origrodeo_id: origrodeo_id
 			origestado_id: origestado_id
 		dataType: "script"
+
+$.fn.eventoTipoCodigo = (evento_id) ->
+	$.ajax
+		type: "GET"
+		url: $('#root_path').val() + 'rga/eventos/' + evento_id + '/tipocodigo'
+		dataType: "script"

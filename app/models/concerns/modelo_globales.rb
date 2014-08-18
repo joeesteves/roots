@@ -43,15 +43,15 @@ module ModeloGlobales
 
 	# filtros por codigo
 
-		def deEmpresaXCod(empresaGrupoCodigo)	
-			metodo = self.name.underscore.split('/')[1].pluralize
-			Rba::Empresa.find_by_codigo(empresaGrupoCodigo).send(metodo)
-		end
 
-		def deEmpresaGrupoXCod(empresaCodigo)	
-			metodo = self.name.underscore.split('/')[1].pluralize
-			Rba::Empresa.find_by_codigo(empresaCodigo).send(metodo)
+		def deEmpresaXCod(empresaCodigo)	
+			# metodo = self.name.underscore.split('/')[1].pluralize
+			# Rba::Empresa.find_by_codigo(empresaCodigo).send(metodo)
 		end
 		
+		def deEmpresaGrupoXCod(empresaGrupoCodigo)	
+			metodo = self.name.underscore.split('/')[1].pluralize
+			Rba::Empresagrupo.find_by_codigo(empresaGrupoCodigo).send(metodo)
+		end
 	end
 end

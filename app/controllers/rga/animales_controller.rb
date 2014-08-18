@@ -63,7 +63,7 @@ class Rga::AnimalesController < ApplicationController
     @disponibles = animales.count
    
     respond_to do |format|
-      format.js {}
+      format.js
     end
 
   end

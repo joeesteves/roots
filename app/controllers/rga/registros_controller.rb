@@ -16,20 +16,36 @@ class Rga::RegistrosController < ApplicationController
     @rga_registro.establecimiento = @establecimiento_actual
     @rga_registro.empresa = @empresa_actual
     define_nodo(params[:nodo])
+    @eventoTipoCodigo = Rga::Evento.first.eventotipo.codigo
   end
 
   # GET /rga/registros/1/edit
   def edit
+    @eventoTipoCodigo = @rga_registro.evento.eventotipo.codigo
   end
 
   # POST /rga/registros
   def create
     @rga_registro = Rga::Registro.new(rga_registro_params)
-   
+    @rga_registro.establecimiento = @establecimiento_actual
+    @rga_registro.empresa = @empresa_actual
+    codigoEvento = @rga_registro.evento.eventotipo.codigo.to_i
 
     if @rga_registro.save
-      @rga_registro.cantidad.times do
-        @rga_registro.animales.create()
+      cantidad = @rga_registro.cantidad
+      cantidad.times do
+      case codigoEvento
+        when -1
+          a = @rga_registro
+          animalesOrigen = Rga::Animal.disponibles(a.empresa_id, a.establecimiento_id, 
+            a.origcategoria_id, a.origrodeo_id, a.origestado_id, {cantidad: cantidad.to_s})
+          animalesOrigen.each do |ao|
+            ao.update_attributes(:estado => 0)
+          end
+          @rga_registro.update_attributes(:animal_ids => animalesOrigen.collect(&:id))
+        when 1
+          @rga_registro.animales.create()
+        end
       end
       
       redirect_to rga_registros_path, notice: 'Registro guardado.'
@@ -69,10 +85,6 @@ class Rga::RegistrosController < ApplicationController
 
 
     if @rga_registro.update(rga_registro_params)
-      
-      
-
-
       flash[:nodo] = @rga_registro.nodos.first.id rescue nil
       redirect_to rga_registros_path, notice: 'Registro actualizado.'
     else

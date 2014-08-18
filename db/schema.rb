@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140728225556) do
+ActiveRecord::Schema.define(version: 20140803005510) do
 
   create_table "rba_actividades", force: true do |t|
     t.string   "codigo"
@@ -243,7 +243,7 @@ ActiveRecord::Schema.define(version: 20140728225556) do
   add_index "rco_registros", ["cuenta_id"], name: "index_rco_registros_on_cuenta_id", using: :btree
 
   create_table "rga_animales", force: true do |t|
-    t.integer  "estado"
+    t.integer  "estado",     default: 1, null: false
     t.string   "codigo"
     t.string   "nombre"
     t.string   "alias"

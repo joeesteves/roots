@@ -53,4 +53,20 @@ $.fn.armaFechas = (dd,mm,yyyy) ->
 		yyyy = yyyy.toString()
 	date = yyyy+"-"+mm+"-"+dd
 
+# Funcion generica para dijujar pantalla
 
+$.fn.dynamicForm = (mostrarCampos, ocultarCampos) ->
+	for campo in mostrarCampos
+		do (campo) -> 
+			if $.isArray(campo)
+				$('#' + campo[0]).show()
+				$('#' + campo[0]).addClass(campo[1])
+			else
+				$('#' + campo).show()
+	for campo in ocultarCampos
+		do (campo) -> 
+			if $.isArray(campo)
+				$('#' + campo[0]).hide()
+				$('#' + campo[0]).removeClass(campo[1])
+			else
+				$('#' + campo).hide()

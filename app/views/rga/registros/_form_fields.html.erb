@@ -1,4 +1,4 @@
-
+<input id="eventoTipoCodigo" type='hidden' value='<%= @eventoTipoCodigo %>' />
 <% f.errores %>
 <div class="row">      
   <div class="small-6 columns">
@@ -16,45 +16,45 @@
   </div>
 
   <div class="small-6 columns">
-    <%= f.collection_select :evento_id, Rga::Evento.all, :id, :nombre, {}, {label: "Evento"} %>
+    <%= f.collection_select :evento_id, Rga::Evento.all, :id, :nombre, {}, {label: "Evento", class:"actualizaDisponible"} %>
   </div>
  
   <div class="small-3 columns">
     <%= f.text_area :desc, :label => "Descripción" %>
   </div>
  
-  <div class="small-3 columns">
-    <%= f.collection_select :origcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Origen"} %>
+  <div id="origcategoria" class="small-3 columns">
+    <%= f.collection_select :origcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Origen",  class:"actualizaDisponible"} %>
   </div>
 
-  <div class="small-3 columns">
-    <%= f.collection_select :origrodeo_id, Rga::Rodeo.all, :id, :nombre, {}, {label:"Rodeo Origen"} %>
+  <div id="origrodeo" class="small-3 columns">
+    <%= f.collection_select :origrodeo_id, Rga::Rodeo.all, :id, :nombre, {}, {label:"Rodeo Origen", class:"actualizaDisponible"} %>
   </div>
   
-  <div class="small-3 columns">
-    <%= f.collection_select :origestado_id, Rga::Estado.all, :id, :nombre, {}, {label:"Estado Origen"} %>
+  <div id="origestado" class="small-3 columns">
+    <%= f.collection_select :origestado_id, Rga::Estado.all, :id, :nombre, {}, {label:"Estado Origen", class:"actualizaDisponible"} %>
   </div>
-  <div class="small-3 columns">
+  <div id="divDisponibles" class="small-3 columns">
     <span class='prefix postfix'>Disponibles</span>
-    <span class='prefix postfix noborder'>ACA</span>
+    <span id='disponibles' class='prefix postfix noborder'></span>
   </div>
-  <div class="small-3 columns">
+  <div id="destcategoria" class="small-3 columns">
   <%= f.collection_select :destcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Destino"} %>
   </div>
   
-  <div class="small-3 columns">
+  <div id="destrodeo" class="small-3 columns">
     <%= f.collection_select :destrodeo_id, Rga::Rodeo.all, :id, :nombre, {}, {label:"Rodeo Destino"} %>
   </div>
   
-  <div class="small-3 columns">
+  <div id="destestado" class="small-3 columns">
     <%= f.collection_select :destestado_id, Rga::Estado.all, :id, :nombre, {}, {label:"Estado Destino"} %>
   </div>
   
-  <div class="small-3 columns">
+  <div id="divCantidad" class="small-3 columns">
     <%= f.number_field :cantidad %>
   </div>
   
-  <div class="small-3 columns">
+  <div id="divPeso"class="small-3 columns">
     <%= f.text_field :peso %>
   </div>
   

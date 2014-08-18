@@ -47,12 +47,15 @@ Roots::Application.routes.draw do
     resources :categorias,
     :categoriatipos,
     :estados,
-    :eventos,
     :eventotipos,
     :rodeos,
     :registros, concerns: [:globales]
     resources :animales do
       post :disponibles, on: :collection
+      concerns [:globales]
+    end
+    resources :eventos do
+      get :tipocodigo, on: :member
       concerns [:globales]
     end
   end

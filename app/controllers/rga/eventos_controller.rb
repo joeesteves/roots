@@ -18,7 +18,7 @@ class Rga::EventosController < ApplicationController
 
   # GET /rga/eventos/1/edit
   def edit
-    @eventoTipoCodigo = @rga_evento.eventotipo.codigo
+    @eventoTipoCodigo = @rga_evento.evento.eventotipo.codigo
   end
 
   # POST /rga/eventos
@@ -55,7 +55,13 @@ class Rga::EventosController < ApplicationController
     Rga::Evento.destroy(params[:ids]) 
     render nothing: true  
   end
- 
+  def tipocodigo     
+    @eventoTipoCodigo = Rga::Evento.find(params[:id]).eventotipo.codigo
+    respond_to do |format|
+      format.js 
+    end
+  end
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_rga_evento
@@ -86,6 +92,7 @@ class Rga::EventosController < ApplicationController
     end
   end
 
+    
     # Only allow a trusted parameter "white list" through.
     def rga_evento_params
       params.require(:rga_evento).permit(:estado, :codigo, :nombre, :desc, :eventotipo_id, :estado_ids)
