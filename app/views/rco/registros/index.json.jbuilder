@@ -14,5 +14,5 @@ json.array!(@rco_registros) do |rco_registro|
 	json.cuenta cuenta.nombre
   json.saldo saldo
   cuenta_ant_id = cuenta.id
-  json.desc_asiento rco_registro.asiento.desc
+  json.desc_asiento rco_registro.asiento.desc rescue nil
 end

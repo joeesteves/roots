@@ -26,12 +26,14 @@ class Rco::AsientosController < ApplicationController
     @rco_asiento = Rco::Asiento.new(rco_asiento_params)
     @rco_asiento.empresa_id = session[:empresa_id] 
 
-    if @rco_asiento.valid_save
-      redirect_to rco_asientos_path, notice: 'Asiento guardado'
-      ubica_en_nodo(params[:nodo])     
-    else
-      render action: 'new'
-    end
+
+      if @rco_asiento.valid_save
+        redirect_to rco_asientos_path, notice: 'Asiento guardado'
+        ubica_en_nodo(params[:nodo])     
+      else
+        render action: 'new'
+      end
+
   end
 
   # PATCH/PUT /rco/asientos/1
@@ -65,6 +67,6 @@ class Rco::AsientosController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def rco_asiento_params
       params.require(:rco_asiento).permit(:fecha, :moneda_id, :cotizacion, :desc, 
-        registros_attributes: [:id, :cuenta_id, :debe, :haber, :debe_op, :haber_op, :desc, :_destroy])
+        registros_attributes: [:id, :cuenta_id, :debe, :haber, :debe_op, :haber_op, :desc, :fecha, :_destroy])
     end
 end

@@ -11,7 +11,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140803005510) do
+ActiveRecord::Schema.define(version: 20140915144802) do
+
+  create_table "rad_operaciones", force: true do |t|
+    t.date     "fecha"
+    t.decimal  "importe",          precision: 12, scale: 4
+    t.integer  "operaciontipo_id"
+    t.integer  "cuotas",                                    default: 1
+    t.integer  "ctaD_id"
+    t.integer  "ctaH_id"
+    t.text     "desc"
+    t.integer  "empresa_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.decimal  "cuotaimporte",     precision: 12, scale: 4
+    t.integer  "asiento_id"
+  end
+
+  add_index "rad_operaciones", ["ctaD_id"], name: "index_rad_operaciones_on_ctaD_id", using: :btree
+  add_index "rad_operaciones", ["ctaH_id"], name: "index_rad_operaciones_on_ctaH_id", using: :btree
+  add_index "rad_operaciones", ["empresa_id"], name: "index_rad_operaciones_on_empresa_id", using: :btree
+  add_index "rad_operaciones", ["operaciontipo_id"], name: "index_rad_operaciones_on_operaciontipo_id", using: :btree
+
+  create_table "rad_operaciontipos", force: true do |t|
+    t.integer  "estado"
+    t.integer  "codigo"
+    t.string   "nombre"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rba_actividades", force: true do |t|
     t.string   "codigo"
@@ -181,6 +209,7 @@ ActiveRecord::Schema.define(version: 20140803005510) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "empresa_id"
+    t.boolean  "esgenerado",                          default: false
   end
 
   add_index "rco_asientos", ["moneda_id"], name: "index_rco_asientos_on_moneda_id", using: :btree

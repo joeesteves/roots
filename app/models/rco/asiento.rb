@@ -1,43 +1,50 @@
 class Rco::Asiento < ActiveRecord::Base
   include ModeloGlobales
   habtm_nodo
-  has_many :registros, :dependent => :destroy
+  has_many :registros, -> {order(:haber)}, :dependent => :destroy
+  has_one :operacion, class_name: "Rad::Operacion"
   accepts_nested_attributes_for :registros, allow_destroy: true
   belongs_to :empresa, class_name: "Rba::Empresa"
   belongs_to :moneda
   validates :cotizacion, :presence => true
   validates_associated :registros
+  before_update :esGenerado?
 
  	def valid_save
-    registros.each do |r|
-      r.debe = r.debe_op * cotizacion
-      r.haber = r.haber_op * cotizacion
+    transaction do
+      registros.each do |r|
+        r.debe = r.debe_op * cotizacion
+        r.haber = r.haber_op * cotizacion
+      end
+      if save
+        unless balancea?
+          raise ActiveRecord::Rollback
+        else
+          true
+        end
+      else
+        false
+      end
     end
-
- 		transaction do      
- 			if save
-	 			unless balancea?
-	 				raise ActiveRecord::Rollback
-	 				return false
-	 			else
-	 				return true
-	 			end	
-	 		else
-	 			false
-	 		end
- 		end
- 	end
-
+  end
+ 	
  	def valid_update(params)
- 		transaction do
- 			if update_attributes(params)
-	 			unless balancea?
+    
+    transaction do
+      if update_attributes(params) 		
+        registros.each do |r|
+          r.debe = r.debe_op * cotizacion
+          r.haber = r.haber_op * cotizacion
+          r.save
+        end
+
+        unless balancea?
 	 				raise ActiveRecord::Rollback
 	 			else
 	 				true
 	 			end	
  			else 
- 				return false
+ 				false
  			end
  		end
  	end
@@ -45,12 +52,19 @@ class Rco::Asiento < ActiveRecord::Base
   def balancea?
   	debe = registros.sum(:debe)
   	haber = registros.sum(:haber)
-
-  	unless debe == haber
-  		errors.add(:base, "El asiento no balancea")
-  		return false
-  	end
-  	return true
+    
+    if debe != haber
+      errors.add(:base, "El Asieto no balancea")
+      false
+    else
+      true
+    end
   end
 
+  def esGenerado?
+    unless esgenerado == false
+      errors.add(:base, "Asiento generado por otra transacción")
+      false
+    end
+  end
 end

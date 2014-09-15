@@ -1,0 +1,2 @@
+module Rad::OperacionesHelper
+end

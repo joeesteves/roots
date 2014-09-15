@@ -17,6 +17,7 @@ class Rba::Nodo < ActiveRecord::Base
 
   modelos_incluidos = 
   %w(
+  rad_operaciontipos
   rba_actividades 
   rba_actividadtipos
   rba_arboles

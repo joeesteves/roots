@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Fecha:</strong>
+  <%= @rad_operacion.fecha %>
+</p>
+
+<p>
+  <strong>Importe:</strong>
+  <%= @rad_operacion.importe %>
+</p>
+
+<p>
+  <strong>Operaciontipo:</strong>
+  <%= @rad_operacion.operaciontipo %>
+</p>
+
+<p>
+  <strong>Cuotas:</strong>
+  <%= @rad_operacion.cuotas %>
+</p>
+
+<p>
+  <strong>Ctad:</strong>
+  <%= @rad_operacion.ctaD %>
+</p>
+
+<p>
+  <strong>Ctah:</strong>
+  <%= @rad_operacion.ctaH %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rad_operacion.desc %>
+</p>
+
+<p>
+  <strong>Rba/empresa:</strong>
+  <%= @rad_operacion.rba/empresa %>
+</p>
+
+<%= link_to 'Editar', edit_rad_operacion_path(@rad_operacion), :class => "button tiny" %>
+<%= link_to 'Volver', rad_operaciones_path, :class => "button tiny" %>

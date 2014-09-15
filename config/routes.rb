@@ -1,9 +1,5 @@
 Roots::Application.routes.draw do
 
-  namespace :rga do
-    resources :estados_eventos
-  end
-
  concern :globales do
     collection do
       post :borrar_seleccion
@@ -17,43 +13,56 @@ Roots::Application.routes.draw do
   post 'rba/mover_items', to: 'rba/nodos#mover_items'
   root 'rba/bienvenidos#inicio'
 
+  namespace :rad do
+    resources :operaciones,
+    :operaciontipos,
+    concerns: [:globales]
+
+  end
   namespace :rba do
-    resources :usuarios,
-    :empresagrupos, 
-    :empresas,
-    :catfiscales, 
-    :arboles, 
-    :nodos, 
-    :libros,
-    :establecimientos, 
+    resources :actividades,
     :actividadtipos, 
-    :actividades,
-    :lotes, 
+    :arboles, 
     :campanas, 
     :campanatipos, 
-    :temporadas,
+    :catfiscales, 
+    :empresagrupos, 
+    :empresas,
+    :establecimientos, 
+    :libros,
+    :lotes, 
     :loteutilizaciones,
+    :nodos, 
+    :temporadas,
+    :usuarios,
     concerns: [:globales]
     resources :sesiones
   end
 
   namespace :rco do
-    resources :cuentas, :cuentatipos,
-    :registros, :asientos, :cotizaciones,
-    :monedas,  concerns: [:globales]
+    resources :cuentas, 
+    :cuentatipos,
+    :registros, 
+    :asientos, 
+    :cotizaciones,
+    :monedas,
+    concerns: [:globales]
   end
 
   namespace :rga do
     resources :categorias,
     :categoriatipos,
     :estados,
+    :estados_eventos,
     :eventotipos,
+    :registros, 
     :rodeos,
-    :registros, concerns: [:globales]
+    concerns: [:globales]
     resources :animales do
       post :disponibles, on: :collection
       concerns [:globales]
     end
+  
     resources :eventos do
       get :tipocodigo, on: :member
       concerns [:globales]

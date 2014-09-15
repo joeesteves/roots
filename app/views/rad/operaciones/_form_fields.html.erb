@@ -1,0 +1,31 @@
+<%= f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.date_select :fecha %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.collection_select :operaciontipo_id, Rad::Operaciontipo.where(:estado => 1),
+		:id, :nombre, {}, {label: "Op. Tipo"} %>
+	</div>
+  <div class="small-3 columns">
+    <%= f.text_field :importe, class: "calcCuota" %>
+  </div>
+  <div class="small-1 columns">
+    <%= f.number_field :cuotas, class: "calcCuota" %>
+  </div>
+  <div class="small-2 columns">
+    <%= f.text_field :cuotaimporte, label: "Valor Cuota", readonly: true %>
+  </div>
+  <div class="small-3 columns">
+  <%= f.collection_select :ctaD_id, Rco::Cuenta.includes(:cuentatipo).order('rco_cuentatipos.codigo asc'),
+		:id, :nombre, {}, {label: "Cuenta Debe"} %>
+	</div>
+  <div class="small-3 columns">
+  <%= f.collection_select :ctaH_id, Rco::Cuenta.includes(:cuentatipo).order('rco_cuentatipos.codigo asc'),
+		:id, :nombre, {}, {label: "Cuenta Haber"} %>
+	</div>
+  <div class="small-3 columns">
+    <%= f.text_area :desc %>
+  </div>
+      
+</div>

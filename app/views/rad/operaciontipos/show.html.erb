@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rad_operaciontipo.estado %>
+</p>
+
+<p>
+  <strong>Codigo:</strong>
+  <%= @rad_operaciontipo.codigo %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rad_operaciontipo.nombre %>
+</p>
+
+<%= link_to 'Editar', edit_rad_operaciontipo_path(@rad_operaciontipo), :class => "button tiny" %>
+<%= link_to 'Volver', rad_operaciontipos_path, :class => "button tiny" %>

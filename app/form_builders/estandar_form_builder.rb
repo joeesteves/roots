@@ -1,7 +1,7 @@
 class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 	delegate  :content_tag, to: :@template
 	%w[text_field 
-		text_area 
+		text_area
 		password_field 
 		collection_select
 		select
@@ -31,16 +31,21 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 
 		def date_select(nombre, opciones = {})
 			html_options = ""
+			
 			opciones.each do |k,v|
 				
 				html_options += k.to_s + "=" + v.to_s + ""
 				p html_options			
 			end
 			
-			
-			"<span class='prefix postfix'>#{nombre.to_s.capitalize}</span>".html_safe + 
-			"<input type='date' id=#{object_name}_fecha 
-			name=#{object_name}[#{nombre}] value='#{object.send(nombre)}' #{html_options} />".html_safe
+			unless opciones[:sinEtiqueta]
+				"<span class='prefix postfix'>#{nombre.to_s.capitalize}</span>".html_safe + 
+				"<input type='date' id=#{object_name}_fecha 
+				name=#{object_name}[#{nombre}] value='#{object.send(nombre)}' #{html_options} />".html_safe
+			else
+				"<input type='date' id=#{object_name}_fecha 
+				name=#{object_name}[#{nombre}] value='#{object.send(nombre)}' #{html_options} />".html_safe
+			end	
 
 		end
 
