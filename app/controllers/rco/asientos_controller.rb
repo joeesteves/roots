@@ -38,6 +38,7 @@ class Rco::AsientosController < ApplicationController
 
   # PATCH/PUT /rco/asientos/1
   def update
+    
     if @rco_asiento.valid_update(rco_asiento_params)
       redirect_to rco_asientos_path, notice: 'Asiento guardado'
     else
@@ -66,7 +67,7 @@ class Rco::AsientosController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def rco_asiento_params
-      params.require(:rco_asiento).permit(:fecha, :moneda_id, :cotizacion, :desc, 
+      params.require(:rco_asiento).permit(:fecha, :moneda_id, :cotizacion, :desc, :esgenerado,
         registros_attributes: [:id, :cuenta_id, :debe, :haber, :debe_op, :haber_op, :desc, :fecha, :_destroy])
     end
 end

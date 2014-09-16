@@ -5,7 +5,9 @@ class Rad::Operacion < ActiveRecord::Base
   belongs_to :ctaD, class_name: "Rco:Cuenta"
   belongs_to :ctaH, class_name: "Rco:Cuenta"
   belongs_to :empresa, class_name: "Rba::Empresa"
-  belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy
+  before_destroy :liberaAsiento
+  belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
+ 
 
 
   def rSave
@@ -89,4 +91,7 @@ end
 		cuotasArr
 	end  
 
+	def liberaAsiento
+		asiento.update_column(:esgenerado,false)
+	end
 end

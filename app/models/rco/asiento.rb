@@ -2,13 +2,15 @@ class Rco::Asiento < ActiveRecord::Base
   include ModeloGlobales
   habtm_nodo
   has_many :registros, -> {order(:haber)}, :dependent => :destroy
-  has_one :operacion, class_name: "Rad::Operacion"
+  has_one :operacion, class_name: "Rad::Operacion", inverse_of: :asiento
   accepts_nested_attributes_for :registros, allow_destroy: true
   belongs_to :empresa, class_name: "Rba::Empresa"
   belongs_to :moneda
   validates :cotizacion, :presence => true
   validates_associated :registros
   before_update :esGenerado?
+  before_destroy :esGenerado?
+ 
 
  	def valid_save
     transaction do
@@ -31,12 +33,13 @@ class Rco::Asiento < ActiveRecord::Base
  	def valid_update(params)
     
     transaction do
-      if update_attributes(params) 		
+      assign_attributes(params)
         registros.each do |r|
           r.debe = r.debe_op * cotizacion
           r.haber = r.haber_op * cotizacion
-          r.save
         end
+      
+      if save
 
         unless balancea?
 	 				raise ActiveRecord::Rollback
@@ -67,4 +70,5 @@ class Rco::Asiento < ActiveRecord::Base
       false
     end
   end
+
 end
