@@ -21,9 +21,23 @@ ready = ->
     $.fn.activarCalcular()
     $.fn.initChosen()
     $('.chosen-single:visible').last().focus()
+    cuentas = $('.cuenta')
+    cuentasLength = cuentas.length
+    if (cuentasLength > 1)
+ 	   cuentas.last().val(cuentas[cuentasLength-2].value).trigger("chosen:updated")
+ 	  re = new RegExp("[0-9]")
+ 	  fechas = $('.fecha')
+ 	  fechasLenght = fechas.length
+ 	  if (fechasLenght > 1)
+	 	  if(['','0'].indexOf($('#vtos').val()) == -1 && re.test($('#vtos').val()))
+ 		  	fechaBase = new Date(fechas[fechasLenght-2].value)
+ 		  	fechaBase.setDate(fechaBase.getDate() + parseInt($('#vtos').val()))
+ 		  	fechaCalculada = $.fn.armaFechas(fechaBase.getDate()+1,fechaBase.getMonth()+1,fechaBase.getFullYear())
+ 		  	fechas.last().val(fechaCalculada)
 
 	$('form').on 'click', '.simil_agrega_campos', () ->
 		$('.agregar_campos').click()
+
 	
 	$('form').on 'click', '.quitar_campos', () ->
 		$(this).parent().prev('input[type=hidden]').val('1')

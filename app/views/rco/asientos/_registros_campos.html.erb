@@ -10,8 +10,8 @@
 		<%= f.text_field :haber_op, sinEtiqueta: true, class: 'haber', placeholder: 'haber' %>
 	</div>
 	
-	<div class="small-2 columns">
-		<%= f.text_field :fecha, sinEtiqueta: true %>
+	<div class="fechaClass small-2 columns">
+		<%= f.date_select :fecha, {sinEtiqueta: true, class: 'fecha'}%>
 	</div>
 	<div class="small-2 columns">
 		<%= f.text_field :desc, sinEtiqueta: true %>

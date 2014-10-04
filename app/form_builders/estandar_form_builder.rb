@@ -34,7 +34,7 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 			
 			opciones.each do |k,v|
 				
-				html_options += k.to_s + "=" + v.to_s + ""
+				html_options += k.to_s + "=" + v.to_s + " "
 				p html_options			
 			end
 			
