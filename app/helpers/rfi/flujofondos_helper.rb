@@ -1,0 +1,2 @@
+module Rfi::FlujofondosHelper
+end

@@ -100,6 +100,9 @@ width:150px;
 float:left;
 }
 
+div .registros input, div .registros select, div .registros > .chosen-container {
+	margin-bottom: rem-calc(1);
+}
 // $experimental: true;
 
 // The default font-size is set to 100% of the browser style sheet (usually 16px)

@@ -12,5 +12,7 @@ class Rco::Registro < ActiveRecord::Base
   		destroy
   		errors.add(:cuenta_id, ": Revisar linea. Debe y haber deben ser distintos y al menos uno igual a 0")	
 		end
-	end			
+	end
+  
+  			
 end

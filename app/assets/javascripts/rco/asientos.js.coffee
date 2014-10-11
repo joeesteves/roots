@@ -2,10 +2,16 @@ ready = ->
 	if $('#con_arbol').val() == 'true'
 		$.fn.arbolInit()
 	$.fn.gridRequest()
-	sumInicial()
-	ActSumDebe()
-	ActSumHaber()
-	submitOn(false)
+
+	if $('#action_name').val() != 'index'
+		sumInicial()
+		ActSumDebe()
+		ActSumHaber()
+		submitOn(false)
+	else
+		$.fn.agregarFiltros([['desde','date'],['hasta','date'],['rco/cuentas','select']])
+		
+
 
 	$('#rco_asiento_moneda_id').change () ->
 		cot = $('#rco_asiento_moneda_id option:selected').data('cot')
@@ -89,7 +95,7 @@ submitOn = (valor) ->
 		$("input[type=submit]").attr("disabled", "disabled")
 
 controlBoton = () ->
-	if $('#debe').val() == $('#haber').val() && $('#debe').val() != ""
+	if $('#debe').val() == $('#haber').val() && ['0',''].indexOf($('#debe').val()) == -1
 		submitOn(true)
 	else
 		submitOn(false)

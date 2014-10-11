@@ -1,0 +1,7 @@
+$('#filtroRow').append('<div class="small-7 columns"><select multiple id="cuentas" name="cuentas"></select></div>');
+<% @rco_cuentas.each do |c| %>
+	$('#cuentas').append(new Option('<%= c.nombre%>','<%= c.id %>' ));
+<% end %>
+$.fn.initChosen()
+
+

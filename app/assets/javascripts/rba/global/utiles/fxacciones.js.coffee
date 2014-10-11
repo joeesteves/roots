@@ -60,6 +60,9 @@ $.fn.pegar = () ->
 			$("#jqxgrid").jqxGrid('clearselection')
 			$('#items_seleccionados').val('')
 	
+# Funcion global para revelar div id=filtro
+$.fn.abrirFiltros = () ->
+	$('#filtro').foundation('reveal', 'open')
 
 #Funcion le da funcionalidad al boton editar de la grilla def en grid_prep_datos
 $.fn.editaRow = (row) ->

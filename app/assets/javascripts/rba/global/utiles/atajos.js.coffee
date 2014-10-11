@@ -14,4 +14,5 @@ $.fn.atajos = () ->
 					$.fn.copiar()
 				when 86 # Ctrl + Shift + D
 					$.fn.pegar()
-				
+				when 70 # Crtl + Shift + F
+					$.fn.abrirFiltros()		

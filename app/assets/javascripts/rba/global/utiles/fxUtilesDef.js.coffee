@@ -1,3 +1,4 @@
+#DEFINICION DE FUNCIONES UTILES 
 #Define la funcion para el calculo dentro de los campos
 $.fn.activarCalcular = () ->
 	$('input:text').focusout ->
@@ -70,3 +71,27 @@ $.fn.dynamicForm = (mostrarCampos, ocultarCampos) ->
 				$('#' + campo[0]).removeClass(campo[1])
 			else
 				$('#' + campo).hide()
+
+
+# funcion que agrega filtros. Se llama desde el js de cada controlador solo desde index. ver asientos.js
+# se alimenta de un array doble [[nombre campo, tipo(date,text,select)]] en caso de ser select el nombre 
+# debe ser el controller al que llama el selector rco/cuentas traeria un listado de cuentas
+$.fn.agregarFiltros = (filtros) ->
+	for filtro in filtros
+		do (filtro) ->
+			if filtro[1] == 'select'
+				$('#filtroRow').append('<div class="small-5 columns">
+			<span class="prefix">'+filtro[0].split("/")[1]+'</span>
+		</div>')
+				$.ajax(
+        type: "GET"
+        url: $('#root_path').val()+filtro[0]
+        dataType: "script")
+			else
+				$('#filtroRow').append('<div class="small-5 columns">
+			<span class="prefix">'+filtro[0]+'</span>
+		</div>')
+				$('#filtroRow').append('<div class="small-7 columns">
+			<input type="'+filtro[1]+'" id="'+filtro[0]+'" name="'+filtro[0]+'" 
+		t	abindex="1"/>
+			</div>')

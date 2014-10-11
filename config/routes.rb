@@ -19,6 +19,9 @@ Roots::Application.routes.draw do
     concerns: [:globales]
 
   end
+  namespace :rfi do
+    resources :flujofondos
+  end
   namespace :rba do
     resources :actividades,
     :actividadtipos, 
