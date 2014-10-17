@@ -11,7 +11,8 @@ class Rad::Operacion < ActiveRecord::Base
 
 
   def rSave
-	 	asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1,:cotizacion =>1, :esgenerado => true, :empresa_id => empresa_id)
+	 	asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1, 
+	 		:cotizacion =>1, :desc => 'Operacion:'  + desc, :esgenerado => true, :empresa_id => empresa_id)
   	case operaciontipo.codigo
 			when 1, 2	
 				cta1 = ctaH_id
@@ -25,11 +26,19 @@ class Rad::Operacion < ActiveRecord::Base
 	  		col2 = "haber_op".to_s
 		end
 		cuotasArr = cuotasArr(fecha, cuotas, importe, cuotaimporte)
-
-		asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
-		cuotasArr.each do |k,v|
-			asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
+		
+		if rdosxmes == false
+			asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+			cuotasArr.each do |k|
+				asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
+			end
+		else
+			cuotasArr.each do |k|
+				asiento.registros.new(:cuenta_id => cta1, col1 => k[:valorCuota], :fecha => k[:fecha])
+				asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
+			end
 		end
+
 
   	asiento.transaction do
   		if asiento.valid_save
@@ -44,8 +53,10 @@ class Rad::Operacion < ActiveRecord::Base
 
 def rUpdate(params)
 	if update_attributes(params)
+		# asiento.update_attributes(:esgenerado => false)
 		asiento.destroy
-	 	asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1,:cotizacion =>1, :esgenerado => true,  :empresa_id => empresa_id)
+	 	asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1,:cotizacion =>1, 
+	 		:desc => 'Operacion:' + id + '-' + desc, :esgenerado => true,  :empresa_id => empresa_id)
 		case operaciontipo.codigo
 			when 1, 2	
 				cta1 = ctaH_id

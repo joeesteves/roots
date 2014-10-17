@@ -68,6 +68,6 @@ class Rad::OperacionesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def rad_operacion_params
       params.require(:rad_operacion).permit(:fecha, :importe, :operaciontipo_id, :cuotas, 
-        :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id)
+        :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes)
     end
 end

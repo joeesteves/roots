@@ -1,0 +1,55 @@
+<table class="notDT">
+	<thead>
+		<th>CUENTAS</th>
+		<th>SI</th>
+		<% @rep.times do |t| %>
+			<th><%= @meses[Date.today().advance(:months => t).month.to_i - 1] %></th>
+	<% end %>
+		<th>SF</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>ACUMULADO</td>
+			<td>--</td>
+			<% acumulados = @sDITotal  %>
+			<% @rep.times do |t| %>
+				<td style="background:blue;color:white"><%= acumulados %></td>
+				<% acumulados += @sMesTotales[t]  %>
+			<% end %>
+			<td>--</td>
+		</tr>	
+		<%	@ctasDisp.each do |cd| %>
+			<tr>
+				<td><%= cd.nombre %></td> 
+				<td><%= link_to @sDI[cd.id].to_s, rco_registros_path(:desde => '2010-01-01', :hasta => Date.today, :cuentas => cd.id)  %></td>
+				<% @rep.times do |t| %>
+					<% if t == 0 %>
+					<% fd = Date.today.advance(:days => 1) %>
+					<%else%>
+						<% fd = Date.new(Date.today.year,Date.today.month,1).advance(:months => t) %>
+						<%end%>
+					<% fh = Date.new(Date.today.year,Date.today.month,-1).advance(:months => t) %>
+					<td><%= link_to @sMes[t][cd.id].to_s, rco_registros_path(:desde => fd, :hasta => fh, :cuentas => cd.id) %></td>
+				<% end %>
+				<td><%= @sDF[cd.id] %></td>
+			</tr>
+		<% end %>
+		<tr>
+			<td>TOTAL</td>
+			<td><%= link_to @sDITotal.to_s, rco_registros_path(:desde =>'2010-01-01', :hasta =>Date.today) %></td>
+			<% @rep.times do |t| %>
+				<% if t == 0 %>
+					<% fd = Date.today.advance(:days => 1) %>
+				<%else%>
+					<% fd = Date.new(Date.today.year,Date.today.month,1).advance(:months => t) %>
+				<%end%>
+				<% fh = Date.new(Date.today.year,Date.today.month,-1).advance(:months => t) %>
+				<td><%= link_to @sMesTotales[t].to_s, rco_registros_path(:desde => fd, :hasta => fh, :cuentas => @ctasDisp.collect(&:id)) %></td>
+			<%end%>
+			<td><%= @sDFTotal %></td>
+		</tr>
+
+
+	</tbody>
+</table>
+

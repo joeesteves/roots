@@ -4,6 +4,8 @@ ready = ->
 	$.fn.gridRequest()
 	$('.calcCuota').change ->
 		calcularCuota()
+	$('.calcCuotaInv').change ->
+		calcularCuotaInv()
 
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','operaciontipo_id', 'importe']
@@ -15,6 +17,13 @@ calcularCuota = () ->
 	cuotas = $('#rad_operacion_cuotas').val()
 	importeCuota = (importe/cuotas).toFixed(2)
 	$('#rad_operacion_cuotaimporte').val(importeCuota)
+
+calcularCuotaInv = () -> 
+	cuotas = $('#rad_operacion_cuotas').val()
+	importeCuota = $('#rad_operacion_cuotaimporte').val()
+	importe = (importeCuota * cuotas).toFixed(2)
+	$('#rad_operacion_importe').val(importe)
+	alert('cambio')
 
 $(document).on('page:load', ready)
 $(document).ready(ready)

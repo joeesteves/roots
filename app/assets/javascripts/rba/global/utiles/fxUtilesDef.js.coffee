@@ -33,7 +33,7 @@ $.fn.activarFechaAutocompletado = () ->
 $.fn.completaHoy = () ->
 	if $(':input[type=date]').val() == ""
 		hoyJs = new Date()
-		dd = hoyJs.getDay() + 1 
+		dd = hoyJs.getDate() 
 		mm = hoyJs.getMonth() + 1
 		yyyy = hoyJs.getFullYear()
 		hoy = $.fn.armaFechas(dd,mm,yyyy)
