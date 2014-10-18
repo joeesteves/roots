@@ -12,7 +12,7 @@ Roots::Application.routes.draw do
   get 'salir', to: 'rba/sesiones#salir', :as => :salir
   post 'rba/mover_items', to: 'rba/nodos#mover_items'
   root 'rba/bienvenidos#inicio'
-
+  
   namespace :rad do
     resources :operaciones,
     :operaciontipos,
@@ -43,8 +43,11 @@ Roots::Application.routes.draw do
   end
 
   namespace :rco do
-    resources :cuentas, 
-    :cuentatipos,
+    resources :cuentas do
+      post :cuentas_para_operacion, on: :collection
+      concerns [:globales]
+    end
+    resources :cuentatipos,
     :registros, 
     :asientos, 
     :cotizaciones,

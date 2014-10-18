@@ -19,25 +19,30 @@ class Rad::Operacion < ActiveRecord::Base
 				col1 = "haber_op".to_s
 	  		cta2 = ctaD_id
 	  		col2 = "debe_op".to_s
-	  	when -1,-2
+	  	when -1,-2, 0
 	  		cta1 = ctaD_id
 	  		col1 = "debe_op".to_s
 	  		cta2 = ctaH_id
-	  		col2 = "haber_op".to_s
+	  		col2 = "haber_op".to_s		
 		end
 		cuotasArr = cuotasArr(fecha, cuotas, importe, cuotaimporte)
 		
-		if rdosxmes == false
-			asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
-			cuotasArr.each do |k|
-				asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
+		unless operaciontipo.codigo == 0
+			if rdosxmes == false
+				asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+				cuotasArr.each do |k|
+					asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+				end
+			else
+				cuotasArr.each do |k|
+					asiento.registros.new(:cuenta_id => cta1, col1 => k[:valorCuota], :fecha => k[:fecha])
+					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
+				end
 			end
 		else
-			cuotasArr.each do |k|
-				asiento.registros.new(:cuenta_id => cta1, col1 => k[:valorCuota], :fecha => k[:fecha])
-				asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
-			end
-		end
+			asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+			asiento.registros.new(:cuenta_id => cta2, col2 => importe, :fecha => fecha)
+		end	
 
 
   	asiento.transaction do

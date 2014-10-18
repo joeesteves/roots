@@ -14,6 +14,7 @@ class Rad::OperacionesController < ApplicationController
   def new
     @rad_operacion = Rad::Operacion.new
     define_nodo(params[:nodo])
+    @operacionTipoDefault = Rad::Operaciontipo.where(:codigo => -1).last.id
   end
 
   # GET /rad/operaciones/1/edit

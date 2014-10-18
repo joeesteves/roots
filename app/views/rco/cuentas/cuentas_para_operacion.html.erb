@@ -1,0 +1,12 @@
+$('#rad_operacion_ctaD_id').empty();
+$('#rad_operacion_ctaH_id').empty();
+<% @ctasDebe.each do |c| %>
+$('#rad_operacion_ctaD_id').append(new Option('<%= c.nombre%>','<%= c.id %>' ));
+<% end %>
+$('#rad_operacion_ctaD_id').trigger("chosen:updated");
+<% @ctasHaber.each do |c| %>
+	$('#rad_operacion_ctaH_id').append(new Option('<%= c.nombre%>','<%= c.id %>' ));
+<% end %>
+$('#rad_operacion_ctaH_id').trigger("chosen:updated");
+
+

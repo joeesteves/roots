@@ -10,7 +10,7 @@ class Rfi::FlujofondosController < ApplicationController
 		fin = hoy.advance(:months => @rep - 1) 
 		hasta = Date.new(fin.year,fin.month, -1)
 		ctasAlInicio = Rco::Cuenta.conSaldo([1.1,1.2,2.2],hoy,empresaGrupoId)
-		ctasAlFin = Rco::Cuenta.conSaldo([1.1,1.2,2.2],hoy,empresaGrupoId)
+		ctasAlFin = Rco::Cuenta.conSaldo([1.1,1.2,2.2],hasta,empresaGrupoId)
 		@ctasDisp = ctasAlInicio | ctasAlFin
 		ctasDispIds = @ctasDisp.collect(&:id)
 		@sDI = Rco::Registro.saldoCta(ctasDispIds,hoy,empresaId) # saldos iniciales
