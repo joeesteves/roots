@@ -1,0 +1,23 @@
+development:
+  adapter: mysql2
+  encode: utf8
+  database: roots_dev
+  pool: 5
+  timeout: 5000
+  username: root
+  password: 'alfa1625'
+
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
+  timeout: 5000
+
+production:
+  adapter: mysql2
+  encode: utf8
+  database: roots
+  pool: 5
+  timeout: 5000
+  username: root
+  password: 'alfa1625'
