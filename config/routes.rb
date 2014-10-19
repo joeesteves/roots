@@ -44,7 +44,7 @@ Roots::Application.routes.draw do
 
   namespace :rco do
     resources :cuentas do
-      post :cuentas_para_operacion, on: :collection
+      post :x_operacion_tipo, on: :collection
       concerns [:globales]
     end
     resources :cuentatipos,

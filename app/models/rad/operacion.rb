@@ -12,7 +12,8 @@ class Rad::Operacion < ActiveRecord::Base
 
   def rSave
 	 	asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1, 
-	 		:cotizacion =>1, :desc => 'Operacion:'  + desc, :esgenerado => true, :empresa_id => empresa_id)
+	 		:cotizacion =>1, :desc => 'Operacion:'  + desc, 
+	 		:esgenerado => true, :empresa_id => empresa_id)
   	case operaciontipo.codigo
 			when 1, 2	
 				cta1 = ctaH_id
@@ -31,7 +32,7 @@ class Rad::Operacion < ActiveRecord::Base
 			if rdosxmes == false
 				asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
 				cuotasArr.each do |k|
-					asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+					asiento.registros.new(:cuenta_id => cta2, col2 => importe, :fecha => fecha)
 				end
 			else
 				cuotasArr.each do |k|
@@ -58,27 +59,42 @@ class Rad::Operacion < ActiveRecord::Base
 
 def rUpdate(params)
 	if update_attributes(params)
-		# asiento.update_attributes(:esgenerado => false)
+		asiento.update_attributes(:esgenerado => false)
 		asiento.destroy
-	 	asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1,:cotizacion =>1, 
-	 		:desc => 'Operacion:' + id + '-' + desc, :esgenerado => true,  :empresa_id => empresa_id)
+		asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1,:cotizacion =>1, 
+	 		:desc => 'Operacion:' + desc, :esgenerado => true,  :empresa_id => empresa_id)
+	
 		case operaciontipo.codigo
 			when 1, 2	
 				cta1 = ctaH_id
 				col1 = "haber_op".to_s
 	  		cta2 = ctaD_id
 	  		col2 = "debe_op".to_s
-	  	when -1,-2
+	  	when -1,-2, 0
 	  		cta1 = ctaD_id
 	  		col1 = "debe_op".to_s
 	  		cta2 = ctaH_id
-	  		col2 = "haber_op".to_s
+	  		col2 = "haber_op".to_s		
 		end
 		cuotasArr = cuotasArr(fecha, cuotas, importe, cuotaimporte)
-		asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
-		cuotasArr.each do |k,v|
-			asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
-		end
+		
+		unless operaciontipo.codigo == 0
+			if rdosxmes == false
+				asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+				cuotasArr.each do |k|
+					asiento.registros.new(:cuenta_id => cta2, col2 => importe, :fecha => fecha)
+				end
+			else
+				cuotasArr.each do |k|
+					asiento.registros.new(:cuenta_id => cta1, col1 => k[:valorCuota], :fecha => k[:fecha])
+					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
+				end
+			end
+		else
+			asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+			asiento.registros.new(:cuenta_id => cta2, col2 => importe, :fecha => fecha)
+		end	
+		
 
 		asiento.transaction do
 			if asiento.valid_save

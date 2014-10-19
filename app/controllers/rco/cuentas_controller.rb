@@ -61,32 +61,17 @@ class Rco::CuentasController < ApplicationController
     render nothing: true  
   end
 
-  def cuentas_para_operacion
+  def x_operacion_tipo
     eg = session[:empresagrupo_id]
-    case params[:operaciontipo_codigo]
-      when '-2' # Pagos
-        @ctasDebe = Rco::Cuenta.xTipos([2.2], eg)
-        @ctasHaber = Rco::Cuenta.xTipos([1.1], eg) 
-      when '-1' # Egresos
-        @ctasDebe = Rco::Cuenta.xTipos([5.0], eg)
-        @ctasHaber = Rco::Cuenta.xTipos([1.1,1.2,2.2], eg)
-      when '0' # Movimiento de fondos
-        @ctasDebe = Rco::Cuenta.xTipos([1.1,1.2,2.2,3.0], eg)
-        @ctasHaber = Rco::Cuenta.xTipos([1.1,1.2,2.2,3.0], eg)
-      when '1' # Ingreso
-        @ctasDebe = Rco::Cuenta.xTipos([1.1,1.2], eg)
-        @ctasHaber = Rco::Cuenta.xTipos([4.0], eg)
-      when '2' #Cobranza
-        @ctasDebe = Rco::Cuenta.xTipos([1.1], eg)
-        @ctasHaber = Rco::Cuenta.xTipos([1.2], eg)
-    end 
+    cuentas = Rco::Cuenta.xOperacionTipo(params[:operaciontipo_codigo], eg)
+    @ctasDebe = cuentas[:debe]
+    @ctasHaber = cuentas[:haber] 
+  
   
     respond_to do |format|
       format.js {}
     end
   end  
- 
-
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -3,7 +3,7 @@ class Rad::OperacionesController < ApplicationController
   
   # GET /rad/operaciones
   def index
-    arbol_index(params[:nodo], flash_nodo: flash[:nodo])
+    arbol_index(params[:nodo], { flash_nodo: flash[:nodo], includes: :operaciontipo})
   end
 
   # GET /rad/operaciones/1
@@ -12,13 +12,20 @@ class Rad::OperacionesController < ApplicationController
 
   # GET /rad/operaciones/new
   def new
+
     @rad_operacion = Rad::Operacion.new
+    @operacionCodigo = -1 # Se define por default el egreso (-1) que es la mas habitual
+    @rad_operacion.operaciontipo_id = Rad::Operaciontipo.where(:codigo => @operacionCodigo).last.id
+    @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])
     define_nodo(params[:nodo])
-    @operacionTipoDefault = Rad::Operaciontipo.where(:codigo => -1).last.id
+     
   end
 
   # GET /rad/operaciones/1/edit
   def edit
+    @operacionCodigo = @rad_operacion.operaciontipo.codigo
+    @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])
+
   end
 
   # POST /rad/operaciones
@@ -32,7 +39,8 @@ class Rad::OperacionesController < ApplicationController
       redirect_to rad_operaciones_path, notice: 'Operacion guardado.'
       ubica_en_nodo(params[:nodo])
     else
-      
+
+      @cuentas = Rco::Cuenta.xOperacionTipo(@rad_operacion.operaciontipo.codigo.to_s, session[:empresagrupo_id])
       render action: 'new'
     end
   end

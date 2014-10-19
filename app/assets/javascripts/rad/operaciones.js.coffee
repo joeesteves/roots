@@ -17,8 +17,8 @@ ready = ->
 
 
 $.fn.gridRequest = (query) ->
-	nombres = ['id','fecha','operaciontipo_id', 'importe']
-	propiedades = [['Fecha','20%'],['Importe','20%'],['Operaciontipo_id','auto']]
+	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']
+	propiedades = [['Fecha','20%'],['Tipo','auto'],['Importe','20%'],['desc','auto', 'Descripción'],['cuotaimporte','auto','Cuota']]
 	$.fn.gridPrepDatos(nombres, propiedades, query)	
 
 calcularCuota = () -> 
@@ -36,7 +36,7 @@ calcularCuotaInv = () ->
 actualizarCuentas = (operaciontipo_codigo) ->
 	$.ajax(
 		type: "POST"
-		url: $('#root_path').val() + 'rco/cuentas/cuentas_para_operacion'
+		url: $('#root_path').val() + 'rco/cuentas/x_operacion_tipo'
 		data:
 			operaciontipo_codigo: operaciontipo_codigo
 		dataType: "script"

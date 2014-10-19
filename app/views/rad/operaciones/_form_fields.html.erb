@@ -5,7 +5,7 @@
   </div>
   <div class="small-3 columns">
     <%= f.select :operaciontipo_id, Rad::Operaciontipo.where(:estado => 1).
-    map {|c| [c.nombre, c.id, {data: {codigo: c.codigo}}]}, {:selected => @operacionTipoDefault}, {label: "Op. Tipo"} %>
+    map {|c| [c.nombre, c.id, {data: {codigo: c.codigo}}]}, {:selected => @rad_operacion.operaciontipo_id}, {label: "Op. Tipo"} %>
 	</div>
   <div class="small-3 columns">
     <%= f.text_field :importe, class: "calcCuota" %>
@@ -17,12 +17,10 @@
     <%= f.text_field :cuotaimporte, {label: "Valor Cuota", class: "calcCuotaInv", :tabindex => -1} %>
   </div>
   <div class="small-3 columns">
-  <%= f.collection_select :ctaD_id, Rco::Cuenta.xTipos([5.0], @e_grupo_actual).includes(:cuentatipo).order('rco_cuentatipos.codigo asc'),
-		:id, :nombre, {}, {label: "Cuenta Debe"} %>
+  <%= f.collection_select :ctaD_id, @cuentas[:debe], :id, :nombre, {}, {label: "Cuenta Debe"} %>
 	</div>
   <div class="small-3 columns">
-  <%= f.collection_select :ctaH_id, Rco::Cuenta.xTipos([1.1,2.2], @e_grupo_actual).includes(:cuentatipo).order('rco_cuentatipos.codigo asc'),
-		:id, :nombre, {}, {label: "Cuenta Haber"} %>
+  <%= f.collection_select :ctaH_id, Rco::Cuenta.all, :id, :nombre, {}, {label: "Cuenta Haber"} %>
 	</div>
   <div class="small-3 columns">
     <%= f.text_area :desc %>

@@ -28,6 +28,27 @@ class Rco::Cuenta < ActiveRecord::Base
     references(:registros)
   end
 
+  def self.xOperacionTipo(operacionTipoCodigo, empresagrupo_id)
+    cuentas = {}
 
-  
+    case operacionTipoCodigo
+      when '-2' # Pagos
+        cuentas[:debe] = Rco::Cuenta.xTipos([2.2], empresagrupo_id)
+        cuentas[:haber] = Rco::Cuenta.xTipos([1.1], empresagrupo_id) 
+      when '-1' # empresagrupo_idresos
+        cuentas[:debe] = Rco::Cuenta.xTipos([5.0], empresagrupo_id)
+        cuentas[:haber] = Rco::Cuenta.xTipos([1.1,1.2,2.2], empresagrupo_id)
+      when '0' # Movimiento de fondos
+        cuentas[:debe] = Rco::Cuenta.xTipos([1.1,1.2,2.2,3.0], empresagrupo_id)
+        cuentas[:haber] = Rco::Cuenta.xTipos([1.1,1.2,2.2,3.0], empresagrupo_id)
+      when '1' # Ingreso
+        cuentas[:debe] = Rco::Cuenta.xTipos([1.1,1.2], empresagrupo_id)
+        cuentas[:haber] = Rco::Cuenta.xTipos([4.0], empresagrupo_id)
+      when '2' #Cobranza
+        cuentas[:debe] = Rco::Cuenta.xTipos([1.1], empresagrupo_id)
+        cuentas[:haber] = Rco::Cuenta.xTipos([1.2], empresagrupo_id)
+    end
+    cuentas
+  end  
+
 end
