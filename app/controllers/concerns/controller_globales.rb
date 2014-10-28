@@ -2,6 +2,7 @@ module ControllerGlobales
 	extend ActiveSupport::Concern
 
 	def getVariables(controller_path)
+    path = controller_path
     controller = controller_path.gsub('/','_')
     coleccion = '@' + controller 
     member = coleccion.singularize
@@ -9,7 +10,7 @@ module ControllerGlobales
     metodo = controller.to_sym
     clase = controller_path.singularize.classify.constantize
     return {controller: controller, coleccion: coleccion, member: member, 
-      metodo_ids: metodo_ids, metodo: metodo, clase: clase}
+      metodo_ids: metodo_ids, metodo: metodo, clase: clase, path: path}
   end
 
   def arbol_index(nodo, args = {})
@@ -92,10 +93,10 @@ module ControllerGlobales
 
 
   def importar
-    v = getVariables(controller_path)
+    entidad = getVariables(controller_path)
     begin 
-      v[:clase].importar(params[:file],controller_path)
-      redirect_to  root_path+controller_path, notice: "se han importado las cuentas correctamente"
+      entidad[:clase].importar(params[:file],entidad, params[:empresa_id])
+      redirect_to  root_path+controller_path, notice: "se han importado los items correctamente"
     rescue Exception => e
       redirect_to  root_path+controller_path, notice: "Hubo algun Error! #{e}"
     end

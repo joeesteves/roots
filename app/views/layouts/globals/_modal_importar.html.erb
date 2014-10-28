@@ -4,6 +4,7 @@
 
  <%= form_tag root_path+controller_path+'/importar', multipart: true do %>
   <%= file_field_tag :file %>
+  <%= hidden_field_tag :empresa_id, @empresa_actual.id %>
   <%= submit_tag "Import" %>
 <% end %>
 
