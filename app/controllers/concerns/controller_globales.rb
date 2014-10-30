@@ -9,8 +9,10 @@ module ControllerGlobales
     metodo_ids = (controller.singularize + '_ids').to_sym
     metodo = controller.to_sym
     clase = controller_path.singularize.classify.constantize
+    entidad = path.split("/")[1]
+    entidad_id = entidad.singularize + "_id"
     return {controller: controller, coleccion: coleccion, member: member, 
-      metodo_ids: metodo_ids, metodo: metodo, clase: clase, path: path}
+      metodo_ids: metodo_ids, metodo: metodo, clase: clase, path: path, entidad_id: entidad_id}
   end
 
   def arbol_index(nodo, args = {})
@@ -94,9 +96,14 @@ module ControllerGlobales
 
   def importar
     entidad = getVariables(controller_path)
-    begin 
-      entidad[:clase].importar(params[:file],entidad, params[:empresa_id])
-      redirect_to  root_path+controller_path, notice: "se han importado los items correctamente"
+    begin
+      @rta = entidad[:clase].importar(params[:file],entidad, params[:empresa_id], params[:empresagrupo_id]) 
+      unless @rta == false
+        instance_variable_set(entidad[:member],@rta)
+        render :new 
+      else 
+       redirect_to  root_path+controller_path, notice: "se han importado los items correctamente"
+      end
     rescue Exception => e
       redirect_to  root_path+controller_path, notice: "Hubo algun Error! #{e}"
     end

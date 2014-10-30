@@ -4,3 +4,7 @@
 <% else %>
 	<%= render "layouts/globals/grid" %>
 <% end %>
+
+<%= hidden_field_tag 'filtro_desde', @desde %>
+<%= hidden_field_tag 'filtro_hasta', @hasta %>
+<%= hidden_field_tag 'filtro_cuentas', @cuentas %>

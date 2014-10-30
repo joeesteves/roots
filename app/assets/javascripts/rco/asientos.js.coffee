@@ -7,7 +7,8 @@ ready = ->
 		sumInicial()
 		ActSumDebe()
 		ActSumHaber()
-		submitOn(false)
+		controlBoton()
+		
 	else
 		$.fn.agregarFiltros([['desde','date'],['hasta','date'],['rco/cuentas','select']])
 		
@@ -35,7 +36,7 @@ ready = ->
  	  fechas = $('.fecha')
  	  fechasLenght = fechas.length
  	  if (fechasLenght > 1)
-	 	  if(['','0'].indexOf($('#vtos').val()) == -1 && re.test($('#vtos').val()))
+	 	  if([''].indexOf($('#vtos').val()) == -1 && re.test($('#vtos').val()))
  		  	fechaBase = new Date(fechas[fechasLenght-2].value)
  		  	fechaBase.setDate(fechaBase.getDate() + parseInt($('#vtos').val()))
  		  	fechaCalculada = $.fn.armaFechas(fechaBase.getDate()+1,fechaBase.getMonth()+1,fechaBase.getFullYear())
@@ -76,14 +77,17 @@ ActSumHaber = () ->
 		difDebeHaber()
 
 sumDebe = () ->
-	$('#debe').val(0)
+	debe = 0
 	$('.debe:visible').each ->
-		$('#debe').val(parseFloat($('#debe').val()) + parseFloat($(this).val()))
+		debe += parseFloat($(this).val())
+	$('#debe').val(parseFloat(debe.toFixed(4)))	
 
 sumHaber = () ->
-	$('#haber').val(0)
+	haber = 0
 	$('.haber:visible').each ->
-		$('#haber').val(parseFloat($('#haber').val()) + parseFloat($(this).val()))
+		haber += parseFloat($(this).val())
+	$('#haber').val(parseFloat(haber.toFixed(4)))	
+
 
 difDebeHaber = () ->
 	$('#diferencia').val($('#debe').val() - $('#haber').val())
@@ -102,3 +106,4 @@ controlBoton = () ->
 
 $(document).on('page:load', ready)
 $(document).ready(ready)
+

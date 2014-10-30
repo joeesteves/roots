@@ -1,4 +1,5 @@
 module Importador
+	include ControllerGlobales
 	def importarGenerico(file, entidad)
 		CSV.foreach(file.path, headers: true ) do |row|
 			objeto = entidad[:clase].create! row.to_hash
@@ -8,22 +9,52 @@ module Importador
 			end
 		end
 	end
-	def importarCuentas(file, entidad, empresa_id)
-		asiento = Rco::Asiento.new({empresa_id: empresa_id,cotizacion: 1, moneda_id: 1})
-			index = 0
+
+	def importarCuentas(file, empresa_id)
+		@asiento = Rco::Asiento.new({empresa_id: empresa_id,cotizacion: 1, moneda_id: 1})
+		index = 0
 			CSV.foreach(file.path, headers: true ) do |row|
 				objeto = row.to_hash
-				cuenta_codigo = objeto["cuenta_codigo"]
-				cuenta_id = Rco::Cuenta.find_by_codigo(cuenta_codigo).id
-				objeto[:cuenta_id] = cuenta_id
-				objeto["debe_op"] = objeto["debe"]
-				objeto["haber_op"] = objeto["haber"]
-				objeto.delete("cuenta_codigo").delete("debe").delete("haber")
-				asiento.fecha = objeto["fecha"] if index == 0
-				asiento.registros.new(objeto) 
+				objeto = convCodigoToId(objeto, ["rco/cuenta"])
+				if objeto["debe"].nil?
+					objeto["debe_op"] =  "0"
+				else
+					objeto["debe_op"] = objeto["debe"].gsub(",",".")
+ 				end
+ 				if objeto["haber"].nil?	 
+ 					objeto["haber_op"] = "0"
+ 				else
+					objeto["haber_op"] = objeto["haber"].gsub(",",".")
+				end
+				if index == 0
+					@asiento.fecha = objeto["fecha"]
+					@asiento.desc = objeto["desc_global"]
+				end 
+				["debe","haber","desc_global"].each do |atr|
+					objeto.delete(atr)
+				end
+				@asiento.registros.new(objeto) 
+				puts index
+				puts objeto["fecha"]
 				index += 1
+
 			end
-			asiento.valid_save
+			@asiento
+			 # asiento.valid_save
+
+	end
+
+	def convCodigoToId(objeto, atributos)
+		atributos.each do |atr|
+			entidad = getVariables(atr)
+			puts entidad
+			instance_variable_set(entidad[:member], objeto[atr])
+			instance_variable_set('@'+entidad[:entidad_id], entidad[:clase].find_by_codigo(@rco_cuenta).id)
+			objeto[entidad[:entidad_id]] = @cuenta_id
+			puts objeto[entidad[:entidad_id]]
+			objeto.delete(atr)
+		end 
+		objeto
 	end
 
 end

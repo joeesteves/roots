@@ -5,12 +5,14 @@ module ModeloGlobales
 		include ControllerGlobales
 		include Importador
 		
-		def importar(file, entidad, empresa_id)
+		def importar(file, entidad, empresa_id, empresagrupo_id)
 			case entidad[:path]
 			when "rco/asientos"
-				importarCuentas(file, entidad, empresa_id)
+				@rta = importarCuentas(file, empresa_id)
+				return @rta
 			else
 				importarGenerico(file, entidad)
+				return false
 			end
 		end
 

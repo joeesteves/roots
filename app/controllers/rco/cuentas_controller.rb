@@ -5,6 +5,8 @@ class Rco::CuentasController < ApplicationController
   def index
     arbol_index(params[:nodo], empresagrupo_id: session[:empresagrupo_id], 
       flash_nodo: flash[:nodo])
+
+    @filtro_cuentas_valor = params[:filtro_valor] if request.xhr? && params[:filtro_valor]
     
     respond_to do |format|
       format.html

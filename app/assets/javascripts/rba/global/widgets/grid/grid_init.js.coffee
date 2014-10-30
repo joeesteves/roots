@@ -1,11 +1,16 @@
 $.fn.gridInit = (col_nombres, col_props, query, agrupar) -> 
-	if $('#con_arbol').val() == 'true'
+# el query cuando hay arbol sirve para filtrar por el nodo seleccionado
+# ql query cuando no hay arbol sirve para pasar las parametros de los filtros
+	if $('#con_arbol').val() == 'true' 
 		if query == undefined || query == ''
 			queryUrl = '?nodo=raiz'
 		else
 			queryUrl = '?nodo='+ query
 	else
-		queryUrl = ''
+		if query == undefined || query == ''
+			queryUrl = ''
+		else
+			queryUrl = query
 			
 	$("#cargando").css('display', 'block')
 	$("#jqxgrid").jqxGrid('destroy')

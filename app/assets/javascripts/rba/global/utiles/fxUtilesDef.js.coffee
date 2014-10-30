@@ -74,8 +74,13 @@ $.fn.dynamicForm = (mostrarCampos, ocultarCampos) ->
 
 
 # funcion que agrega filtros. Se llama desde el js de cada controlador solo desde index. ver asientos.js
-# se alimenta de un array doble [[nombre campo, tipo(date,text,select)]] en caso de ser select el nombre 
+# se alimenta de un array triple [[nombre campo, tipo(date,text,select), valor default]] en caso de ser select el nombre 
 # debe ser el controller al que llama el selector rco/cuentas traeria un listado de cuentas
+# en el caso de los tipo select ahi logica en los controladores correspondientes que devuelven un js.
+# para hacer llegar los parametros a la consulta json, se guardan en cada view en un hidden fiel con el prefijo filtro
+# luego el gridrequest lo pasa como parametro query.
+# grid_init separa los index con arbol y sin arbol. Para los con arbol el query indica el nodo de trabajo para los sin arbol los filtros
+
 $.fn.agregarFiltros = (filtros) ->
 	for filtro in filtros
 		do (filtro) ->
@@ -86,6 +91,8 @@ $.fn.agregarFiltros = (filtros) ->
 				$.ajax(
         type: "GET"
         url: $('#root_path').val()+filtro[0]
+        data:
+        	filtro_valor: filtro[2]
         dataType: "script")
 			else
 				$('#filtroRow').append('<div class="small-5 columns">
@@ -93,5 +100,5 @@ $.fn.agregarFiltros = (filtros) ->
 		</div>')
 				$('#filtroRow').append('<div class="small-7 columns">
 			<input type="'+filtro[1]+'" id="'+filtro[0]+'" name="'+filtro[0]+'" 
-		t	abindex="1"/>
+		tabindex="1" value="'+filtro[2]+'"/>
 			</div>')

@@ -42,4 +42,14 @@ class Rco::Registro < ActiveRecord::Base
     sum('coalesce(debe,0) -coalesce(haber,0)', :group => :cuenta_id)
   end  
 
+  def self.filtros(empresa_ids, desde, hasta, cuentas)
+
+    includes(:asiento).
+    where('rco_asientos.empresa_id in (?)', empresa_ids).references(:asiento)
+    where('rco_registros.fecha >= ?', desde).
+    where('rco_registros.fecha <= ?', hasta).
+    where('rco_registros.cuenta_id in (?)', cuentas)
+
+  end
+
 end

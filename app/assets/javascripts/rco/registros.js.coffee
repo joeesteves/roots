@@ -1,7 +1,18 @@
 ready = ->
 	if $('#con_arbol').val() == 'true'
 		$.fn.arbolInit()
-	$.fn.gridRequest()
+	if $('#action_name').val() == 'index'
+		# captura las variables de filtros
+		desde = $('#filtro_desde').val()
+		hasta = $('#filtro_hasta').val()
+		cuentas = $('#filtro_cuentas').val().split(" ")
+		cuentaUrl = ''
+		$.each cuentas, (i,v) -> 
+			cuentaUrl += '&cuentas[]='+v
+
+		$.fn.agregarFiltros([['desde','date',desde],['hasta','date',hasta],['rco/cuentas','select',cuentas]])
+		query = '?desde='+desde+'&hasta='+hasta+cuentaUrl
+	$.fn.gridRequest(query)
 
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','cuenta',['debe','float'],'haber',['saldo','float'],'desc','desc_asiento']
