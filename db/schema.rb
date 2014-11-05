@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141016203635) do
+ActiveRecord::Schema.define(version: 20141102170934) do
 
   create_table "rad_operaciones", force: true do |t|
     t.date     "fecha"
@@ -201,6 +201,17 @@ ActiveRecord::Schema.define(version: 20141016203635) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "rco_aplicaciones", force: true do |t|
+    t.integer  "reg_orig_id"
+    t.integer  "reg_dest_id"
+    t.decimal  "importe",     precision: 12, scale: 4, default: 0.0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rco_aplicaciones", ["reg_dest_id"], name: "index_rco_aplicaciones_on_reg_dest_id", using: :btree
+  add_index "rco_aplicaciones", ["reg_orig_id"], name: "index_rco_aplicaciones_on_reg_orig_id", using: :btree
 
   create_table "rco_asientos", force: true do |t|
     t.date     "fecha"

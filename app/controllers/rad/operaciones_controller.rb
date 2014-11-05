@@ -18,6 +18,7 @@ class Rad::OperacionesController < ApplicationController
     @rad_operacion.operaciontipo_id = Rad::Operaciontipo.where(:codigo => @operacionCodigo).last.id
     @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])
     define_nodo(params[:nodo])
+    # @aplicaciones_dest = Rco: 
      
   end
 

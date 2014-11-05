@@ -3,6 +3,11 @@ class Rco::Registro < ActiveRecord::Base
   habtm_nodo
   belongs_to :asiento
   belongs_to :cuenta
+  has_many :aplicaciones_dest, class_name: "Rco::Aplicacion", foreign_key: "reg_dest_id"
+  has_many :aplicaciones_orig, class_name: "Rco::Aplicacion", foreign_key: "reg_orig_id"
+  has_many :reg_dest, through: :aplicaciones_orig
+  has_many :reg_orig, through: :aplicaciones_dest
+
   validate do |registro|
     registro.debe_haber
   end

@@ -13,6 +13,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 		'accion' => 'acciones',
 		'actividad' => 'actividades',
 		'animal' => 'animales',
+		'aplicacion' => 'aplicaciones',
 		'arbol' => 'arboles',
 		'categoria' => 'categorias',
 		'catfiscal' => 'catfiscales',
