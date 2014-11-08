@@ -7,11 +7,15 @@ development:
   username: root
   password: 'alfa1625'
 
-# test:
-#   adapter: sqlite3
-#   database: db/test.sqlite3
-#   pool: 5
-#   timeout: 5000
+test:
+  adapter: mysql2
+  encode: utf8
+  database: roots_test
+  pool: 5
+  timeout: 5000
+  username: root
+  password: 'alfa1625'
+
 
 production:
   adapter: mysql2

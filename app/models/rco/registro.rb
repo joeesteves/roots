@@ -3,10 +3,12 @@ class Rco::Registro < ActiveRecord::Base
   habtm_nodo
   belongs_to :asiento
   belongs_to :cuenta
-  has_many :aplicaciones_dest, class_name: "Rco::Aplicacion", foreign_key: "reg_dest_id"
-  has_many :aplicaciones_orig, class_name: "Rco::Aplicacion", foreign_key: "reg_orig_id"
-  has_many :reg_dest, through: :aplicaciones_orig
-  has_many :reg_orig, through: :aplicaciones_dest
+  delegate :esCtaCte?, :to => :cuenta
+  delegate :codigo, :nombre, :to => :cuenta, :prefix => true
+  has_many :aplicaciones_debe, class_name: "Rco::Aplicacion", foreign_key: "reg_debe_id"
+  has_many :aplicaciones_haber, class_name: "Rco::Aplicacion", foreign_key: "reg_haber_id"
+  has_many :reg_debe, through: :aplicaciones_debe
+  has_many :reg_haber, through: :aplicaciones_haber
 
   validate do |registro|
     registro.debe_haber
@@ -54,7 +56,33 @@ class Rco::Registro < ActiveRecord::Base
     where('rco_registros.fecha >= ?', desde).
     where('rco_registros.fecha <= ?', hasta).
     where('rco_registros.cuenta_id in (?)', cuentas)
-
   end
 
+  def self.pendientes(registro)
+    if registro.esCtaCte?
+      case registro.saldoTipo
+      when "debe"
+        where(:cuenta_id => registro.cuenta_id).
+        where.not(:haber => 0).
+        includes(:aplicaciones_haber).
+        having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
+        group('rco_registros.id').references(:aplicaciones_haber)
+      when "haber"
+        where(:cuenta_id => registro.cuenta_id).
+        where.not(:debe => 0).
+        includes(:aplicaciones_debe).
+        having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
+        group('rco_registros.id').references(:aplicaciones_debe)
+      end
+
+    end
+  end
+  
+  def saldoTipo
+    unless debe == 0 || debe.nil?
+      "debe"
+    else
+      "haber"
+    end
+  end
 end

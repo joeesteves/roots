@@ -2,18 +2,10 @@ class Rco::Cuenta < ActiveRecord::Base
   include ModeloGlobales
   habtm_nodo
   belongs_to :cuentatipo
+  delegate :codigo, :to => :cuentatipo, :prefix => true
   has_many :registros
   belongs_to :empresagrupo, :class_name => "Rba::Empresagrupo"
   
-  # def self.conSaldo(tipos, fecha, empresagrupo_id)
-  # 	deEmpresaGrupoXId(empresagrupo_id).includes(:cuentatipo).
-  # 	where('rco_cuentatipos.codigo in ( ? )', tipos).
-  # 	joins(:registros).group('rco_cuentas.id').
-  #   where('rco_registros.fecha <= :fecha', :fecha => fecha).
-		# having('coalesce(sum(rco_registros.debe),0)-coalesce(sum(rco_registros.haber),0) != 0').
-		# references(:cuentatipo,:registros)
-  # end
-
   def self.xTipos(tipos, empresagrupo_id)
     deEmpresaGrupoXId(empresagrupo_id).
     includes(:cuentatipo).
@@ -50,5 +42,9 @@ class Rco::Cuenta < ActiveRecord::Base
     end
     cuentas
   end  
+
+  def esCtaCte?
+   ['1.2','2.2'].include? cuentatipo_codigo 
+  end
 
 end
