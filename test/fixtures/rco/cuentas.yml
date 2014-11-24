@@ -1,0 +1,9 @@
+clientes:
+ nombre: clientes
+ cuentatipo: cta_cte_act
+banco:
+ nombre: banco nacion
+ cuentatipo: banco
+proveedores:
+ nombre: proveedores
+ cuentatipo: cta_cte_pas

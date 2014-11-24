@@ -3,10 +3,10 @@ class Rco::Registro < ActiveRecord::Base
   habtm_nodo
   belongs_to :asiento
   belongs_to :cuenta
-  delegate :esCtaCte?, :to => :cuenta
-  delegate :codigo, :nombre, :to => :cuenta, :prefix => true
-  has_many :aplicaciones_debe, class_name: "Rco::Aplicacion", foreign_key: "reg_debe_id"
-  has_many :aplicaciones_haber, class_name: "Rco::Aplicacion", foreign_key: "reg_haber_id"
+  delegate :codigo, :nombre, :esCtaCte?, :to => :cuenta, :prefix => true
+  # El registro tiene aplicaciones al debe a traves de reg_haber_id (que lo id) y al revés también
+  has_many :aplicaciones_debe, class_name: "Rco::Aplicacion", foreign_key: "reg_haber_id"
+  has_many :aplicaciones_haber, class_name: "Rco::Aplicacion", foreign_key: "reg_debe_id"
   has_many :reg_debe, through: :aplicaciones_debe
   has_many :reg_haber, through: :aplicaciones_haber
 
@@ -58,23 +58,35 @@ class Rco::Registro < ActiveRecord::Base
     where('rco_registros.cuenta_id in (?)', cuentas)
   end
 
-  def self.pendientes(registro)
-    if registro.esCtaCte?
-      case registro.saldoTipo
+  def self.compatiblesXCta(cuenta_id, saldoTipo)
+    cuenta = Rco::Cuenta.find(cuenta_id)
+    if cuenta.esCtaCte?
+      case saldoTipo
       when "debe"
-        where(:cuenta_id => registro.cuenta_id).
+        where(:cuenta_id => cuenta_id).
         where.not(:haber => 0).
         includes(:aplicaciones_haber).
         having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_haber)
       when "haber"
-        where(:cuenta_id => registro.cuenta_id).
+        where(:cuenta_id => cuenta_id).
         where.not(:debe => 0).
         includes(:aplicaciones_debe).
         having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_debe)
       end
+    end
+  end
 
+  # devuelve las aplicaciones que tiene cada registro y guarda la logica si es debe o haber
+
+
+  def aplicados
+    case saldoTipo
+    when "debe"
+      reg_haber
+    when "haber"
+      reg_debe
     end
   end
   
@@ -85,4 +97,9 @@ class Rco::Registro < ActiveRecord::Base
       "haber"
     end
   end
+  
+  def compatibles
+    Rco::Registro.compatiblesXCta(cuenta_id, saldoTipo)
+  end
+
 end

@@ -1,0 +1,9 @@
+cta_cte_act:
+ codigo: 1.2
+ nombre: cta cte activo
+cta_cte_pas:
+ codigo: 1.2
+ nombre: cta cte pasivo 
+banco:
+ codigo: 1.0
+ nombre: banco

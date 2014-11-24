@@ -1,0 +1,16 @@
+debe_banco:
+ debe: 100
+ haber: 0
+ cuenta: banco
+debe_clientes:
+ debe: 100
+ haber: 0
+ cuenta: clientes
+haber_banco:
+ debe: 0
+ haber: 100
+ cuenta: banco
+haber_prov:
+ debe: 0
+ haber: 100
+ cuenta: proveedores

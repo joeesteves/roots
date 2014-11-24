@@ -58,6 +58,12 @@ class Rco::RegistrosController < ApplicationController
     Rco::Registro.destroy(params[:ids]) 
     render nothing: true  
   end
+
+  # def buscarCompatibles(action)
+  #   if action == "new"
+  #     Rco::Registro.compatiblesXCta(cuenta_id, saldoTipo)
+  #   else
+       
  
   private
     # Use callbacks to share common setup or constraints between actions.
