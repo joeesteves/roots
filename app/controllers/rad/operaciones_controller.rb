@@ -12,6 +12,7 @@ class Rad::OperacionesController < ApplicationController
 
   # GET /rad/operaciones/new
   def new
+    @compatibles = Rco::Registro.all
 
     @rad_operacion = Rad::Operacion.new
     @operacionCodigo = -1 # Se define por default el egreso (-1) que es la mas habitual
@@ -26,6 +27,8 @@ class Rad::OperacionesController < ApplicationController
   def edit
     @operacionCodigo = @rad_operacion.operaciontipo.codigo
     @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])
+    # utilizo first solo para probar
+    @compatibles = @rad_operacion.registros.first().compatibles
 
   end
 

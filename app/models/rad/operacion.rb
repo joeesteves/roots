@@ -7,7 +7,8 @@ class Rad::Operacion < ActiveRecord::Base
   belongs_to :empresa, class_name: "Rba::Empresa"
   before_destroy :liberaAsiento
   belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
- 
+  delegate :registros, :to => :asiento
+
 
 
   def rSave

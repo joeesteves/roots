@@ -74,6 +74,8 @@ class Rco::Registro < ActiveRecord::Base
         includes(:aplicaciones_debe).
         having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_debe)
+      else
+        none
       end
     end
   end
@@ -87,6 +89,8 @@ class Rco::Registro < ActiveRecord::Base
       reg_haber
     when "haber"
       reg_debe
+    else
+      none
     end
   end
   
@@ -99,7 +103,7 @@ class Rco::Registro < ActiveRecord::Base
   end
   
   def compatibles
-    Rco::Registro.compatiblesXCta(cuenta_id, saldoTipo)
+    Rco::Registro.compatiblesXCta(cuenta_id, saldoTipo) + aplicados
   end
 
 end
