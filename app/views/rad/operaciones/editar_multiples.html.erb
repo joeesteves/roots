@@ -1,13 +1,13 @@
 <input id="esForm" type="hidden" value=true />
 <div class="row">
   <div class="panel">
-    <%= form_tag actualizar_multiples_rad_operaciontipos_path, method: :put do %>
-    <% @rad_operaciontipos.each do |rad_operaciontipo| %>
+    <%= form_tag actualizar_multiples_rad_operaciones_path, method: :put do %>
+    <% @rad_operaciones.each do |rad_operacion| %>
 
     <div class="row">
-    <h3>Grupo: <%= rad_operaciontipo.nombre.upcase %></h3>
+    <h3>Grupo: <%= rad_operacion.id	 %></h3>
 <div class="panel">
-<%= fields_for "rad_operaciontipos[]", rad_operaciontipo, builder: EstandarFormBuilder do |f| %>
+<%= fields_for "rad_operaciones[]", rad_operacion, builder: EstandarFormBuilder do |f| %>
 <%= render 'form_fields', f:f %>
 <% end %>
 </div>

@@ -31,9 +31,6 @@
     <%= f.check_box :rdosxmes, {label: "Rmes"} %>
   </div>
   
-  <div class="small-12 columns">
-    <% unless @compatibles.empty? %> 
-     <%= select_tag "aplicaciones" , options_from_collection_for_select(@compatibles, :id, :desc) , {} %>
-    <%end%>
-  </div>0
+  <div class="small-12 columns" id="compatibles">
+  </div>
 </div>

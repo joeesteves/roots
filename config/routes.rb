@@ -14,8 +14,11 @@ Roots::Application.routes.draw do
   root 'rba/bienvenidos#inicio'
   
   namespace :rad do
-    resources :operaciones,
-    :operaciontipos,
+    resources :operaciones do
+      post :compatibles, on: :collection
+      concerns [:globales]
+    end
+    resources :operaciontipos,
     concerns: [:globales]
 
   end

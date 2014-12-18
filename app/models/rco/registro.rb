@@ -9,6 +9,9 @@ class Rco::Registro < ActiveRecord::Base
   has_many :aplicaciones_haber, class_name: "Rco::Aplicacion", foreign_key: "reg_debe_id"
   has_many :reg_debe, through: :aplicaciones_debe
   has_many :reg_haber, through: :aplicaciones_haber
+  scope :alDebe, -> { where(:haber => 0 ) }
+  scope :alHaber, -> { where(:debe => 0 ) }
+
 
   validate do |registro|
     registro.debe_haber
@@ -63,14 +66,14 @@ class Rco::Registro < ActiveRecord::Base
     if cuenta.esCtaCte?
       case saldoTipo
       when "debe"
+        alDebe.
         where(:cuenta_id => cuenta_id).
-        where.not(:haber => 0).
         includes(:aplicaciones_haber).
         having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_haber)
       when "haber"
+        alHaber.
         where(:cuenta_id => cuenta_id).
-        where.not(:debe => 0).
         includes(:aplicaciones_debe).
         having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_debe)

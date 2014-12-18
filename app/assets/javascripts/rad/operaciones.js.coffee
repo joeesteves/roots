@@ -7,13 +7,28 @@ ready = ->
 	$('.calcCuotaInv').change ->
 		calcularCuotaInv()
 	$('#rad_operacion_operaciontipo_id').change ->
-		if $('#rad_operacion_operaciontipo_id option:selected').data('codigo') == 0
-			$('#rad_operacion_cuotas, #rad_operacion_rdosxmes, #rad_operacion_cuotaimporte')
-			.prop('disabled', true)
-		else
-			$('#rad_operacion_cuotas, #rad_operacion_rdosxmes, #rad_operacion_cuotaimporte')
-			.prop('disabled', false)
+		interruptorCuotas(false)
 		actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))
+		switch $('#rad_operacion_operaciontipo_id option:selected').data('codigo')
+			#MOV DE FONDOS
+			when 0 then interruptorCuotas(true)			
+			#EGRESOS Y COBRANZAS
+			when -1, 2 then (
+				actualizarCompatibles(getCuentaId("haber"),"debe")	
+				activaCuentasCompatiblesOnChange("haber")
+			)
+			#INGRESOS Y PAGOS
+			when 1, -2 then (
+				actualizarCompatibles(getCuentaId("debe"),"haber")
+				activaCuentasCompatiblesOnChange("debe")
+			)
+	if $('#action_name').val() != 'index'	
+		actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo')) if $('#action_name').val() != 'edit'	
+		actualizarCompatibles(getCuentaId("haber"),"debe") 
+		activaCuentasCompatiblesOnChange("haber")
+
+interruptorCuotas = (posicion) ->
+	$('#rad_operacion_cuotas, #rad_operacion_rdosxmes, #rad_operacion_cuotaimporte').prop('disabled', posicion)
 
 
 $.fn.gridRequest = (query) ->
@@ -40,8 +55,48 @@ actualizarCuentas = (operaciontipo_codigo) ->
 		data:
 			operaciontipo_codigo: operaciontipo_codigo
 		dataType: "script"
+		)
+
+activaCuentasCompatiblesOnChange = (saldoTipo) ->
+	switch saldoTipo
+		when "debe" then (
+			$('#rad_operacion_ctaD_id, #rad_operacion_ctaH_id').unbind("change")
+			$('#rad_operacion_ctaD_id').change ->
+				actualizarCompatibles(getCuentaId("debe"),"haber")
+				alert("debe")
+		)
+		when "haber" then (
+			$('#rad_operacion_ctaD_id, #rad_operacion_ctaH_id').unbind("change")
+			$('#rad_operacion_ctaH_id').change ->
+				actualizarCompatibles(getCuentaId("haber"),"debe")
+				alert("haber")
+		)
+
+actualizarCompatibles = (cuenta_id, saldoTipo) ->
+	$.ajax(
+		type: "POST"
+		url: $('#root_path').val() + 'rad/operaciones/compatibles'
+		data:
+			saldoTipo: saldoTipo
+			cuenta_id: cuenta_id
+		dataType: "script"
     )
-		
+
+getCuentaId = (saldoTipo) ->
+	switch saldoTipo
+		when "debe" then $('#rad_operacion_ctaD_id option:selected').val()
+		when "haber" then $('#rad_operacion_ctaH_id option:selected').val()
+
+$.fn.cargaCompatibles = (datos) ->
+	$('#compatibles').empty()
+	$('#compatibles').append('<select id="aplicaciones" name="aplicaciones" multiple></select>')
+	$.each datos, (i) ->
+		opcion = '<option value="' + this.id + '">' + 
+		this.desc + 
+		' disponible: '+ this.disponible +
+		'</option>'
+		$('#aplicaciones').append(opcion)
+	$.fn.initChosen()
 
 $(document).on('page:load', ready)
 $(document).ready(ready)

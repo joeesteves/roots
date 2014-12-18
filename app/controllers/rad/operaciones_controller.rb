@@ -12,7 +12,6 @@ class Rad::OperacionesController < ApplicationController
 
   # GET /rad/operaciones/new
   def new
-    @compatibles = Rco::Registro.all
 
     @rad_operacion = Rad::Operacion.new
     @operacionCodigo = -1 # Se define por default el egreso (-1) que es la mas habitual
@@ -28,8 +27,6 @@ class Rad::OperacionesController < ApplicationController
     @operacionCodigo = @rad_operacion.operaciontipo.codigo
     @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])
     # utilizo first solo para probar
-    @compatibles = @rad_operacion.registros.first().compatibles
-
   end
 
   # POST /rad/operaciones
@@ -70,6 +67,28 @@ class Rad::OperacionesController < ApplicationController
     render nothing: true  
   end
  
+ def compatibles
+  compatibles = Rco::Registro.compatiblesXCta(params[:cuenta_id], params[:saldoTipo])
+  compatibles = [] if compatibles.nil?
+  @compatibles = Array.new
+  compatibles.each do |reg|
+    opcion = Hash.new
+    opcion['id'] = reg.id.to_s
+    opcion['desc'] = reg.desc
+    if (params[:saldoTipo] == "debe")
+      opcion['disponible'] = reg.debe - reg.aplicaciones_haber.sum(:importe).to_f
+    else
+      opcion['disponible'] = reg.haber - reg.aplicaciones_debe.sum(:importe).to_f
+    end
+    @compatibles.push(opcion)
+  end
+  @compatibles = @compatibles.to_json
+puts @compatibles
+  respond_to do |format|
+    format.js {}
+  end
+
+ end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_rad_operacion

@@ -17,6 +17,7 @@ class Rco::Asiento < ActiveRecord::Base
       registros.each do |r|
         r.debe = r.debe_op * cotizacion
         r.haber = r.haber_op * cotizacion
+        r.desc = desc
       end
       if save
         unless balancea?
@@ -37,6 +38,7 @@ class Rco::Asiento < ActiveRecord::Base
         registros.each do |r|
           r.debe = r.debe_op * cotizacion
           r.haber = r.haber_op * cotizacion
+          r.desc = desc
         end
       
       if save
