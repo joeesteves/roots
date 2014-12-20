@@ -7,29 +7,35 @@ ready = ->
 	$('.calcCuotaInv').change ->
 		calcularCuotaInv()
 	$('#rad_operacion_operaciontipo_id').change ->
-		interruptorCuotas(false)
+		interruptorCuotas(false); interruptorRdosxmes(true)
 		actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))
-		switch $('#rad_operacion_operaciontipo_id option:selected').data('codigo')
-			#MOV DE FONDOS
-			when 0 then interruptorCuotas(true)			
-			#EGRESOS Y COBRANZAS
-			when -1, 2 then (
-				actualizarCompatibles(getCuentaId("haber"),"debe")	
-				activaCuentasCompatiblesOnChange("haber")
-			)
-			#INGRESOS Y PAGOS
-			when 1, -2 then (
-				actualizarCompatibles(getCuentaId("debe"),"haber")
-				activaCuentasCompatiblesOnChange("debe")
-			)
-	if $('#action_name').val() != 'index'	
+		defineUiXOpTipo($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))
+		
+	if $('#action_name').val() != 'index'
+		defineUiXOpTipo($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))
 		actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo')) if $('#action_name').val() != 'edit'	
-		actualizarCompatibles(getCuentaId("haber"),"debe") 
-		activaCuentasCompatiblesOnChange("haber")
+
+defineUiXOpTipo = (opTipoCodigo) ->
+	switch opTipoCodigo
+		#MOV DE FONDOS
+		when 0 then interruptorCuotas(true); interruptorRdosxmes(true)
+		#EGRESOS Y COBRANZAS
+		when -1, 2 then (
+			interruptorRdosxmes(false) if opTipoCodigo == -1
+			actualizarCompatibles(getCuentaId("haber"),"debe")	
+			activaCuentasCompatiblesOnChange("haber")
+		)
+		#INGRESOS Y PAGOS
+		when 1, -2 then (
+			interruptorRdosxmes(false) if opTipoCodigo == 1
+			actualizarCompatibles(getCuentaId("debe"),"haber")
+			activaCuentasCompatiblesOnChange("debe")
+		)
 
 interruptorCuotas = (posicion) ->
-	$('#rad_operacion_cuotas, #rad_operacion_rdosxmes, #rad_operacion_cuotaimporte').prop('disabled', posicion)
-
+	$('#rad_operacion_cuotas, #rad_operacion_cuotaimporte').prop('disabled', posicion)
+interruptorRdosxmes = (posicion) ->
+	$('#rad_operacion_rdosxmes').prop('disabled', posicion)
 
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']
@@ -89,9 +95,9 @@ getCuentaId = (saldoTipo) ->
 
 $.fn.cargaCompatibles = (datos) ->
 	$('#compatibles').empty()
-	$('#compatibles').append('<select id="aplicaciones" name="aplicaciones" multiple></select>')
+	$('#compatibles').append('<select id="aplicaciones" name="aplicaciones[]" multiple></select>')
 	$.each datos, (i) ->
-		opcion = '<option value="' + this.id + '">' + 
+		opcion = '<option value="'+ this.id + ', ' + this.disponible + '">' + 
 		this.desc + 
 		' disponible: '+ this.disponible +
 		'</option>'
