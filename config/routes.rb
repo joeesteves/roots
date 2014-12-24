@@ -16,6 +16,7 @@ Roots::Application.routes.draw do
   namespace :rad do
     resources :operaciones do
       post :compatibles, on: :collection
+      get :compatibles, on: :member
       concerns [:globales]
     end
     resources :operaciontipos,

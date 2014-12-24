@@ -1,8 +1,8 @@
 class Rad::Operacion < ActiveRecord::Base
   include ModeloGlobales
   habtm_nodo
-  validates :importe, :cuotas, :cuotaimporte, presence: true
-  belongs_to :operaciontipo
+	validates :importe, :cuotas, :cuotaimporte, presence: { message: "no puede estar vacio"}, numericality: { message: "debe ser un número"}
+	belongs_to :operaciontipo
   belongs_to :ctaD, class_name: "Rco:Cuenta"
   belongs_to :ctaH, class_name: "Rco:Cuenta"
   belongs_to :empresa, class_name: "Rba::Empresa"
@@ -11,6 +11,7 @@ class Rad::Operacion < ActiveRecord::Base
   delegate :registros, :to => :asiento
 
   def rSave(ahAplicaciones) # ArrayHashAplicaciones [{cuenta_id: x, importe: xx.xx}]
+  	return false unless valid?
 	 	asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1, 
 	 		:cotizacion =>1, :desc => 'Operacion:'  + desc, 
 	 		:esgenerado => true, :empresa_id => empresa_id)
@@ -69,7 +70,8 @@ class Rad::Operacion < ActiveRecord::Base
   	end
 	end
 
-def rUpdate(params)
+def rUpdate(params, ahAplicaciones)
+	return false unless valid?
 	if update_attributes(params)
 		asiento.update_attributes(:esgenerado => false)
 		asiento.destroy
@@ -78,11 +80,15 @@ def rUpdate(params)
 	
 		case operaciontipo.codigo
 			when 1, 2	
+				aplicaAl = "aplicaciones_debe" # COBRANZA
+				metodo = "reg_debe_id"
 				cta1 = ctaH_id
 				col1 = "haber_op".to_s
 	  		cta2 = ctaD_id
 	  		col2 = "debe_op".to_s
 	  	when -1,-2, 0
+	  		aplicaAl = "aplicaciones_haber" # PAGOS
+	  		metodo = "reg_haber_id"
 	  		cta1 = ctaD_id
 	  		col1 = "debe_op".to_s
 	  		cta2 = ctaH_id
@@ -92,7 +98,7 @@ def rUpdate(params)
 		
 		unless operaciontipo.codigo == 0
 			if rdosxmes == false # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
-				asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+				regAplicable = asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
 				cuotasArr.each do |k|
 					asiento.registros.new(:cuenta_id => cta2, col2 => importe, :fecha => fecha)
 				end
@@ -110,6 +116,12 @@ def rUpdate(params)
 
 		asiento.transaction do
 			if asiento.valid_save
+				unless ahAplicaciones.nil?
+	  			ahAplicaciones.each do |aplicacion|
+	  				aplicacion = aplicacion.split(', ')
+						regAplicable.send(aplicaAl).create(metodo.to_sym => aplicacion[0].to_i, :importe => aplicacion[1].to_f)
+					end
+  			end
 				save
 				update_attributes(:asiento_id => asiento.id)
 			else

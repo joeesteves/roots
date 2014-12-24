@@ -24,9 +24,8 @@ class Rad::OperacionesController < ApplicationController
 
   # GET /rad/operaciones/1/edit
   def edit
-    @operacionCodigo = @rad_operacion.operaciontipo.codigo
-    @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])
-    # utilizo first solo para probar
+    @cuentas = Rco::Cuenta.xOperacionTipo(@rad_operacion.operaciontipo.codigo.to_s, session[:empresagrupo_id])
+   
   end
 
   # POST /rad/operaciones
@@ -39,7 +38,6 @@ class Rad::OperacionesController < ApplicationController
       redirect_to rad_operaciones_path, notice: 'Operacion guardado.'
       ubica_en_nodo(params[:nodo])
     else
-
       @cuentas = Rco::Cuenta.xOperacionTipo(@rad_operacion.operaciontipo.codigo.to_s, session[:empresagrupo_id])
       render action: 'new'
     end
@@ -47,10 +45,12 @@ class Rad::OperacionesController < ApplicationController
 
   # PATCH/PUT /rad/operaciones/1
   def update
-    if @rad_operacion.rUpdate(rad_operacion_params)
+    ahAplicaciones = params[:aplicaciones]
+    if @rad_operacion.rUpdate(rad_operacion_params, ahAplicaciones)
       flash[:nodo] = @rad_operacion.nodos.first.id rescue nil
       redirect_to rad_operaciones_path, notice: 'Operacion actualizado.'
     else
+     @cuentas = Rco::Cuenta.xOperacionTipo(@rad_operacion.operaciontipo.codigo.to_s, session[:empresagrupo_id])
       render action: 'edit'
     end
   end
@@ -67,22 +67,53 @@ class Rad::OperacionesController < ApplicationController
   end
  
  def compatibles
-  compatibles = Rco::Registro.compatiblesXCta(params[:cuenta_id], params[:saldoTipo])
+  aplicados_ids = []
+  if params[:rad_operacion_id]
+    operacion_id = params[:rad_operacion_id].to_i
+    if (params[:saldoTipo] == "haber")
+      regOri = Rad::Operacion.find(operacion_id).registros.alHaber.first
+      compatibles = regOri.compatibles
+      aplicados_ids = regOri.aplicados.collect(&:id)
+    else
+      regOri =  Rad::Operacion.find(operacion_id).registros.alDebe.first
+      compatibles = regOri.compatibles
+      aplicados_ids = regOri.aplicados.collect(&:id)
+    end    
+  else
+
+    compatibles = Rco::Registro.compatiblesXCta(params[:cuenta_id], params[:saldoTipo])
+  end
   compatibles = [] if compatibles.nil?
+
   @compatibles = Array.new
   compatibles.each do |reg|
     opcion = Hash.new
     opcion['id'] = reg.id.to_s
     opcion['desc'] = reg.desc
-    if (params[:saldoTipo] == "debe")
+    if (params[:saldoTipo] == "haber")
       opcion['disponible'] = reg.debe - reg.aplicaciones_haber.sum(:importe).to_f
+      if params[:rad_operacion_id]
+        # esta linea le vuelve a sumar lo aplicado para esa op. en particular. Ya que esta disponible
+        opcion['disponible'] += reg.aplicaciones_haber.where(:reg_haber_id => regOri.id).sum(:importe).to_f
+      end
     else
       opcion['disponible'] = reg.haber - reg.aplicaciones_debe.sum(:importe).to_f
+      if params[:rad_operacion_id]
+        opcion['disponible'] += reg.aplicaciones_debe.where(:reg_debe_id => regOri.id).sum(:importe).to_f
+      end
     end
     @compatibles.push(opcion)
   end
+
   @compatibles = @compatibles.to_json
-puts @compatibles
+  unless aplicados_ids.empty?
+    @aplicados = ""
+    aplicados_ids.each do |ap|
+      @aplicados += "#" + ap.to_s + ","
+    end
+    @aplicados = @aplicados[0...-1]
+  end 
+
   respond_to do |format|
     format.js {}
   end
@@ -93,8 +124,6 @@ puts @compatibles
     def set_rad_operacion
       @rad_operacion = Rad::Operacion.find(params[:id])
     end
-
-
 
     # Only allow a trusted parameter "white list" through.
     def rad_operacion_params

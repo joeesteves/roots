@@ -3,12 +3,12 @@ class Rco::Registro < ActiveRecord::Base
   habtm_nodo
   belongs_to :asiento
   belongs_to :cuenta
-  delegate :codigo, :nombre, :esCtaCte?, :to => :cuenta, :prefix => true
+  delegate :codigo, :nombre, :esCtaCte?, :to => :cuenta, :prefix => true 
   # El registro tiene aplicaciones al debe a traves de reg_haber_id (que lo id) y al revés también
   has_many :aplicaciones_debe, class_name: "Rco::Aplicacion", foreign_key: "reg_haber_id"
   has_many :aplicaciones_haber, class_name: "Rco::Aplicacion", foreign_key: "reg_debe_id"
-  has_many :reg_debe, through: :aplicaciones_debe
-  has_many :reg_haber, through: :aplicaciones_haber
+  has_many :reg_debe, through: :aplicaciones_debe, :dependent => :destroy
+  has_many :reg_haber, through: :aplicaciones_haber, :dependent => :destroy
   scope :alDebe, -> { where(:haber => 0 ) }
   scope :alHaber, -> { where(:debe => 0 ) }
 
@@ -65,21 +65,23 @@ class Rco::Registro < ActiveRecord::Base
     cuenta = Rco::Cuenta.find(cuenta_id)
     if cuenta.esCtaCte?
       case saldoTipo
-      when "debe"
+      when "haber"
         alDebe.
         where(:cuenta_id => cuenta_id).
         includes(:aplicaciones_haber).
-        having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
+        having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_haber)
-      when "haber"
+      when "debe"
         alHaber.
         where(:cuenta_id => cuenta_id).
         includes(:aplicaciones_debe).
-        having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
+        having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_debe)
       else
         none
       end
+    else
+      none
     end
   end
 
@@ -97,6 +99,7 @@ class Rco::Registro < ActiveRecord::Base
     end
   end
   
+  #devuelve si el registro tiene saldo al debe o al haber
   def saldoTipo
     unless debe == 0 || debe.nil?
       "debe"
@@ -104,9 +107,9 @@ class Rco::Registro < ActiveRecord::Base
       "haber"
     end
   end
-  
+
   def compatibles
-    Rco::Registro.compatiblesXCta(cuenta_id, saldoTipo) + aplicados
+    Rco::Registro.compatiblesXCta(cuenta_id, saldoTipo) | aplicados
   end
 
 end
