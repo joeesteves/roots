@@ -39,6 +39,38 @@ $.fn.completaHoy = () ->
 		hoy = $.fn.armaFechas(dd,mm,yyyy)
 		$(':input[type=date]').val(hoy)
 
+$.fn.primerDiaDelMesActual = () ->
+	hoyJs = new Date()
+	dd = 1
+	mm = hoyJs.getMonth() + 1
+	yyyy = hoyJs.getFullYear()
+	hoy = $.fn.armaFechas(dd,mm,yyyy)
+
+$.fn.ultimoDiaDelMesActual = () ->
+	hoyJs = new Date()
+	yyyy = hoyJs.getFullYear()
+	mm = hoyJs.getMonth() + 1
+	if [1,3,5,7,8,10,12].indexOf(mm) != -1
+		dd = 31
+	else if mm == 2
+		if chequearBisiesto(yyyy)
+			dd = 29
+		else
+			dd = 28
+	else
+		dd = 30
+	hoy = $.fn.armaFechas(dd,mm,yyyy)
+
+chequearBisiesto = (yyyy) ->
+	if yyyy % 4 == 0 
+		if yyyy%100 == 0 & yyyy%400 != 0
+			false
+		else
+			true
+	else
+		false
+
+
 $.fn.armaFechas = (dd,mm,yyyy) ->
 	if dd < 10
 			dd = "0" + dd.toString()
