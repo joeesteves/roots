@@ -2,6 +2,7 @@ class Rco::Registro < ActiveRecord::Base
   include ModeloGlobales
   habtm_nodo
   belongs_to :asiento
+  delegate :id, :to => :asiento, :prefix => true 
   belongs_to :cuenta
   delegate :codigo, :nombre, :esCtaCte?, :to => :cuenta, :prefix => true 
   # El registro tiene aplicaciones al debe a traves de reg_haber_id (que lo id) y al revés también

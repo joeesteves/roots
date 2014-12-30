@@ -2,7 +2,9 @@ saldo = 0
 cuenta_ant_id = 0
 json.array!(@rco_registros) do |rco_registro|
   id = rco_registro.id
+  id_padre = rco_registro.asiento_id
   json.id id
+  json.id_padre id_padre
   json.extract! rco_registro, :debe, :haber, :desc
   json.fecha rco_registro.fecha.strftime("%d/%m/%Y") rescue nil
 	cuenta = rco_registro.cuenta

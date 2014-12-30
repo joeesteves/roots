@@ -66,8 +66,12 @@ $.fn.abrirFiltros = () ->
 
 #Funcion le da funcionalidad al boton editar de la grilla def en grid_prep_datos
 $.fn.editaRow = (row) ->
-	id = $("#jqxgrid").jqxGrid('getrowdata', row).id
-	url = $('#controller_full_path').val() + "/" + id + "/edit"
+	if $('#controller_full_path').val() == "/rco/registros"
+		id = $("#jqxgrid").jqxGrid('getrowdata', row).id_padre
+		url = "/rco/asientos" + "/" + id + "/edit"
+	else
+		id = $("#jqxgrid").jqxGrid('getrowdata', row).id
+		url = $('#controller_full_path').val() + "/" + id + "/edit"
 	$(location).attr('href',url)
 
 #Funcion para convertir los nombres que pasa cada index en un json utilizado por fx grid para obtener un array de objetos seleccionados
