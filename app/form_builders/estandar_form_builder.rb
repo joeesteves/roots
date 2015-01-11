@@ -15,12 +15,12 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 			if options[:label]
 				label = options[:label]
 			else
-				label = nombre
+				label = nombre.capitalize
 			end
 
 			
 			unless options[:sinEtiqueta]
-				"<span class='prefix postfix'>#{label.to_s.capitalize}</span>".html_safe + 
+				"<span class='prefix postfix'>#{label.to_s}</span>".html_safe + 
 				super(nombre,*args, options)
 			else
 				options.delete(:sinEtiqueta)
