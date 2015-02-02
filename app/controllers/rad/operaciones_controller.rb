@@ -3,7 +3,7 @@ class Rad::OperacionesController < ApplicationController
   
   # GET /rad/operaciones
   def index
-    arbol_index(params[:nodo], { flash_nodo: flash[:nodo], includes: :operaciontipo})
+    arbol_index(params[:nodo], { flash_nodo: flash[:nodo], includes: :operaciontipo, alcance: "empresa"})
   end
 
   # GET /rad/operaciones/1

@@ -13,7 +13,7 @@
 			</ul>
 			<ul>
 				<li><label>Mi cuenta</label></li>
-				<li><a>Configuración</a></li>
+				<li><%= link_to "Configuración", edit_rba_usuario_path(@usuario_actual.id)%></a></li>
 				<li><a href=<%= salir_url %>>Salir</a></li>				
 			</ul>
 		</li>

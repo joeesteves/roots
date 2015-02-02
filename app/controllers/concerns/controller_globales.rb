@@ -25,8 +25,13 @@ module ControllerGlobales
     if args[:includes]
       includes = args[:includes]
     end
-    if args[:empresagrupo_id]
-      empresagrupo = "empresagrupo_id = #{args[:empresagrupo_id]}"
+    if args[:alcance]
+      case args[:alcance]
+      when "grupo"
+        alcance = "empresagrupo_id = #{args[:empresagrupo_id]}"
+      when "empresa"
+        alcance = "empresa_id = #{session[:empresa_id]}"
+      end
     end
     if args[:flash_nodo]
       @nodo = args[:flash_nodo]
@@ -34,16 +39,16 @@ module ControllerGlobales
     if nodo
       unless nodo == 'raiz' # definido en grid_init
        instance_variable_set(v[:coleccion], Rba::Nodo.find(nodo).send(v[:metodo]).
-        where(empresagrupo).order(args[:order]))
+        where(alcance).order(args[:order]))
       else    
        instance_variable_set(v[:coleccion], Rba::Arbol.
         find_by_modelo(controller_path).
         nodos.first.send(v[:metodo]).
-        where(empresagrupo).order(args[:order]))
+        where(alcance).order(args[:order]))
       end
     else  
      instance_variable_set(v[:coleccion],v[:clase].
-      where(empresagrupo).includes(includes).order(args[:order]))
+      where(alcance).includes(includes).order(args[:order]))
     end
   end
 

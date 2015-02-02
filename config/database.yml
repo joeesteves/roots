@@ -5,7 +5,7 @@ development:
   pool: 5
   timeout: 5000
   username: root
-  password: 'alfa1625'
+  password: '1625'
 
 test:
   adapter: mysql2
