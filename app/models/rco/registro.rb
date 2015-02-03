@@ -12,9 +12,7 @@ class Rco::Registro < ActiveRecord::Base
   has_many :reg_haber, through: :aplicaciones_haber, :dependent => :destroy
   scope :alDebe, -> { where(:haber => 0 ) }
   scope :alHaber, -> { where(:debe => 0 ) }
-  scope :cuyaCuentaEs, -> (cuentas) {  where('rco_registros.cuenta_id in (?)', cuentas) unless cuentas == [""] }
-
-
+  scope :conCuenta, -> (cuentas) {  where('rco_registros.cuenta_id in (?)', cuentas) unless cuentas == [""] }
 
   validate do |registro|
     registro.debe_haber
@@ -57,10 +55,11 @@ class Rco::Registro < ActiveRecord::Base
 
   def self.filtros(empresa_ids, desde, hasta, cuentas)
     includes(:asiento).
-    where('rco_asientos.empresa_id in (?)', empresa_ids).references(:asiento)
+    where('rco_asientos.empresa_id in (?)', empresa_ids).
     where('rco_registros.fecha >= ?', desde).
     where('rco_registros.fecha <= ?', hasta).
-    cuyaCuentaEs(cuentas)
+    conCuenta(cuentas).order(:cuenta_id, :fecha, :id).
+    references(:asiento)
   end
 
   def self.compatiblesXCta(cuenta_id, saldoTipo)

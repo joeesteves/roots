@@ -11,19 +11,15 @@ class Rba::SesionesController < ApplicationController
 			session[:usuario_id] = usuario.id
 			session[:empresagrupo_id] = params[:empresagrupo]
 			session[:empresa_id] =  Rba::Empresagrupo.find(params[:empresagrupo]).empresas.first.id
-			session[:establecimiento_id] =  Rba::Establecimiento.first.id
-			 # por ahora siempre en la empresa 1 
-		
+			establecimientos = Rba::Empresagrupo.find(params[:empresagrupo]).establecimientos
+			session[:establecimiento_id] = establecimientos.first.id   
 			if params[:url] != ''
 				redirect_to params[:url]
 			else
 				redirect_to rba_usuarios_url, :notice => "Adentro! Dijo Juan Carlos Saravia"
 			end
-	
 		else
-			
 			redirect_to root_url, :notice => "Usuario ó contraseña incorrectos"
-	
 		end
 	end
 

@@ -3,7 +3,7 @@ class Rba::EstablecimientosController < ApplicationController
 
   # GET /rba/establecimientos
   def index
-    arbol_index(params[:nodo], flash_nodo: flash[:nodo], :empresagrupo_id => session[:empresagrupo_id])
+    arbol_index(params[:nodo], flash_nodo: flash[:nodo], :contexto => "grupo")
   end
 
   # GET /rba/establecimientos/1

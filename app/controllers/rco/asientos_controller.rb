@@ -3,7 +3,7 @@ class Rco::AsientosController < ApplicationController
   
   # GET /rco/asientos
   def index
-    arbol_index(params[:nodo])
+    arbol_index(params[:nodo], contexto: "empresa")
   end
 
   # GET /rco/asientos/1

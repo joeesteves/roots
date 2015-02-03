@@ -54,10 +54,10 @@ class Rco::RegistrosController < ApplicationController
   #   redirect_to rco_registros_url, notice: 'Registro eliminado.'
   # end
 
-  def borrar_seleccion
-    Rco::Registro.destroy(params[:ids]) 
-    render nothing: true  
-  end
+  # def borrar_seleccion
+  #   Rco::Registro.destroy(params[:ids])
+  #   render nothing: true  
+  # end
 
   # def buscarCompatibles(action)
   #   if action == "new"

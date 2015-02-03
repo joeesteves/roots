@@ -10,8 +10,8 @@ $.fn.activarCalcular = () ->
 		else
 			$(this).val(rta)
 			$(this).change()
-$.fn.calcular = (texto) ->
-	if texto[0] == "="
+$.fn.calcular = (texto) ->	
+	if texto != undefined && texto.match(/^[=+]/) != null 
 		try
 			fx = texto.substring(1,texto.length)
 			rta = eval(fx)

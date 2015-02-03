@@ -11,11 +11,10 @@ ready = ->
 		actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))
 		$.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])
 		
-	if $('#action_name').val() == 'new'
-		actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))		
-	else if $('#action_name').val() == 'edit'
-		$.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), $('#rad_operacion_id').val()])
-	
+	switch $('#action_name').val()
+		when 'new' then actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))		
+		when 'edit' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), $('#rad_operacion_id').val()])
+		when 'create' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])	
 
 
 $.fn.defineUiXOpTipo = (opcionesArray) ->
@@ -42,9 +41,10 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 		)
 
 interruptorCuotas = (posicion) ->
-	$('#rad_operacion_cuotas, #rad_operacion_cuotaimporte').prop('disabled', posicion)
+	$('#rad_operacion_cuotas, #rad_operacion_cuotaimporte').prop('readonly', posicion)
 interruptorRdosxmes = (posicion) ->
 	$('#rad_operacion_rdosxmes').prop('disabled', posicion)
+	$('#rad_operacion_rdosxmes').prop('checked', false) if posicion == true
 
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']
@@ -141,8 +141,8 @@ calculaImporte = () ->
 	$('#compatiblesImporte input').each ->
 		id = $(this).attr("id").substr(4)
 		opcion = $('#aplicaciones #' + id )
-		$(this).val(opcion.data("disponible")) if parseInt($(this).val()) > parseInt(opcion.data("disponible")) 
-		$('#rad_operacion_importe').val(parseInt($('#rad_operacion_importe').val()) + parseInt($(this).val()))
+		$(this).val(opcion.data("disponible")) if parseFloat($(this).val()) > parseFloat(opcion.data("disponible")) 
+		$('#rad_operacion_importe').val(parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val()))
 		opcion.val(id + ', ' + $(this).val()) 
 	$('#rad_operacion_importe').change()
 	

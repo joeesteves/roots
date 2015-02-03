@@ -16,21 +16,21 @@ module ControllerGlobales
   end
 
   def arbol_index(nodo, args = {})
-    #argumentos opcionales [:empresagrupo_id] filtra por grupo
+    #argumentos opcionales [:contexto] filtra por grupo o empresa 
     #argumentos opcionales [:includes] eager loading
     
     v = getVariables(controller_path)
-    empresagrupo = ""
+    contexto = ""
     includes = ""
     if args[:includes]
       includes = args[:includes]
     end
-    if args[:alcance]
-      case args[:alcance]
+    if args[:contexto]
+      case args[:contexto]
       when "grupo"
-        alcance = "empresagrupo_id = #{args[:empresagrupo_id]}"
+        contexto = "empresagrupo_id = #{session[:empresagrupo_id]}"
       when "empresa"
-        alcance = "empresa_id = #{session[:empresa_id]}"
+        contexto = "empresa_id = #{session[:empresa_id]}"
       end
     end
     if args[:flash_nodo]
@@ -39,16 +39,16 @@ module ControllerGlobales
     if nodo
       unless nodo == 'raiz' # definido en grid_init
        instance_variable_set(v[:coleccion], Rba::Nodo.find(nodo).send(v[:metodo]).
-        where(alcance).order(args[:order]))
+        where(contexto).order(args[:order]))
       else    
        instance_variable_set(v[:coleccion], Rba::Arbol.
         find_by_modelo(controller_path).
         nodos.first.send(v[:metodo]).
-        where(alcance).order(args[:order]))
+        where(contexto).order(args[:order]))
       end
     else  
      instance_variable_set(v[:coleccion],v[:clase].
-      where(alcance).includes(includes).order(args[:order]))
+      where(contexto).includes(includes).order(args[:order]))
     end
   end
 
