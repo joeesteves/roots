@@ -40,7 +40,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'chosen-rails'
 
 # para Heroku
-gem 'rails_12factor'
+gem 'rails_12factor', group: :production
 # gem 'roo'
 # Use unicorn as the app server
 # gem 'unicorn'
