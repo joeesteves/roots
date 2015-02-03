@@ -1,0 +1,1 @@
+(function(){var a;a=function(){return jQuery.fn.activarCalcular()},$(document).ready(a),$(document).on("page:load",a)}).call(this);

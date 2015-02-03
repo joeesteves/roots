@@ -1,0 +1,1 @@
+(function(){var n;n=function(){return"true"===$("#con_arbol").val()&&$.fn.arbolInit(),$.fn.gridRequest()},$.fn.gridRequest=function(n){var o,a;return o=["id","moneda","fecha","cotizacion"],a=[["Fecha","auto"],["Moneda","auto"],["Cotizacion","auto"]],$.fn.gridPrepDatos(o,a,n,"moneda")},$(document).on("page:load",n),$(document).ready(n)}).call(this);

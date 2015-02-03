@@ -1,0 +1,1 @@
+(function(){var e;e=function(){return jQuery.fn.arbolInit(),jQuery.fn.gridRequest()},jQuery.fn.gridRequest=function(e){var r,n;return r=["id","codigo","nombre","desc"],n=[["Codigo","20%"],["Nombre","20%"],["Descripci\xf3n","auto"]],jQuery.fn.gridPrepDatos(r,n,e)},$(document).on("page:load",e),$(document).ready(e)}).call(this);
