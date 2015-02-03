@@ -94,12 +94,14 @@ class Rad::OperacionesController < ApplicationController
       opcion['disponible'] = reg.debe - reg.aplicaciones_haber.sum(:importe).to_f
       if params[:rad_operacion_id]
         # esta linea le vuelve a sumar lo aplicado para esa op. en particular. Ya que esta disponible
-        opcion['disponible'] += reg.aplicaciones_haber.where(:reg_haber_id => regOri.id).sum(:importe).to_f
+        opcion['aplicadoATransaccion'] = reg.aplicaciones_haber.where(:reg_haber_id => regOri.id).sum(:importe).to_f
+        opcion['disponible'] += opcion['aplicadoATransaccion']
       end
     else
       opcion['disponible'] = reg.haber - reg.aplicaciones_debe.sum(:importe).to_f
       if params[:rad_operacion_id]
-        opcion['disponible'] += reg.aplicaciones_debe.where(:reg_debe_id => regOri.id).sum(:importe).to_f
+        opcion['aplicadoATransaccion'] = reg.aplicaciones_debe.where(:reg_debe_id => regOri.id).sum(:importe).to_f
+        opcion['disponible'] += opcion['aplicadoATransaccion']
       end
     end
     @compatibles.push(opcion)

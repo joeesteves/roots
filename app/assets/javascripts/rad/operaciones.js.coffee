@@ -110,7 +110,9 @@ $.fn.cargaCompatibles = (datos) ->
 	$('#compatibles').empty()
 	$('#compatibles').append('<select  data-placeholder="Seleccionar registros" id="aplicaciones" name="aplicaciones[]" multiple></select>')
 	$.each datos, (i) ->
-		opcion = '<option id="'+ this.id + '" value="'+ this.id + ', ' + this.disponible + '" data-disponible="'+ this.disponible+'">' + 
+		opcion = '<option id="'+ this.id + '" value="'+ this.id + ', ' + this.disponible + '" data-disponible="'+ this.disponible + '"' +
+		'data-aplicado="'+ this.aplicadoATransaccion + '"' +
+		'data-desc="'+this.desc+'">' + 
 		this.desc + 
 		' disponible: '+ this.disponible +
 		'</option>'
@@ -118,23 +120,16 @@ $.fn.cargaCompatibles = (datos) ->
 	$('#aplicaciones').change ->
 		$('#compatiblesImporte').empty()
 		$('#aplicaciones option:selected').each ->
-			id = "reg_" + $(this).attr("id")
-			$('#compatiblesImporte').append('<span>ejemplo</span><input id='+id+' name='+id+' type="text" value="' + $(this).data("disponible") + '">')
+			agregaEditorRegistro($(this),'onSelect')
 		calculaImporte()
 		$('#compatiblesImporte input').focus()
-		$('#compatiblesImporte input').change ->
-			calculaImporte()
 
 	$.fn.initChosen()
 
 $.fn.seleccionaAplicados = (aplicados_ids) ->
 	$('#aplicaciones ' + aplicados_ids).prop("selected", true).trigger("chosen:updated")
 	$.each $('#aplicaciones ' + aplicados_ids), () ->
-		id = "reg_" + $(this).attr("id")
-		$('#compatiblesImporte').append('<span>ejemplo</span><input id='+id+' name='+id+' type="text" value="' + $(this).data("disponible") + '">')
-	$('#compatiblesImporte input').change ->
-		calculaImporte()
-
+		agregaEditorRegistro($(this),'onRecord')
 
 calculaImporte = () ->
 	$('#rad_operacion_importe').val(0)
@@ -146,6 +141,16 @@ calculaImporte = () ->
 		opcion.val(id + ', ' + $(this).val()) 
 	$('#rad_operacion_importe').change()
 	
+agregaEditorRegistro = (registro, momento) ->
+	id = "reg_" + registro.attr("id")
+	if registro.data("aplicado") == 'undefined' || momento == 'onSelect'
+		valorEditorRegistro = registro.data("disponible")
+	else
+		valorEditorRegistro = registro.data("aplicado")
+
+	$('#compatiblesImporte').append('<span>Ref: '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
+	$('#compatiblesImporte input').change ->
+		calculaImporte()
 
 
 $(document).on('page:load', ready)
