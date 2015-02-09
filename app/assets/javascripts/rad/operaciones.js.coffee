@@ -114,7 +114,8 @@ $.fn.cargaCompatibles = (datos) ->
 		'data-aplicado="'+ this.aplicadoATransaccion + '"' +
 		'data-desc="'+this.desc+'">' + 
 		this.desc + 
-		' disponible: '+ this.disponible +
+		' -- disp: '+ this.disponible +
+		' -- venc: ' + this.fecha + 
 		'</option>'
 		$('#aplicaciones').append(opcion)
 	$('#aplicaciones').change ->

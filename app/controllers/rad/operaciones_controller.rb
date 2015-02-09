@@ -90,6 +90,7 @@ class Rad::OperacionesController < ApplicationController
     opcion = Hash.new
     opcion['id'] = reg.id.to_s
     opcion['desc'] = reg.desc
+    opcion['fecha'] = reg.fecha.strftime("%d/%m")
     if (params[:saldoTipo] == "haber")
       opcion['disponible'] = reg.debe - reg.aplicaciones_haber.sum(:importe).to_f
       if params[:rad_operacion_id]
