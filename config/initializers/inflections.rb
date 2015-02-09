@@ -26,6 +26,7 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
 		'operacionorigen' => 'operacionorigenes',
 		'sesion' => 'sesiones',
 		'unidad' => 'unidades',
+		'organizacion' => 'organizaciones',
 	}
 	
 	inflecciones.each do |k,v|
