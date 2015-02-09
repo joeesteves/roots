@@ -31,10 +31,10 @@ span.noborder {
 	margin: 0 0 0 3px;
 }
 
-// Particularizaciones
-.has-dropdown, .dropdown, .top-bar,div .sticky,div .fixed {
-z-index: 200;
-}
+// // Particularizaciones
+// .has-dropdown, .dropdown, .top-bar,div .sticky,div .fixed {
+// z-index: 300;
+// }
 // Por si son impares
 div .row > .columns:last-child {
 	float: left
@@ -1292,14 +1292,14 @@ $topbar-link-font-size: rem-calc(12);
 
 @import 'foundation';
 .has-dropdown, .dropdown, .top-bar,div .sticky,.fixed {
-z-index: 200;
+z-index: 300;
 }
 
 .reveal-modal{
-	z-index: 200;
+	z-index: 300;
 }
 .reveal-modal-bg {
-	z-index: 199;
+	z-index: 299;
 
 }
 

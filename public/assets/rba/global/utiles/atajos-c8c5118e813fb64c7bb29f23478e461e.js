@@ -1,1 +1,0 @@
-(function(){$.fn.atajos=function(){return $(document).keyup(function(e){if(e.preventDefault(),e.stopPropagation(),e.ctrlKey&&e.altKey)switch(e.keyCode){case 65:return $.fn.nuevo();case 69:return $.fn.editar();case 68:return $.fn.borrar();case 67:return $.fn.copiar();case 86:return $.fn.pegar()}})}}).call(this);
