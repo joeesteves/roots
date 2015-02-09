@@ -1,1 +1,0 @@
-(function(){$.fn.gridPrepDatos=function(n,t,i,e){var a,o,r,f,d,h,l,s,u;if("index"===$("#action_name").val()){for(a=[],h=0,s=n.length;s>h;h++)f=n[h],a.push({name:f});for(o=[],l=0,u=t.length;u>l;l++)r=t[l],d=void 0!==r[2]?r[2]:r[0],o.push({text:d,datafield:r[0].toLowerCase(),width:r[1]});return $.fn.gridInit(a,o,i,e)}}}).call(this);
