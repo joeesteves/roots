@@ -1,5 +1,13 @@
 Roots::Application.routes.draw do
 
+  namespace :rba do
+    resources :organizaciones
+  end
+
+  namespace :rba do
+    resources :organizaciontipos
+  end
+
  concern :globales do
     collection do
       post :borrar_seleccion

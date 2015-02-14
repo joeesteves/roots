@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_organizaciontipo.nombre %>
+</p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rba_organizaciontipo.estado %>
+</p>
+
+<%= link_to 'Editar', edit_rba_organizaciontipo_path(@rba_organizaciontipo), :class => "button tiny" %>
+<%= link_to 'Volver', rba_organizaciontipos_path, :class => "button tiny" %>

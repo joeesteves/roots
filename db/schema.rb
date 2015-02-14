@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141108011505) do
+ActiveRecord::Schema.define(version: 20150213225428) do
 
   create_table "rad_operaciones", force: true do |t|
     t.date     "fecha"
@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(version: 20141108011505) do
     t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "idmascara"
   end
 
   create_table "rba_empresagrupos", force: true do |t|
@@ -180,6 +181,28 @@ ActiveRecord::Schema.define(version: 20141108011505) do
   end
 
   add_index "rba_nodos", ["arbol_id"], name: "index_rba_nodos_on_arbol_id", using: :btree
+
+  create_table "rba_organizaciones", force: true do |t|
+    t.integer  "estado"
+    t.string   "nombre"
+    t.string   "desc"
+    t.integer  "catfiscal_id"
+    t.string   "idfiscal"
+    t.integer  "organizaciontipo_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rba_organizaciones", ["catfiscal_id"], name: "index_rba_organizaciones_on_catfiscal_id", using: :btree
+  add_index "rba_organizaciones", ["organizaciontipo_id"], name: "index_rba_organizaciones_on_organizaciontipo_id", using: :btree
+
+  create_table "rba_organizaciontipos", force: true do |t|
+    t.string   "nombre"
+    t.integer  "estado"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "desc"
+  end
 
   create_table "rba_temporadas", force: true do |t|
     t.string   "estado"

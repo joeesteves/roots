@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @rba_organizacion.estado %>
+</p>
+
+<p>
+  <strong>Nombre:</strong>
+  <%= @rba_organizacion.nombre %>
+</p>
+
+<p>
+  <strong>Desc:</strong>
+  <%= @rba_organizacion.desc %>
+</p>
+
+<p>
+  <strong>Catfiscal:</strong>
+  <%= @rba_organizacion.catfiscal %>
+</p>
+
+<p>
+  <strong>Idfiscal:</strong>
+  <%= @rba_organizacion.idfiscal %>
+</p>
+
+<p>
+  <strong>Organizaciontipo:</strong>
+  <%= @rba_organizacion.organizaciontipo %>
+</p>
+
+<%= link_to 'Editar', edit_rba_organizacion_path(@rba_organizacion), :class => "button tiny" %>
+<%= link_to 'Volver', rba_organizaciones_path, :class => "button tiny" %>

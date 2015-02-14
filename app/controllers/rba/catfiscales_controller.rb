@@ -60,6 +60,6 @@ class Rba::CatfiscalesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def rba_catfiscal_params
-      params.require(:rba_catfiscal).permit(:codigo, :nombre, :desc)
+      params.require(:rba_catfiscal).permit(:codigo, :nombre, :desc, :idmascara)
     end
 end

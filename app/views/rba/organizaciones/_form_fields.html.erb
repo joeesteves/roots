@@ -1,0 +1,23 @@
+<% f.errores %>
+<div class="row">      
+  <div class="small-3 columns">
+    <%= f.check_box :estado, label: "Activo?" %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :nombre %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :desc %>
+  </div>
+  <div class="small-3 columns">
+     <%= f.select :catfiscal_id, Rba::Catfiscal.all.
+    map {|c| [c.nombre, c.id, {data: {mascara: c.idmascara}}]}, {:prompt => "Seleccionar opción", label: "Categoría Fiscal"} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :idfiscal,  label: "Id. Número" %>
+  </div>
+  <div class="small-3 columns">
+     <%= f.collection_select :organizaciontipo_id, Rba::Organizaciontipo.all, :id, :nombre, label: 'Tipo' %>
+  </div>
+      
+</div>
