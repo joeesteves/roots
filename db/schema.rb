@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150213225428) do
+ActiveRecord::Schema.define(version: 20150217163030) do
 
   create_table "rad_operaciones", force: true do |t|
     t.date     "fecha"
@@ -191,6 +191,7 @@ ActiveRecord::Schema.define(version: 20150213225428) do
     t.integer  "organizaciontipo_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "empresagrupo_id"
   end
 
   add_index "rba_organizaciones", ["catfiscal_id"], name: "index_rba_organizaciones_on_catfiscal_id", using: :btree

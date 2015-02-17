@@ -13,6 +13,9 @@
      <%= f.select :catfiscal_id, Rba::Catfiscal.all.
     map {|c| [c.nombre, c.id, {data: {mascara: c.idmascara}}]}, {:prompt => "Seleccionar opción", label: "Categoría Fiscal"} %>
   </div>
+  </div>
+
+  <div class="row">      
   <div class="small-3 columns">
     <%= f.text_field :idfiscal,  label: "Id. Número" %>
   </div>

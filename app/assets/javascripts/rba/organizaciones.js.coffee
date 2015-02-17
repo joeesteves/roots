@@ -2,7 +2,7 @@ ready = ->
 	if $('#con_arbol').val() == 'true'
 		$.fn.arbolInit()
 	$.fn.gridRequest()
-	if ['new','edit'].indexOf($('#action_name').val()) != -1
+	if ['new','edit','create'].indexOf($('#action_name').val()) != -1
 		activaActualizaMascara()
 
 $.fn.gridRequest = (query) ->

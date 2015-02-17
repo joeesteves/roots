@@ -3,7 +3,7 @@ class Rba::OrganizacionesController < ApplicationController
   
   # GET /rba/organizaciones
   def index
-    arbol_index(params[:nodo], flash_nodo: flash[:nodo])
+    arbol_index(params[:nodo], flash_nodo: flash[:nodo], contexto: "grupo")
   end
 
   # GET /rba/organizaciones/1
@@ -23,6 +23,7 @@ class Rba::OrganizacionesController < ApplicationController
   # POST /rba/organizaciones
   def create
     @rba_organizacion = Rba::Organizacion.new(rba_organizacion_params)
+    @rba_organizacion.empresagrupo_id = session[:empresagrupo_id]
 
     if @rba_organizacion.save
       redirect_to rba_organizaciones_path, notice: 'Organizacion guardado.'
@@ -63,6 +64,6 @@ class Rba::OrganizacionesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def rba_organizacion_params
-      params.require(:rba_organizacion).permit(:estado, :nombre, :desc, :catfiscal_id, :idfiscal, :organizaciontipo_id)
+      params.require(:rba_organizacion).permit(:estado, :nombre, :desc, :catfiscal_id, :idfiscal, :organizaciontipo_id, :empresagrupo_id)
     end
 end
