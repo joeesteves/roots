@@ -1,1 +1,0 @@
-(function(){var a;a=function(){return $(this).foundation(),"true"===$("#esForm").val()&&($.fn.activarCalcular(),$.fn.activarFechaAutocompletado(),$.fn.completaHoy(),$("input").inputmask()),"index"===$("#action_name").val()?($.fn.acciones(),$.fn.atajos()):void 0},$(document).ready(a),$(document).on("page:load",a)}).call(this);
