@@ -6,8 +6,8 @@ ready = ->
 		activaActualizaMascara()
 
 $.fn.gridRequest = (query) ->
-	nombres = ['id','nombre','estado','desc','idfiscal']
-	propiedades = [['Estado','5%'],['Nombre','20%'],['Idfiscal', 'auto','N° Id'],['Desc','auto','Descripción']]
+	nombres = ['id','nombre','estado','desc','idfiscal','domicilio']
+	propiedades = [['Estado','3%'],['Nombre','20%'],['Idfiscal', 'auto','N° Id'],['Domicilio','auto']]
 	$.fn.gridPrepDatos(nombres, propiedades, query)	
 $(document).on('page:load', ready)
 $(document).ready(ready)

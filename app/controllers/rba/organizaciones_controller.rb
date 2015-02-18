@@ -64,6 +64,6 @@ class Rba::OrganizacionesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def rba_organizacion_params
-      params.require(:rba_organizacion).permit(:estado, :nombre, :desc, :catfiscal_id, :idfiscal, :organizaciontipo_id, :empresagrupo_id)
+      params.require(:rba_organizacion).permit(:estado, :nombre, :desc, :catfiscal_id, :idfiscal, :organizaciontipo_id, :empresagrupo_id, :domicilio)
     end
 end
