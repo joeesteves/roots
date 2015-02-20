@@ -23,6 +23,22 @@ class Rba::SesionesController < ApplicationController
 		end
 	end
 
+	def actualizaSesion
+		@modelo = params[:modelo]
+		case @modelo
+		when "empresa"
+			session[:empresa_id] = params[:id]
+			@nuevoNombre = Rba::Empresa.find(params[:id]).nombre
+		when "establecimiento"
+			session[:establecimiento_id] = params[:id]
+			@nuevoNombre = Rba::Establecimiento.find(params[:id]).nombre
+		end
+
+		respond_to do |format|
+			format.js
+		end
+	end
+
 	def salir
 		reset_session
 		

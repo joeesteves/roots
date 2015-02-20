@@ -23,12 +23,12 @@
     <%= f.text_area :desc, :label => "Descripción" %>
   </div>
  
-  <div id="origcategoria" class="small-3 columns">
-    <%= f.collection_select :origcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Origen",  class:"actualizaDisponible"} %>
-  </div>
 
   <div id="origrodeo" class="small-3 columns">
     <%= f.collection_select :origrodeo_id, Rga::Rodeo.all, :id, :nombre, {}, {label:"Rodeo Origen", class:"actualizaDisponible"} %>
+  </div>
+  <div id="origcategoria" class="small-3 columns">
+    <%= f.collection_select :origcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Origen",  class:"actualizaDisponible"} %>
   </div>
   
   <div id="origestado" class="small-3 columns">
@@ -38,12 +38,12 @@
     <span class='prefix postfix'>Disponibles</span>
     <span id='disponibles' class='prefix postfix noborder'></span>
   </div>
-  <div id="destcategoria" class="small-3 columns">
-  <%= f.collection_select :destcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Destino"} %>
-  </div>
-  
   <div id="destrodeo" class="small-3 columns">
     <%= f.collection_select :destrodeo_id, Rga::Rodeo.all, :id, :nombre, {}, {label:"Rodeo Destino"} %>
+  </div>
+  
+  <div id="destcategoria" class="small-3 columns">
+  <%= f.collection_select :destcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Destino"} %>
   </div>
   
   <div id="destestado" class="small-3 columns">

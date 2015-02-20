@@ -1,15 +1,21 @@
 <li class="has-dropdown">
-	<a href="#" tabindex="-1">Sesion</a>
+	<a id="menu_sesion" href="#" tabindex="-1">Sesion</a>
 	<ul class="dropdown">
 		<li>
 			<ul>
 				<li><label>Empresas</label></li>
-				<li><a>lista de empresas</a></li>
+					<% @empresas_disponibles.each do |emp| %>
+				<li><%= link_to emp.nombre, actualizaSesion_url("empresa",emp.id), remote:true %></li>
+				<% end %>
 			</ul>
 
 			<ul>
 				<li><label>Establecimientos</label></li>
-				<li><a>Lista de est.</a></li>
+				<% @establecimientos_disponibles.each do |est| %>
+				<li><%= link_to est.nombre, actualizaSesion_url("establecimiento",est.id), remote:true %></li>
+				<% end %>
+
+				
 			</ul>
 			<ul>
 				<li><label>Mi cuenta</label></li>

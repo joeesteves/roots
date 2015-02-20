@@ -10,6 +10,7 @@ Roots::Application.routes.draw do
   end
 
   get 'salir', to: 'rba/sesiones#salir', :as => :salir
+  get '/rba/sesiones/actualizaSesion/:modelo/:id', to: 'rba/sesiones#actualizaSesion', :as => :actualizaSesion
   post 'rba/mover_items', to: 'rba/nodos#mover_items'
   root 'rba/bienvenidos#inicio'
   
