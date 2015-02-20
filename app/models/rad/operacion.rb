@@ -9,6 +9,7 @@ class Rad::Operacion < ActiveRecord::Base
   before_destroy :liberaAsiento
   belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
   delegate :registros, :to => :asiento
+  has_many :operacionregistros
 
   def rSave(ahAplicaciones) # ArrayHashAplicaciones [{cuenta_id: x, importe: xx.xx}]
   	return false unless valid?
@@ -31,6 +32,22 @@ class Rad::Operacion < ActiveRecord::Base
 	  		cta1 = ctaD_id
 	  		col1 = "debe_op".to_sym
 	  		cta2 = ctaH_id
+	  		col2 = "haber_op".to_sym
+			# PROVISION INGRESO
+  		when 3
+				aplicaAl = "aplicaciones_debe" # INGRESOS
+				metodo = "reg_debe_id"
+				cta1 = ctaH_id
+				col1 = "haber_op".to_sym
+	  		cta2 = ctaD_id
+	  		col2 = "debe_op".to_sym
+  		# PROVISIÓN	
+	  	when -3
+	  		aplicaAl = "aplicaciones_haber" # EGRESOS
+	  		metodo = "reg_haber_id"
+	  		cta1 = ctaD_id
+	  		col1 = "debe_op".to_sym
+	  		cta2 = ctaH_id
 	  		col2 = "haber_op".to_sym		
 		end
 		cuotasArr = cuotasArr(fecha, cuotas, importe, cuotaimporte)
@@ -39,7 +56,7 @@ class Rad::Operacion < ActiveRecord::Base
 			if rdosxmes == false # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
 				regAplicable = asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
 				cuotasArr.each do |k|
-					asiento.registros.new(:cuenta_id => cta2, col2 => importe, :fecha => fecha)
+					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha =>  k[:fecha])
 				end
 			else
 				cuotasArr.each do |k|
@@ -100,7 +117,7 @@ def rUpdate(params, ahAplicaciones)
 			if rdosxmes == false # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
 				regAplicable = asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
 				cuotasArr.each do |k|
-					asiento.registros.new(:cuenta_id => cta2, col2 => importe, :fecha => fecha)
+					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
 				end
 			else
 				cuotasArr.each do |k|

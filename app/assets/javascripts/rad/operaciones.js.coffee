@@ -14,7 +14,21 @@ ready = ->
 	switch $('#action_name').val()
 		when 'new' then actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))		
 		when 'edit' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), $('#rad_operacion_id').val()])
-		when 'create' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])	
+		when 'create' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])
+
+	$('.agregar_campos').click () ->
+    time = new Date().getTime()
+    regexp = new RegExp($(this).data('id'), 'g')
+    $('#container').append($(this).data('fields').replace(regexp, time))
+    $.fn.initChosen()
+    $('.chosen-single:visible').last().focus()
+
+	$('form').on 'click', '.simil_agrega_campos', () ->
+		$('.agregar_campos').click()
+
+	$('form').on 'click', '.quitar_campos', () ->
+		$(this).parent().prev('input[type=hidden]').val('1')
+		$(this).closest('.row').hide()
 
 
 $.fn.defineUiXOpTipo = (opcionesArray) ->

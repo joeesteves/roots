@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150218125809) do
+ActiveRecord::Schema.define(version: 20150220201031) do
 
   create_table "rad_operaciones", force: true do |t|
     t.date     "fecha"
@@ -33,6 +33,17 @@ ActiveRecord::Schema.define(version: 20150218125809) do
   add_index "rad_operaciones", ["ctaH_id"], name: "index_rad_operaciones_on_ctaH_id", using: :btree
   add_index "rad_operaciones", ["empresa_id"], name: "index_rad_operaciones_on_empresa_id", using: :btree
   add_index "rad_operaciones", ["operaciontipo_id"], name: "index_rad_operaciones_on_operaciontipo_id", using: :btree
+
+  create_table "rad_operacionregistros", force: true do |t|
+    t.integer  "operacion_id"
+    t.integer  "ctaD_id"
+    t.integer  "ctaH_id"
+    t.decimal  "valor",        precision: 12, scale: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rad_operacionregistros", ["operacion_id"], name: "index_rad_operacionregistros_on_operacion_id", using: :btree
 
   create_table "rad_operaciontipos", force: true do |t|
     t.integer  "estado"
