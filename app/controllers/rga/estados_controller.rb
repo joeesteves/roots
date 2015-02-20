@@ -25,8 +25,8 @@ class Rga::EstadosController < ApplicationController
     @rga_estado = Rga::Estado.new(rga_estado_params)
 
     if @rga_estado.save
-      redirect_to rga_estados_path, notice: 'Estado guardado.'
       ubica_en_nodo(params[:nodo])
+      redirect_to rga_estados_path, notice: 'Estado guardado.'
     else
       render action: 'new'
     end
