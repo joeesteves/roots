@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150220201031) do
+ActiveRecord::Schema.define(version: 20150220214150) do
 
   create_table "rad_operaciones", force: true do |t|
     t.date     "fecha"
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(version: 20150220201031) do
 
   create_table "rad_operacionregistros", force: true do |t|
     t.integer  "operacion_id"
-    t.integer  "ctaD_id"
-    t.integer  "ctaH_id"
+    t.integer  "cuenta_id"
+    t.string   "saldotipo"
     t.decimal  "valor",        precision: 12, scale: 4
     t.datetime "created_at"
     t.datetime "updated_at"

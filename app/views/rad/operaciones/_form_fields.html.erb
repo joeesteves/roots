@@ -8,31 +8,19 @@
     map {|c| [c.nombre, c.id, {data: {codigo: c.codigo}}]}, {:selected => @rad_operacion.operaciontipo_id}, {label: "Op. Tipo"} %>
 	</div>
   <div class="small-1 columns" style="float:left">
-      <span class='prefix postfix'></span>
-      <h4 style='widht:100%;text-align:center'> 
-        <%= agregar_linea "O", f, :operacionregistros %>
-      </h4>
-    </div>
+    <span class='prefix postfix'></span>
+    <h4 style='widht:100%;text-align:center'> 
+      <%= agregar_linea "O", f, :operacionregistros %>
+    </h4>
+  </div>
 </div>
-<div class="row">
   <%= f.fields_for :operacionregistros do |builder| %>
     <%= render 'operacionregistros_campos', f: builder %>
   <% end %>
 
-<div id="container">
-</div>
-<!--  
-  <div class="small-3 columns">
-    <%= f.collection_select :ctaD_id, @cuentas[:debe], :id, :nombre, {}, {label: "Cuenta Debe"} %>
+  <div id="container">
   </div>
-  
- </div>
-  <div class="row">
-  <div class="small-3 columns">
-    <%= f.collection_select :ctaH_id,@cuentas[:haber], :id, :nombre, {}, {label: "Cuenta Haber"} %>
-  </div> -->
 
-</div>
 <div class="row">
   <div class="small-1 columns">
     <%= f.check_box :rdosxmes, {label: "Rmes"} %>

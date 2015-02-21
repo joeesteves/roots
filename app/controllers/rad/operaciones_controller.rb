@@ -14,6 +14,8 @@ class Rad::OperacionesController < ApplicationController
   def new
 
     @rad_operacion = Rad::Operacion.new
+    @rad_operacion.operacionregistros.new
+    @rad_operacion.operacionregistros.new
     @operacionCodigo = -1 # Se define por default el egreso (-1) que es la mas habitual
     @rad_operacion.operaciontipo_id = Rad::Operaciontipo.where(:codigo => @operacionCodigo).last.id
     @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])

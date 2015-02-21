@@ -22,28 +22,32 @@ ready = ->
 		controlBoton()
 	
 	$('.agregar_campos').click () ->
-    time = new Date().getTime()
-    regexp = new RegExp($(this).data('id'), 'g')
-    $('#container').append($(this).data('fields').replace(regexp, time))
-    $.fn.activarCalcular()
-    $.fn.initChosen()
-    $('.chosen-single:visible').last().focus()
-    cuentas = $('.cuenta')
-    cuentasLength = cuentas.length
-    if (cuentasLength > 1)
- 	   cuentas.last().val(cuentas[cuentasLength-2].value).trigger("chosen:updated")
- 	  re = new RegExp("[0-9]")
- 	  fechas = $('.fecha')
- 	  fechasLenght = fechas.length
- 	  if (fechasLenght > 1)
-	 	  if([''].indexOf($('#vtos').val()) == -1 && re.test($('#vtos').val()))
- 		  	fechaBase = new Date(fechas[fechasLenght-2].value)
- 		  	fechaBase.setDate(fechaBase.getDate() + parseInt($('#vtos').val()))
- 		  	fechaCalculada = $.fn.armaFechas(fechaBase.getDate()+1,fechaBase.getMonth()+1,fechaBase.getFullYear())
- 		  	fechas.last().val(fechaCalculada)
+		time = new Date().getTime()
+		regexp = new RegExp($(this).data('id'), 'g')
+		$('#container').append($(this).data('fields').replace(regexp, time))
+		$.fn.activarCalcular()
+		$.fn.initChosen()
+		$('.chosen-single:visible').last().focus()
+		cuentas = $('.cuenta')
+		cuentasLength = cuentas.length
+		if (cuentasLength > 1)
+			cuentas.last().val(cuentas[cuentasLength-2].value).trigger("chosen:updated")
+			re = new RegExp("[0-9]")
+			fechas = $('.fecha')
+			fechasLenght = fechas.length
+			if (fechasLenght > 1)
+				if([''].indexOf($('#vtos').val()) == -1 && re.test($('#vtos').val()))
+					fechaBase = new Date(fechas[fechasLenght-2].value)
+					fechaBase.setDate(fechaBase.getDate() + parseInt($('#vtos').val()))
+					fechaCalculada = $.fn.armaFechas(fechaBase.getDate()+1,fechaBase.getMonth()+1,fechaBase.getFullYear())
+					fechas.last().val(fechaCalculada)
+		return false
+
+
 
 	$('form').on 'click', '.simil_agrega_campos', () ->
 		$('.agregar_campos').click()
+		return false
 
 	
 	$('form').on 'click', '.quitar_campos', () ->
@@ -51,7 +55,8 @@ ready = ->
 		$(this).closest('.row').hide()
 		sumInicial()
 		controlBoton()
-		$('.chosen-single:visible')[1].focus()
+		try $('.chosen-single:visible')[1].focus()
+		return false
 
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','desc','importe','moneda','cotizacion']

@@ -10,6 +10,8 @@ class Rad::Operacion < ActiveRecord::Base
   belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
   delegate :registros, :to => :asiento
   has_many :operacionregistros
+  accepts_nested_attributes_for :operacionregistros, allow_destroy: true
+
 
   def rSave(ahAplicaciones) # ArrayHashAplicaciones [{cuenta_id: x, importe: xx.xx}]
   	return false unless valid?
