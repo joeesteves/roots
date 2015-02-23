@@ -13,6 +13,7 @@ class Rco::Registro < ActiveRecord::Base
   scope :alDebe, -> { where(:haber => 0 ) }
   scope :alHaber, -> { where(:debe => 0 ) }
   scope :conCuenta, -> (cuentas) {  where('rco_registros.cuenta_id in (?)', cuentas) unless cuentas == [""] }
+  validates :cuenta_id, presence:  { message: "Debe indicar una cuenta"}
 
   validate do |registro|
     registro.debe_haber

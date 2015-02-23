@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="small-3 columns">
-		<%= f.collection_select :cuenta, Rco::Cuenta.all, :id, :nombre, {}, {sinEtiqueta: true, class: 'cuenta'} %>
+		<%= f.collection_select :cuenta_id, Rco::Cuenta.all, :id, :nombre, {}, {sinEtiqueta: true, class: 'cuenta'} %>
 	</div>
 	<div class="small-2 columns">
 		<%= f.text_field :valor, sinEtiqueta: true, placeholder: 'Valor'  %>
