@@ -10,29 +10,31 @@
   <div class="small-1 columns" style="float:left">
     <span class='prefix postfix'></span>
     <h4 style='widht:100%;text-align:center'> 
-      <%= agregar_linea "O", f, :operacionregistros %>
+      <%= agregar_linea_con_atributos "D", f, :operacionregistros, :saldotipo => "debe" %>
+      <%= agregar_linea_con_atributos "H", f, :operacionregistros, :saldotipo => "haber" %>
     </h4>
   </div>
 </div>
+<div id="operacionregistros">
   <%= f.fields_for :operacionregistros do |builder| %>
     <%= render 'operacionregistros_campos', f: builder %>
   <% end %>
 
   <div id="container">
-  </div>
-
+</div>
+</div>
 <div class="row">
   <div class="small-1 columns">
     <%= f.check_box :rdosxmes, {label: "Rmes"} %>
-  </div>
-  <div class="small-3 columns">
-    <%= f.text_field :importe, class: "calcCuota" %>
   </div>
   <div class="small-1 columns">
     <%= f.number_field :cuotas, class: "calcCuota" %>
   </div>
   <div class="small-2 columns">
     <%= f.text_field :cuotaimporte, {label: "Valor Cuota", class: "calcCuotaInv", :tabindex => -1} %>
+  </div>
+  <div class="small-3 columns">
+    <%= f.text_field :importe, class: "calcCuota" %>
   </div>
   
   <div class="small-6 columns" id="compatibles">

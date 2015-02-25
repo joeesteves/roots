@@ -1,0 +1,9 @@
+.debe {
+background-color: rgb(87, 143, 229)
+}
+.haber {
+background-color: rgba(48, 129, 48, 0.92)
+}
+.debe, .haber {	
+	padding-top: 12px;
+}

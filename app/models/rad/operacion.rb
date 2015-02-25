@@ -9,8 +9,16 @@ class Rad::Operacion < ActiveRecord::Base
   before_destroy :liberaAsiento
   belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
   delegate :registros, :to => :asiento
-  has_many :operacionregistros
+  has_many :operacionregistros, -> {order(:saldotipo)}
   accepts_nested_attributes_for :operacionregistros, allow_destroy: true
+
+	
+	def ctasAlDebe
+		operacionregistros.where(:rad_operacionregistros => {:saldotipo => "debe"}).collect(&:cuenta_id)
+	end
+	def ctasAlHaber
+		operacionregistros.where(:rad_operacionregistros => {:saldotipo => "haber"}).collect(&:cuenta_id)
+	end
 
 
   def rSave(ahAplicaciones) # ArrayHashAplicaciones [{cuenta_id: x, importe: xx.xx}]
@@ -43,13 +51,13 @@ class Rad::Operacion < ActiveRecord::Base
 				col1 = "haber_op".to_sym
 	  		cta2 = ctaD_id
 	  		col2 = "debe_op".to_sym
-  		# PROVISIÓN	
-	  	when -3
-	  		aplicaAl = "aplicaciones_haber" # EGRESOS
+  		# PROVISIÓN EGRESOS	
+	  	when -3 
+	  		aplicaAl = "aplicaciones_haber" 
 	  		metodo = "reg_haber_id"
-	  		cta1 = ctaD_id
+	  		cta1 = ctasAlDebe.first
 	  		col1 = "debe_op".to_sym
-	  		cta2 = ctaH_id
+	  		cta2 = ctasAlHaber.first
 	  		col2 = "haber_op".to_sym		
 		end
 		cuotasArr = cuotasArr(fecha, cuotas, importe, cuotaimporte)
@@ -111,8 +119,16 @@ def rUpdate(params, ahAplicaciones)
 	  		cta1 = ctaD_id
 	  		col1 = "debe_op".to_s
 	  		cta2 = ctaH_id
-	  		col2 = "haber_op".to_s		
+	  		col2 = "haber_op".to_s
+  		when -3 # PROVISION EGRESOS
+	  		aplicaAl = "aplicaciones_haber" 
+	  		metodo = "reg_haber_id"
+	  		cta1 = ctasAlDebe.first
+	  		col1 = "debe_op".to_sym
+	  		cta2 = ctasAlHaber.first
+	  		col2 = "haber_op".to_sym		
 		end
+
 		cuotasArr = cuotasArr(fecha, cuotas, importe, cuotaimporte)
 		
 		unless operaciontipo.codigo == 0

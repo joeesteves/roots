@@ -16,7 +16,7 @@ ready = ->
 		when 'edit' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), $('#rad_operacion_id').val()])
 		when 'create' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])
 
-	$('.agregar_campos').click () ->
+	$('.agregar_campos_D, .agregar_campos_H').click () ->
 		time = new Date().getTime()
 		regexp = new RegExp($(this).data('id'), 'g')
 		$('#container').append($(this).data('fields').replace(regexp, time))
@@ -24,8 +24,11 @@ ready = ->
 		$('.chosen-single:visible').last().focus()
 		return false
 
-	$('form').on 'click', '.simil_agrega_campos', () ->
-		$('.agregar_campos').click()
+	$('form').on 'click', '.simil_agrega_campos_D', () ->
+		$('.agregar_campos_D').click()
+		return false
+	$('form').on 'click', '.simil_agrega_campos_H', () ->
+		$('.agregar_campos_H').click()
 		return false
 
 	$('form').on 'click', '.quitar_campos', () ->
@@ -33,6 +36,7 @@ ready = ->
 		$(this).closest('.row').remove()
 		$('.chosen-single:visible')[1].focus()
 		return false
+
 
 $.fn.defineUiXOpTipo = (opcionesArray) ->
 	switch opcionesArray[0]
