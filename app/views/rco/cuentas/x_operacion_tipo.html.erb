@@ -1,13 +1,13 @@
-$('#rad_operacion_ctaD_id').empty();
-$('#rad_operacion_ctaH_id').empty();
+$('select.debe').empty();
+$('select.haber').empty();
 <% @ctasDebe.each do |c| %>
-$('#rad_operacion_ctaD_id').append(new Option('<%= c.nombre%>','<%= c.id %>' ));
+$('select.debe').append(new Option('<%= c.nombre%>','<%= c.id %>' ));
 <% end %>
-$('#rad_operacion_ctaD_id').trigger("chosen:updated");
+$('select.debe').trigger("chosen:updated");
 <% @ctasHaber.each do |c| %>
-	$('#rad_operacion_ctaH_id').append(new Option('<%= c.nombre%>','<%= c.id %>' ));
+	$('select.haber').append(new Option('<%= c.nombre%>','<%= c.id %>' ));
 <% end %>
-$('#rad_operacion_ctaH_id').trigger("chosen:updated");
+$('select.haber').trigger("chosen:updated");
 $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])	
 
 

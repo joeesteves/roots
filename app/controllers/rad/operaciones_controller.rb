@@ -14,8 +14,8 @@ class Rad::OperacionesController < ApplicationController
   def new
 
     @rad_operacion = Rad::Operacion.new
-    @rad_operacion.operacionregistros.new
-    @rad_operacion.operacionregistros.new
+    @rad_operacion.operacionregistros.new(:saldotipo => 'debe')
+    @rad_operacion.operacionregistros.new(:saldotipo => 'haber')
     @operacionCodigo = -1 # Se define por default el egreso (-1) que es la mas habitual
     @rad_operacion.operaciontipo_id = Rad::Operaciontipo.where(:codigo => @operacionCodigo).last.id
     @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])
@@ -134,6 +134,6 @@ class Rad::OperacionesController < ApplicationController
     def rad_operacion_params
       params.require(:rad_operacion).permit(:fecha, :importe, :operaciontipo_id, :cuotas, 
         :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes, :aplicaciones,
-         operacionregistros_attributes: [:id, :cuenta_id, :valor, :tipo, :_destroy])
+         operacionregistros_attributes: [:id, :cuenta_id, :valor, :saldotipo, :_destroy])
     end
 end

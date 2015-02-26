@@ -19,7 +19,12 @@ ready = ->
 	$('.agregar_campos_D, .agregar_campos_H').click () ->
 		time = new Date().getTime()
 		regexp = new RegExp($(this).data('id'), 'g')
-		$('#container').append($(this).data('fields').replace(regexp, time))
+		if $(this).attr("class").match(/agregar_campos_D/g) != null
+			afterRow = '.row.debe:last' 
+		else
+			afterRow = '.row.haber:last'
+		$(afterRow).after($(this).data('fields').replace(regexp, time))
+		
 		$.fn.initChosen()
 		$('.chosen-single:visible').last().focus()
 		return false
@@ -39,12 +44,16 @@ ready = ->
 
 
 $.fn.defineUiXOpTipo = (opcionesArray) ->
+	# opcionesArray [opCodigo, operacion_id (si es edit)]
 	switch opcionesArray[0]
 		#MOV DE FONDOS
 		when 0 then interruptorCuotas(true); interruptorRdosxmes(true)
 		#EGRESOS Y COBRANZAS
-		when -1, 2 then (
-			interruptorRdosxmes(false) if opcionesArray[0] == -1
+		when -1, 2, -3 then (
+			if opcionesArray[0] == -3
+				interruptorRdosxmes(false) 
+			else
+				interruptorRdosxmes(true) 
 			if opcionesArray[1] == undefined
 				actualizarCompatibles(["buscaPorCta", getCuentaId("haber"),"haber"])
 			else
@@ -52,8 +61,11 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 			activaCuentasCompatiblesOnChange("haber")
 		)
 		#INGRESOS Y PAGOS
-		when 1, -2 then (
-			interruptorRdosxmes(false) if opcionesArray[0] == 1
+		when 1, -2, 3 then (
+			if opcionesArray[0] == 3
+				interruptorRdosxmes(false) 
+			else
+				interruptorRdosxmes(true) 
 			if opcionesArray[1] == undefined
 				actualizarCompatibles(["buscaPorCta", getCuentaId("debe"),"debe"])
 			else

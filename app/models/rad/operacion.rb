@@ -3,14 +3,14 @@ class Rad::Operacion < ActiveRecord::Base
   habtm_nodo
 	validates :importe, :cuotas, :cuotaimporte, presence: { message: "no puede estar vacio"}, numericality: { message: "debe ser un número"}
 	belongs_to :operaciontipo
-  belongs_to :ctaD, class_name: "Rco:Cuenta"
-  belongs_to :ctaH, class_name: "Rco:Cuenta"
   belongs_to :empresa, class_name: "Rba::Empresa"
-  before_destroy :liberaAsiento
   belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
-  delegate :registros, :to => :asiento
   has_many :operacionregistros, -> {order(:saldotipo)}
+  before_destroy :liberaAsiento
+  delegate :registros, :to => :asiento
   accepts_nested_attributes_for :operacionregistros, allow_destroy: true
+  # belongs_to :ctaD, class_name: "Rco:Cuenta"
+  # belongs_to :ctaH, class_name: "Rco:Cuenta"
 
 	
 	def ctasAlDebe
@@ -18,6 +18,14 @@ class Rad::Operacion < ActiveRecord::Base
 	end
 	def ctasAlHaber
 		operacionregistros.where(:rad_operacionregistros => {:saldotipo => "haber"}).collect(&:cuenta_id)
+	end
+
+	def ctasAlDebeNoGuardadasAun
+		operacionregistros.select{|x| x['saldotipo'] == "debe"}
+	end
+	
+	def ctasAlHaberNoGuardadasAun
+		operacionregistros.select{|x| x['saldotipo'] == "haber"}
 	end
 
 
@@ -34,17 +42,15 @@ class Rad::Operacion < ActiveRecord::Base
 				cta1 = ctaH_id
 				col1 = "haber_op".to_sym
 	  		cta2 = ctaD_id
-	  		col2 = "debe_op".to_sym
-  		# EGRESO, PAGO Y MOV. FONDOS	
-	  	when -1,-2, 0
+	  		col2 = "debe_op".to_sym	
+	  	when -1,-2, 0 # EGRESO, PAGO Y MOV. FONDOS
 	  		aplicaAl = "aplicaciones_haber" # PAGOS
 	  		metodo = "reg_haber_id"
 	  		cta1 = ctaD_id
 	  		col1 = "debe_op".to_sym
 	  		cta2 = ctaH_id
 	  		col2 = "haber_op".to_sym
-			# PROVISION INGRESO
-  		when 3
+  		when 3 # PROVISION INGRESO
 				aplicaAl = "aplicaciones_debe" # INGRESOS
 				metodo = "reg_debe_id"
 				cta1 = ctaH_id
@@ -55,9 +61,9 @@ class Rad::Operacion < ActiveRecord::Base
 	  	when -3 
 	  		aplicaAl = "aplicaciones_haber" 
 	  		metodo = "reg_haber_id"
-	  		cta1 = ctasAlDebe.first
+	  		cta1 = ctasAlDebeNoGuardadasAun.first.cuenta_id
 	  		col1 = "debe_op".to_sym
-	  		cta2 = ctasAlHaber.first
+	  		cta2 = ctasAlHaberNoGuardadasAun.first.cuenta_id
 	  		col2 = "haber_op".to_sym		
 		end
 		cuotasArr = cuotasArr(fecha, cuotas, importe, cuotaimporte)
@@ -80,7 +86,7 @@ class Rad::Operacion < ActiveRecord::Base
 		end	
 
   	asiento.transaction do
-  		if asiento.valid_save
+			if asiento.valid_save
   			# UNA VEZ GUARDADO EL ASIENTO GUARDA LAS APLICACIONES
   			unless ahAplicaciones.nil?
 	  			ahAplicaciones.each do |aplicacion|

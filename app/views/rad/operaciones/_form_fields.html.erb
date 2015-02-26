@@ -15,14 +15,12 @@
     </h4>
   </div>
 </div>
-<div id="operacionregistros">
   <%= f.fields_for :operacionregistros do |builder| %>
     <%= render 'operacionregistros_campos', f: builder %>
   <% end %>
 
   <div id="container">
-</div>
-</div>
+  </div>
 <div class="row">
   <div class="small-1 columns">
     <%= f.check_box :rdosxmes, {label: "Rmes"} %>
