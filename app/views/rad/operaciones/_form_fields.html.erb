@@ -10,8 +10,8 @@
   <div class="small-1 columns" style="float:left">
     <span class='prefix postfix'></span>
     <h4 style='widht:100%;text-align:center'> 
-      <%= agregar_linea_con_atributos "D", f, :operacionregistros, :saldotipo => "debe" %>
-      <%= agregar_linea_con_atributos "H", f, :operacionregistros, :saldotipo => "haber" %>
+      <%= agregar_linea_en_operacion "D", f, :operacionregistros, "debe" %>
+      <%= agregar_linea_en_operacion "H", f, :operacionregistros, "haber" %>
     </h4>
   </div>
 </div>
@@ -19,7 +19,9 @@
     <%= render 'operacionregistros_campos', f: builder %>
   <% end %>
 
-  <div id="container">
+  <div id="container" class="ContainerDebe">
+  </div>
+  <div id="container" class="ContainerHaber">
   </div>
 <div class="row">
   <div class="small-1 columns">

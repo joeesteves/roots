@@ -13,12 +13,12 @@ class Rad::Operacion < ActiveRecord::Base
   # belongs_to :ctaH, class_name: "Rco:Cuenta"
 
 	
-	def ctasAlDebe
-		operacionregistros.where(:rad_operacionregistros => {:saldotipo => "debe"}).collect(&:cuenta_id)
-	end
-	def ctasAlHaber
-		operacionregistros.where(:rad_operacionregistros => {:saldotipo => "haber"}).collect(&:cuenta_id)
-	end
+	# def ctasAlDebe
+	# 	operacionregistros.where(:rad_operacionregistros => {:saldotipo => "debe"}).collect(&:cuenta_id)
+	# end
+	# def ctasAlHaber
+	# 	operacionregistros.where(:rad_operacionregistros => {:saldotipo => "haber"}).collect(&:cuenta_id)
+	# end
 
 	def ctasAlDebeNoGuardadasAun
 		operacionregistros.select{|x| x['saldotipo'] == "debe"}
@@ -61,7 +61,7 @@ class Rad::Operacion < ActiveRecord::Base
 	  	when -3 
 	  		aplicaAl = "aplicaciones_haber" 
 	  		metodo = "reg_haber_id"
-	  		cta1 = ctasAlDebeNoGuardadasAun.first.cuenta_id
+	  		ctas1 = ctasAlDebeNoGuardadasAun
 	  		col1 = "debe_op".to_sym
 	  		cta2 = ctasAlHaberNoGuardadasAun.first.cuenta_id
 	  		col2 = "haber_op".to_sym		
@@ -70,14 +70,18 @@ class Rad::Operacion < ActiveRecord::Base
 		
 		unless operaciontipo.codigo == 0 # - MOV. FONDOS
 			if rdosxmes == false # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
-				regAplicable = asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+				ctas1.each do |cta1|
+					regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => fecha)
+				end
 				cuotasArr.each do |k|
 					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha =>  k[:fecha])
 				end
 			else
 				cuotasArr.each do |k|
-					asiento.registros.new(:cuenta_id => cta1, col1 => k[:valorCuota], :fecha => k[:fecha])
-					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])
+					ctas1.each do |cta1|
+						asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => k[:fecha])
+					end
+					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])	
 				end
 			end
 		else # MOV. FONDOS
@@ -187,6 +191,8 @@ end
 		end	
 		cuotasArr
 	end  
+
+
 
 	def liberaAsiento
 		asiento.update_column(:esgenerado,false)
