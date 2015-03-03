@@ -104,9 +104,10 @@ calcularValores = (opTipo, obj) ->
 	cuotas = $(pf + 'cuotas').val()
 	importeCuota = $(pf + 'cuotaimporte').val(importeCuota)
 	switch obj.attr('id')
-		when 'rad_operacion_cuotas'
+		when 'rad_operacion_cuotas','rad_operacion_cuotaimporte'
 	 		valorAActualizar = (cuotas * importeCuota).toFixed(2)
-	 		idQueSeActualiza = 'importe'	
+	 		idQueSeActualiza = 'importe'
+	 		$('input.haber').val(importeCuota)
 	$(pf + idQueSeActualiza).val(valorAActualizar)
 calculaImporteDesdeAplicaciones = () ->
 	$('#rad_operacion_importe').val(0)
@@ -122,6 +123,18 @@ getCuentaId = (saldoTipo) ->
 	switch saldoTipo
 		when "debe" then $('.row.debe:first select option:selected').val()
 		when "haber" then $('.row.haber:first select option:selected').val()
+
+interruptorInputsYAgregarLinea = (queHabilito) ->
+	if queHabilito == 'debe'
+		posicion = true
+		$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos').show()
+		$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos, .debe a.quitar_campos:first').hide()
+	else
+		$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos').show()
+		$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos, .haber a.quitar_campos:first').hide()
+		posicion = false
+	$('input.debe').prop('disabled',!posicion)
+	$('input.haber').prop('disabled',posicion)
 interruptorCuotas = (posicion) ->
 	$('#rad_operacion_cuotas, #rad_operacion_cuotaimporte').prop('readonly', posicion)
 interruptorRdosxmes = (posicion) ->
@@ -171,6 +184,7 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 			else
 				actualizarCompatibles(["buscaPorReg", opcionesArray[1], "haber"])
 			activaCuentasCompatiblesOnChange("haber")
+			interruptorInputsYAgregarLinea('debe')
 		)
 		#PROVISIÓN INGRESOS, INGRESOS Y PAGOS
 		when 1, -2, 3 then (
@@ -183,6 +197,7 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 			else
 				actualizarCompatibles(["buscaPorReg", opcionesArray[1], "debe"])
 			activaCuentasCompatiblesOnChange("debe")
+			interruptorInputsYAgregarLinea('haber')
 		)
 	$('a').prop('tabindex',-1)
 $.fn.gridRequest = (query) ->

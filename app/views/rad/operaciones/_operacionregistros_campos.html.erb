@@ -3,7 +3,7 @@
 		<%= f.collection_select :cuenta_id, Rco::Cuenta.all, :id, :nombre, {}, {sinEtiqueta: true, class: f.object.saldotipo} %>
 	</div>
 	<div class="small-2 columns">
-		<%= f.text_field :valor, sinEtiqueta: true, placeholder: 'Valor'  %>
+		<%= f.text_field :valor, sinEtiqueta: true, placeholder: 'Valor', class: f.object.saldotipo  %>
 	</div>
 	<%= f.hidden_field :saldotipo %>
 	<div class="small-1 columns">
