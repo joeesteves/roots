@@ -2,10 +2,8 @@ ready = ->
 	if $('#con_arbol').val() == 'true'
 		$.fn.arbolInit()
 	$.fn.gridRequest()
-	$('.calcCuota').change ->
-		calcularCuota()
-	$('.calcCuotaInv').change ->
-		calcularCuotaInv()
+	$('.calcularValores').change ->
+		calcularValores($('#rad_operacion_operaciontipo_id option:selected').data('codigo'), $(this))
 	$('#rad_operacion_operaciontipo_id').change ->
 		interruptorCuotas(false); interruptorRdosxmes(true)
 		actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))
@@ -34,7 +32,6 @@ ready = ->
 		activaCalculos()
 		setPlaceHolder($('#rad_operacion_rdosxmes').prop('checked'))
 		return false
-
 	$('form').on 'click', '.simil_agrega_campos_D', () ->
 		$('.agregar_campos_D').click()
 		return false
@@ -49,34 +46,14 @@ ready = ->
 		return false
 	$('#rad_operacion_rdosxmes').click () ->
 		setPlaceHolder($(this).prop('checked'))
-interruptorCuotas = (posicion) ->
-	$('#rad_operacion_cuotas, #rad_operacion_cuotaimporte').prop('readonly', posicion)
-interruptorRdosxmes = (posicion) ->
-	$('#rad_operacion_rdosxmes').prop('disabled', posicion)
-	$('#rad_operacion_rdosxmes').prop('checked', !posicion)
-	setPlaceHolder(!posicion)
-setPlaceHolder = (posicion) ->
-	placeHolder = "Valor mensual" if posicion == true
-	placeHolder = "Valor" if posicion == false	
-	$('input[name*=valor]').attr("placeholder", placeHolder)
-calcularCuota = () -> 
-	importe = $('#rad_operacion_importe').val()
-	cuotas = $('#rad_operacion_cuotas').val()
-	importeCuota = (importe/cuotas).toFixed(2)
-	$('#rad_operacion_cuotaimporte').val(importeCuota)
-calcularCuotaInv = () -> 
-	cuotas = $('#rad_operacion_cuotas').val()
-	importeCuota = $('#rad_operacion_cuotaimporte').val()
-	importe = (importeCuota * cuotas).toFixed(2)
-	$('#rad_operacion_importe').val(importe)
-actualizarCuentas = (operaciontipo_codigo) ->
-	$.ajax(
-		type: "POST"
-		url: $('#root_path').val() + 'rco/cuentas/x_operacion_tipo'
-		data:
-			operaciontipo_codigo: operaciontipo_codigo
-		dataType: "script"
-		)
+activaCalculos = () ->
+	$('.row.debe input[name*=valor]').change ->
+		total = 0
+		$.each $('.row.debe input[name*=valor]'), () ->
+			valor = 0
+			valor = $(this).val() if $(this).val() != ""
+			total += parseInt(valor)
+		$('#rad_operacion_cuotaimporte').val(total.toFixed(2)).change()
 activaCuentasCompatiblesOnChange = (saldoTipo) ->
 	switch saldoTipo
 		when "debe" then (
@@ -88,6 +65,14 @@ activaCuentasCompatiblesOnChange = (saldoTipo) ->
 			$('.row.debe select, .row.haber select').unbind("change")
 			$('.row.haber select').change ->
 				actualizarCompatibles(["buscaPorCta", getCuentaId("haber"),"haber"])
+		)
+actualizarCuentas = (operaciontipo_codigo) ->
+	$.ajax(
+		type: "POST"
+		url: $('#root_path').val() + 'rco/cuentas/x_operacion_tipo'
+		data:
+			operaciontipo_codigo: operaciontipo_codigo
+		dataType: "script"
 		)
 actualizarCompatibles = (opcionesArray) ->
 	if opcionesArray[0] == "buscaPorReg"
@@ -104,40 +89,70 @@ actualizarCompatibles = (opcionesArray) ->
 		data: data
 		dataType: "script"
     )
-getCuentaId = (saldoTipo) ->
-	switch saldoTipo
-		when "debe" then $('.row.debe:first select option:selected').val()
-		when "haber" then $('.row.haber:first select option:selected').val()
-calculaImporte = () ->
-	$('#rad_operacion_importe').val(0)
-	$('#compatiblesImporte input').each ->
-		id = $(this).attr("id").substr(4)
-		opcion = $('#aplicaciones #' + id )
-		$(this).val(opcion.data("disponible")) if parseFloat($(this).val()) > parseFloat(opcion.data("disponible")) 
-		$('#rad_operacion_importe').val(parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val()))
-		opcion.val(id + ', ' + $(this).val()) 
-	$('#rad_operacion_importe').change()	
 agregaEditorRegistro = (registro, momento) ->
 	id = "reg_" + registro.attr("id")
 	if registro.data("aplicado") == 'undefined' || momento == 'onSelect'
 		valorEditorRegistro = registro.data("disponible")
 	else
 		valorEditorRegistro = registro.data("aplicado")
-	$('#compatiblesImporte').append('<span>Ref: '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
+	$('#compatiblesImporte').append('<span>Ref '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
 	$('#compatiblesImporte input').change ->
-		calculaImporte()
-activaCalculos = () ->
-	$('.row.debe input[name*=valor]').change ->
-		total = 0
-		$.each $('.row.debe input[name*=valor]'), () ->
-			valor = 0
-			valor = $(this).val() if $(this).val() != ""
-			total += parseInt(valor)
-		$('#rad_operacion_cuotaimporte').val(total.toFixed(2)).change()
-$.fn.gridRequest = (query) ->
-	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']
-	propiedades = [['Fecha','20%'],['Tipo','auto'],['Importe','20%'],['desc','auto', 'Descripción'],['cuotaimporte','auto','Cuota']]
-	$.fn.gridPrepDatos(nombres, propiedades, query)	
+		calculaImporteDesdeAplicaciones()
+calcularValores = (opTipo, obj) ->
+	pf = '#rad_operacion_' #pf
+	importe = $(pf + 'importe').val()
+	cuotas = $(pf + 'cuotas').val()
+	importeCuota = $(pf + 'cuotaimporte').val(importeCuota)
+	switch obj.attr('id')
+		when 'rad_operacion_cuotas'
+	 		valorAActualizar = (cuotas * importeCuota).toFixed(2)
+	 		idQueSeActualiza = 'importe'	
+	$(pf + idQueSeActualiza).val(valorAActualizar)
+calculaImporteDesdeAplicaciones = () ->
+	$('#rad_operacion_importe').val(0)
+	$('#compatiblesImporte input').each ->
+		id = $(this).attr("id").substr(4)
+		opcion = $('#aplicaciones #' + id )
+		$(this).val(opcion.data("disponible")) if parseFloat($(this).val()) > parseFloat(opcion.data("disponible"))
+		importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
+		$('#rad_operacion_importe').val(importe.toFixed(2))
+		opcion.val(id + ', ' + $(this).val()) 
+	$('#rad_operacion_importe').change()
+getCuentaId = (saldoTipo) ->
+	switch saldoTipo
+		when "debe" then $('.row.debe:first select option:selected').val()
+		when "haber" then $('.row.haber:first select option:selected').val()
+interruptorCuotas = (posicion) ->
+	$('#rad_operacion_cuotas, #rad_operacion_cuotaimporte').prop('readonly', posicion)
+interruptorRdosxmes = (posicion) ->
+	$('#rad_operacion_rdosxmes').prop('disabled', posicion)
+	$('#rad_operacion_rdosxmes').prop('checked', !posicion)
+	setPlaceHolder(!posicion)
+setPlaceHolder = (posicion) ->
+	placeHolder = "Valor mensual" if posicion == true
+	placeHolder = "Valor" if posicion == false	
+	$('input[name*=valor]').attr("placeholder", placeHolder)
+$.fn.cargaCompatibles = (datos) ->
+	$('#compatibles').empty()
+	$('#compatiblesImporte').empty()
+	if datos.length != 0
+		$('#compatibles').append('<span>Aplicar</span><select  data-placeholder="Seleccionar registros" id="aplicaciones" name="aplicaciones[]" multiple></select>')
+		$.each datos, (i) ->
+			opcion = '<option id="'+ this.id + '" value="'+ this.id + ', ' + this.disponible + '" data-disponible="'+ this.disponible + '"' +
+			'data-aplicado="'+ this.aplicadoATransaccion + '"' +
+			'data-desc="'+this.desc+'">' + 
+			this.desc + 
+			' -- disp: '+ this.disponible +
+			' -- venc: ' + this.fecha + 
+			'</option>'
+			$('#aplicaciones').append(opcion)
+		$('#aplicaciones').change ->
+			$('#compatiblesImporte').empty()
+			$('#aplicaciones option:selected').each ->
+				agregaEditorRegistro($(this),'onSelect')
+			calculaImporteDesdeAplicaciones()
+			$('#compatiblesImporte input').focus()
+		$.fn.initChosen()
 $.fn.defineUiXOpTipo = (opcionesArray) ->
 	# [cuenta_id, saldoTipo] si es edit [rad_operacion_id]
 	# opcionesArray [opCodigo, operacion_id (si es edit)]
@@ -170,25 +185,10 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 			activaCuentasCompatiblesOnChange("debe")
 		)
 	$('a').prop('tabindex',-1)
-$.fn.cargaCompatibles = (datos) ->
-	$('#compatibles').empty()
-	$('#compatibles').append('<select  data-placeholder="Seleccionar registros" id="aplicaciones" name="aplicaciones[]" multiple></select>')
-	$.each datos, (i) ->
-		opcion = '<option id="'+ this.id + '" value="'+ this.id + ', ' + this.disponible + '" data-disponible="'+ this.disponible + '"' +
-		'data-aplicado="'+ this.aplicadoATransaccion + '"' +
-		'data-desc="'+this.desc+'">' + 
-		this.desc + 
-		' -- disp: '+ this.disponible +
-		' -- venc: ' + this.fecha + 
-		'</option>'
-		$('#aplicaciones').append(opcion)
-	$('#aplicaciones').change ->
-		$('#compatiblesImporte').empty()
-		$('#aplicaciones option:selected').each ->
-			agregaEditorRegistro($(this),'onSelect')
-		calculaImporte()
-		$('#compatiblesImporte input').focus()
-	$.fn.initChosen()
+$.fn.gridRequest = (query) ->
+	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']
+	propiedades = [['Fecha','20%'],['Tipo','auto'],['Importe','20%'],['desc','auto', 'Descripción'],['cuotaimporte','auto','Cuota']]
+	$.fn.gridPrepDatos(nombres, propiedades, query)	
 $.fn.seleccionaAplicados = (aplicados_ids) ->
 	$('#aplicaciones ' + aplicados_ids).prop("selected", true).trigger("chosen:updated")
 	$.each $('#aplicaciones ' + aplicados_ids), () ->

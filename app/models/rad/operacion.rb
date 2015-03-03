@@ -1,24 +1,16 @@
 class Rad::Operacion < ActiveRecord::Base
   include ModeloGlobales
   habtm_nodo
-	validates :importe, :cuotas, :cuotaimporte, presence: { message: "no puede estar vacio"}, numericality: { message: "debe ser un número"}
+	validates :importe, :cuotas, :cuotaimporte, presence: { message: "no puede estar vacio"},
+	 numericality: { message: "debe ser un número"}
 	belongs_to :operaciontipo
   belongs_to :empresa, class_name: "Rba::Empresa"
-  belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
-  has_many :operacionregistros, -> {order(:saldotipo)}
   before_destroy :liberaAsiento
+  belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
+  has_many :operacionregistros, -> {order(:saldotipo)}, dependent: :destroy
   delegate :registros, :to => :asiento
   accepts_nested_attributes_for :operacionregistros, allow_destroy: true
-  # belongs_to :ctaD, class_name: "Rco:Cuenta"
-  # belongs_to :ctaH, class_name: "Rco:Cuenta"
-
-	
-	# def ctasAlDebe
-	# 	operacionregistros.where(:rad_operacionregistros => {:saldotipo => "debe"}).collect(&:cuenta_id)
-	# end
-	# def ctasAlHaber
-	# 	operacionregistros.where(:rad_operacionregistros => {:saldotipo => "haber"}).collect(&:cuenta_id)
-	# end
+  
 
 	def ctasAlDebeNoGuardadasAun
 		operacionregistros.select{|x| x['saldotipo'] == "debe"}
@@ -192,9 +184,7 @@ end
 		cuotasArr
 	end  
 
-
-
 	def liberaAsiento
-		asiento.update_column(:esgenerado,false)
+		asiento.update_columns(:esgenerado => false) if asiento.esgenerado == true
 	end
 end

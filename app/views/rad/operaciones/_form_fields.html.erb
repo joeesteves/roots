@@ -15,6 +15,12 @@
     </h4>
   </div>
 </div>
+<div class="row">
+<div class="small-6 columns" id="compatibles">
+</div>
+
+<div class="small-6 columns" id="compatiblesImporte">
+</div></div>
   <%= f.fields_for :operacionregistros do |builder| %>
     <%= render 'operacionregistros_campos', f: builder %>
   <% end %>
@@ -28,20 +34,15 @@
     <%= f.check_box :rdosxmes, {label: "Rmes"} %>
   </div>
   <div class="small-1 columns">
-    <%= f.number_field :cuotas, class: "calcCuota" %>
+    <%= f.number_field :cuotas, class: "calcularValores" %>
   </div>
   <div class="small-2 columns">
-    <%= f.text_field :cuotaimporte, {label: "Valor Cuota", class: "calcCuotaInv", :tabindex => -1} %>
+    <%= f.text_field :cuotaimporte, {label: "Valor Cuota", class: "calcularValores", :tabindex => -1} %>
   </div>
   <div class="small-3 columns">
-    <%= f.text_field :importe, class: "calcCuota" %>
+    <%= f.text_field :importe, class: "calcularValores" %>
   </div>
   
-  <div class="small-6 columns" id="compatibles">
-  </div>
-  
-  <div class="small-6 columns" id="compatiblesImporte">
-  </div>
   <div class="small-12 columns">
     <%= f.text_area :desc %>
   </div>
