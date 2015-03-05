@@ -17,7 +17,7 @@ module ApplicationHelper
     fields = f.fields_for(asociacion, new_object, child_index: id) do |builder|
       render(asociacion.to_s + "_campos", f: builder)
 		end
-		link_to(nombre, '#', class: "agregar_campos_#{nombre}", data: {id: id, fields: fields.gsub("\n", "")}, remote:true)
+		link_to(nombre, '#', class: "agregar_campos_#{nombre} actualizarCuentas", data: {id: id, fields: fields.gsub("\n", "")}, remote:true)
 	end
 
 end

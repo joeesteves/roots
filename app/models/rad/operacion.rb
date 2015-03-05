@@ -102,7 +102,7 @@ class Rad::Operacion < ActiveRecord::Base
 def rUpdate(params, ahAplicaciones)
 	return false unless valid?
 	if update_attributes(params)
-		asiento.update_attributes(:esgenerado => false)
+		asiento.update_columns(:esgenerado => false) if asiento.esgenerado == true
 		asiento.destroy
 		asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1,:cotizacion =>1, 
 	 		:desc => 'Operacion:' + desc, :esgenerado => true,  :empresa_id => empresa_id)

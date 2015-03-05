@@ -13,22 +13,21 @@ ready = ->
 		when 'new' then actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))		
 		when 'edit' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), $('#rad_operacion_id').val()])
 		when 'create' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])
-
 	$('.agregar_campos_D, .agregar_campos_H').click () ->
 		time = new Date().getTime()
 		regexp = new RegExp($(this).data('id'), 'g')
 		if $(this).attr("class").match(/agregar_campos_D/g) != null
-			afterRow = '.row.debe:last'
-			containerClass = 'ContainerDebe' 
+			afterRow = '.row.debe'
+			containerClass = 'ContainerDebe'
 		else
-			afterRow = '.row.haber:last'
+			afterRow = '.row.haber'
 			containerClass = 'ContainerHaber'
 		if $(afterRow).length != 0
-			$(afterRow).after($(this).data('fields').replace(regexp, time)) 
+			$(afterRow+':last').after($(this).data('fields').replace(regexp, time))
+			$(afterRow+':last select').empty().append($(afterRow+':first select option').clone()).trigger("chosen:updated")
 		else
 			$("#container."+containerClass).append($(this).data('fields').replace(regexp, time)) 			
 		$.fn.initChosen()
-		$('.chosen-single:visible').last().focus()
 		activaCalculos()
 		setPlaceHolder($('#rad_operacion_rdosxmes').prop('checked'))
 		return false
@@ -133,8 +132,10 @@ interruptorInputsYAgregarLinea = (queHabilito) ->
 		$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos').show()
 		$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos, .haber a.quitar_campos:first').hide()
 		posicion = false
-	$('input.debe').prop('disabled',!posicion)
-	$('input.haber').prop('disabled',posicion)
+	$('input.debe').prop('readonly',!posicion)
+	$('input.haber').prop('readonly',posicion)
+	$('[readonly]').prop('tabindex',-1)
+
 interruptorCuotas = (posicion) ->
 	$('#rad_operacion_cuotas, #rad_operacion_cuotaimporte').prop('readonly', posicion)
 interruptorRdosxmes = (posicion) ->
@@ -185,6 +186,7 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 				actualizarCompatibles(["buscaPorReg", opcionesArray[1], "haber"])
 			activaCuentasCompatiblesOnChange("haber")
 			interruptorInputsYAgregarLinea('debe')
+			$('.row.haber').not(':first').remove()
 		)
 		#PROVISIÓN INGRESOS, INGRESOS Y PAGOS
 		when 1, -2, 3 then (
@@ -198,8 +200,10 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 				actualizarCompatibles(["buscaPorReg", opcionesArray[1], "debe"])
 			activaCuentasCompatiblesOnChange("debe")
 			interruptorInputsYAgregarLinea('haber')
+			$('.row.debe').not(':first').remove()
+
 		)
-	$('a').prop('tabindex',-1)
+	$('a.agregar_campos_D, a.agregar_campos_H').prop('tabindex',-1)
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']
 	propiedades = [['Fecha','20%'],['Tipo','auto'],['Importe','20%'],['desc','auto', 'Descripción'],['cuotaimporte','auto','Cuota']]
