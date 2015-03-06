@@ -26,7 +26,7 @@ class Rco::Cuenta < ActiveRecord::Base
     case operacionTipoCodigo
       when '-3' # Provisión Egresos
         cuentas[:debe] = Rco::Cuenta.xTipos([5.0], empresagrupo_id)
-        cuentas[:haber] = Rco::Cuenta.xTipos([2.2], empresagrupo_id)
+        cuentas[:haber] = Rco::Cuenta.xTipos([2.9], empresagrupo_id)
       when '-2' # Pagos
         cuentas[:debe] = Rco::Cuenta.xTipos([2.2], empresagrupo_id)
         cuentas[:haber] = Rco::Cuenta.xTipos([1.1], empresagrupo_id) 
@@ -43,7 +43,7 @@ class Rco::Cuenta < ActiveRecord::Base
         cuentas[:debe] = Rco::Cuenta.xTipos([1.1], empresagrupo_id)
         cuentas[:haber] = Rco::Cuenta.xTipos([1.2], empresagrupo_id)
       when '3' # Provisión Ingresos
-        cuentas[:debe] = Rco::Cuenta.xTipos([1.1,1.2], empresagrupo_id)
+        cuentas[:debe] = Rco::Cuenta.xTipos([1.9], empresagrupo_id)
         cuentas[:haber] = Rco::Cuenta.xTipos([4.0], empresagrupo_id)
     end
     cuentas
