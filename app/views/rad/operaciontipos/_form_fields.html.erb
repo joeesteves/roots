@@ -1,9 +1,9 @@
 <% f.errores %>
 <div class="row">      
-  <div class="small-3 columns">
-    <%= f.number_field :estado %>
+   <div class="small-2 columns">
+    <%= f.check_box :estado, label: 'Activo ?' %>
   </div>
-  <div class="small-3 columns">
+	<div class="small-3 columns">
     <%= f.number_field :codigo %>
   </div>
   <div class="small-3 columns">
