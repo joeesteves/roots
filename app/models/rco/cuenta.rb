@@ -28,20 +28,20 @@ class Rco::Cuenta < ActiveRecord::Base
         cuentas[:debe] = Rco::Cuenta.xTipos([5.0], empresagrupo_id)
         cuentas[:haber] = Rco::Cuenta.xTipos([2.9], empresagrupo_id)
       when '-2' # Pagos
-        cuentas[:debe] = Rco::Cuenta.xTipos([2.2], empresagrupo_id)
+        cuentas[:debe] = Rco::Cuenta.xTipos([2.2,2.9], empresagrupo_id)
         cuentas[:haber] = Rco::Cuenta.xTipos([1.1], empresagrupo_id) 
       when '-1' # Egresos
-        cuentas[:debe] = Rco::Cuenta.xTipos([5.0], empresagrupo_id)
+        cuentas[:debe] = Rco::Cuenta.xTipos([5.0,2.9], empresagrupo_id)
         cuentas[:haber] = Rco::Cuenta.xTipos([1.1,1.2,2.2], empresagrupo_id)
       when '0' # Movimiento de fondos
         cuentas[:debe] = Rco::Cuenta.xTipos([1.1,1.2,2.2,3.0], empresagrupo_id)
         cuentas[:haber] = Rco::Cuenta.xTipos([1.1,1.2,2.2,3.0], empresagrupo_id)
       when '1' # Ingresos
         cuentas[:debe] = Rco::Cuenta.xTipos([1.1,1.2], empresagrupo_id)
-        cuentas[:haber] = Rco::Cuenta.xTipos([4.0], empresagrupo_id)
+        cuentas[:haber] = Rco::Cuenta.xTipos([4.0,1.9], empresagrupo_id)
       when '2' #Cobranzas
         cuentas[:debe] = Rco::Cuenta.xTipos([1.1], empresagrupo_id)
-        cuentas[:haber] = Rco::Cuenta.xTipos([1.2], empresagrupo_id)
+        cuentas[:haber] = Rco::Cuenta.xTipos([1.2,1.9], empresagrupo_id)
       when '3' # Provisión Ingresos
         cuentas[:debe] = Rco::Cuenta.xTipos([1.9], empresagrupo_id)
         cuentas[:haber] = Rco::Cuenta.xTipos([4.0], empresagrupo_id)
@@ -50,7 +50,7 @@ class Rco::Cuenta < ActiveRecord::Base
   end  
 
   def esCtaCte?
-   ['1.2','2.2'].include? cuentatipo_codigo 
+   ['1.2','2.2','2.9'].include? cuentatipo_codigo 
   end
 
 end

@@ -3,7 +3,7 @@ ready = ->
 		$.fn.arbolInit()
 	$.fn.gridRequest()
 	$('.calcularValores').change ->
-		calcularValores()
+		calcularValores(false)
 	$('#rad_operacion_operaciontipo_id').change ->
 		interruptorCuotas(false); interruptorRdosxmes(true)
 		actualizarCuentas(getTipoOpCodigo())
@@ -27,7 +27,7 @@ ready = ->
 		else
 			$("#container."+containerClass).append($(this).data('fields').replace(regexp, time)) 			
 		$.fn.initChosen()
-		activaCalculos()
+		activaCalculos(false)
 		setPlaceHolder($('#rad_operacion_rdosxmes').prop('checked'))
 		return false
 	$('form').on 'click', '.simil_agrega_campos_D', () ->
@@ -43,18 +43,23 @@ ready = ->
 		return false
 	$('#rad_operacion_rdosxmes').click () ->
 		setPlaceHolder($(this).prop('checked'))
-activaCalculos = () ->
-	multilinea = '.row.' + String(getUbMultilinea())
-	$(multilinea + ' input[name*=valor], #rad_operacion_rdosxmes').change ->
-		total = 0
-		$.each $(multilinea + ' input[name*=valor]'), () ->
-			valor = 0
-			valor = $(this).val() if $(this).val() != ""
-			total += parseInt(valor)
-		switch getRMes()
-			when true then rm = 'cuotaimporte'
-			when false then rm = 'importe'
-		$('#rad_operacion_'+rm).val(total.toFixed(2)).change()
+activaCalculos = (ejecuta) ->
+	lineasVivas = '.row.' + String(getLineasVivas())
+	calculos(lineasVivas) if ejecuta == true
+	$(lineasVivas + ' input[name*=valor], #rad_operacion_rdosxmes').change ->
+		calculos(lineasVivas)
+
+calculos = (lineasVivas) ->
+	total = 0
+	$.each $(lineasVivas + ' input[name*=valor]'), () ->
+		valor = 0
+		valor = $(this).val() if $(this).val() != ""
+		total += parseInt(valor)
+	switch getRMes()
+		when true then rm = 'cuotaimporte'
+		when false then rm = 'importe'
+	$('#rad_operacion_'+rm).val(total.toFixed(2)).change()
+
 activaCuentasCompatiblesOnChange = (saldoTipo) ->
 	switch saldoTipo
 		when "debe" then (
@@ -99,16 +104,16 @@ agregaEditorRegistro = (registro, momento) ->
 	$('#compatiblesImporte').append('<span>Ref '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
 	$('#compatiblesImporte input').change ->
 		calculaImporteDesdeAplicaciones()
-calcularValores = (obj) ->
+calcularValores = (desdeAplicacion) ->
 	opTipo = $('#rad_operacion_operaciontipo_id option:selected').data('codigo')
 	pf = '#rad_operacion_' #pf
 	importe = $(pf + 'importe').val()
 	cuotas = $(pf + 'cuotas').val()
 	importeCuota = $(pf + 'cuotaimporte').val(importeCuota)
 	switch opTipo
-		when -3,-2,-1
+		when -3,2,-1
 			contraPartida = 'input.haber'
-		when 1,2,3
+		when 1,-2,3
 			contraPartida = 'input.debe'
 	switch getRMes()
 		when true
@@ -118,7 +123,10 @@ calcularValores = (obj) ->
  		when false
 	 		valorAActualizar = (importe / cuotas).toFixed(2)
 	 		idQueSeActualiza = 'cuotaimporte'
-	 		$(contraPartida).val(importe)
+	 		if desdeAplicacion == true
+	 			$('input.debe, input.haber').val(importe)
+ 			else
+	 			$(contraPartida).val(importe)
 	$(pf + idQueSeActualiza).val(valorAActualizar)
 calculaImporteDesdeAplicaciones = () ->
 	$('#rad_operacion_importe').val(0)
@@ -129,7 +137,8 @@ calculaImporteDesdeAplicaciones = () ->
 		importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
 		$('#rad_operacion_importe').val(importe.toFixed(2))
 		opcion.val(id + ', ' + $(this).val()) 
-	$('#rad_operacion_importe').change()
+	# $('#rad_operacion_importe').change()
+		calcularValores(true)
 getCuentaId = (saldoTipo) ->
 	switch saldoTipo
 		when "debe" then $('.row.debe:first select option:selected').val()
@@ -138,7 +147,7 @@ getRMes = () ->
 	$('#rad_operacion_rdosxmes').prop('checked')
 getTipoOpCodigo = () ->
 	$('#rad_operacion_operaciontipo_id option:selected').data('codigo')
-getUbMultilinea = () ->
+getLineasVivas = () ->
 	switch getTipoOpCodigo()
 		when -3, 2,-1
 			saldoTipo = "debe"
@@ -221,7 +230,7 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 			interruptorInputsYAgregarLinea('haber')
 			$('.row.debe').not(':first').remove()
 		)
-	activaCalculos()
+	activaCalculos(true)
 	$('a.agregar_campos_D, a.agregar_campos_H').prop('tabindex',-1)
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']
