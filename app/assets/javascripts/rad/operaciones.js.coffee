@@ -3,16 +3,15 @@ ready = ->
 		$.fn.arbolInit()
 	$.fn.gridRequest()
 	$('.calcularValores').change ->
-		calcularValores($('#rad_operacion_operaciontipo_id option:selected').data('codigo'), $(this))
+		calcularValores()
 	$('#rad_operacion_operaciontipo_id').change ->
 		interruptorCuotas(false); interruptorRdosxmes(true)
-		actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))
-		$.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])
-		
+		actualizarCuentas(getTipoOpCodigo())
+		$.fn.defineUiXOpTipo([getTipoOpCodigo(), undefined])
 	switch $('#action_name').val()
-		when 'new' then actualizarCuentas($('#rad_operacion_operaciontipo_id option:selected').data('codigo'))		
-		when 'edit' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), $('#rad_operacion_id').val()])
-		when 'create' then $.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])
+		when 'new' then actualizarCuentas(getTipoOpCodigo())		
+		when 'edit' then $.fn.defineUiXOpTipo([getTipoOpCodigo(), $('#rad_operacion_id').val()])
+		when 'create' then $.fn.defineUiXOpTipo([getTipoOpCodigo(), undefined])
 	$('.agregar_campos_D, .agregar_campos_H').click () ->
 		time = new Date().getTime()
 		regexp = new RegExp($(this).data('id'), 'g')
@@ -37,7 +36,6 @@ ready = ->
 	$('form').on 'click', '.simil_agrega_campos_H', () ->
 		$('.agregar_campos_H').click()
 		return false
-
 	$('form').on 'click', '.quitar_campos', () ->
 		$(this).parent().prev('input[type=hidden]').val('1')
 		$(this).closest('.row').remove()
@@ -46,13 +44,17 @@ ready = ->
 	$('#rad_operacion_rdosxmes').click () ->
 		setPlaceHolder($(this).prop('checked'))
 activaCalculos = () ->
-	$('.row.debe input[name*=valor]').change ->
+	multilinea = '.row.' + String(getUbMultilinea())
+	$(multilinea + ' input[name*=valor], #rad_operacion_rdosxmes').change ->
 		total = 0
-		$.each $('.row.debe input[name*=valor]'), () ->
+		$.each $(multilinea + ' input[name*=valor]'), () ->
 			valor = 0
 			valor = $(this).val() if $(this).val() != ""
 			total += parseInt(valor)
-		$('#rad_operacion_cuotaimporte').val(total.toFixed(2)).change()
+		switch getRMes()
+			when true then rm = 'cuotaimporte'
+			when false then rm = 'importe'
+		$('#rad_operacion_'+rm).val(total.toFixed(2)).change()
 activaCuentasCompatiblesOnChange = (saldoTipo) ->
 	switch saldoTipo
 		when "debe" then (
@@ -97,16 +99,26 @@ agregaEditorRegistro = (registro, momento) ->
 	$('#compatiblesImporte').append('<span>Ref '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
 	$('#compatiblesImporte input').change ->
 		calculaImporteDesdeAplicaciones()
-calcularValores = (opTipo, obj) ->
+calcularValores = (obj) ->
+	opTipo = $('#rad_operacion_operaciontipo_id option:selected').data('codigo')
 	pf = '#rad_operacion_' #pf
 	importe = $(pf + 'importe').val()
 	cuotas = $(pf + 'cuotas').val()
 	importeCuota = $(pf + 'cuotaimporte').val(importeCuota)
-	switch obj.attr('id')
-		when 'rad_operacion_cuotas','rad_operacion_cuotaimporte'
+	switch opTipo
+		when -3,-2,-1
+			contraPartida = 'input.haber'
+		when 1,2,3
+			contraPartida = 'input.debe'
+	switch getRMes()
+		when true
 	 		valorAActualizar = (cuotas * importeCuota).toFixed(2)
 	 		idQueSeActualiza = 'importe'
-	 		$('input.haber').val(importeCuota)
+	 		$(contraPartida).val(importeCuota)
+ 		when false
+	 		valorAActualizar = (importe / cuotas).toFixed(2)
+	 		idQueSeActualiza = 'cuotaimporte'
+	 		$(contraPartida).val(importe)
 	$(pf + idQueSeActualiza).val(valorAActualizar)
 calculaImporteDesdeAplicaciones = () ->
 	$('#rad_operacion_importe').val(0)
@@ -122,7 +134,16 @@ getCuentaId = (saldoTipo) ->
 	switch saldoTipo
 		when "debe" then $('.row.debe:first select option:selected').val()
 		when "haber" then $('.row.haber:first select option:selected').val()
-
+getRMes = () ->
+	$('#rad_operacion_rdosxmes').prop('checked')
+getTipoOpCodigo = () ->
+	$('#rad_operacion_operaciontipo_id option:selected').data('codigo')
+getUbMultilinea = () ->
+	switch getTipoOpCodigo()
+		when -3, 2,-1
+			saldoTipo = "debe"
+		when 1,-2,3
+			saldoTipo = "haber"
 interruptorInputsYAgregarLinea = (queHabilito) ->
 	if queHabilito == 'debe'
 		posicion = true
@@ -135,7 +156,6 @@ interruptorInputsYAgregarLinea = (queHabilito) ->
 	$('input.debe').prop('readonly',!posicion)
 	$('input.haber').prop('readonly',posicion)
 	$('[readonly]').prop('tabindex',-1)
-
 interruptorCuotas = (posicion) ->
 	$('#rad_operacion_cuotas, #rad_operacion_cuotaimporte').prop('readonly', posicion)
 interruptorRdosxmes = (posicion) ->
@@ -177,7 +197,6 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 		when -1, 2, -3 then (
 			if opcionesArray[0] == -3
 				interruptorRdosxmes(false)
-				activaCalculos()
 			else
 				interruptorRdosxmes(true)
 			if opcionesArray[1] == undefined
@@ -201,8 +220,8 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 			activaCuentasCompatiblesOnChange("debe")
 			interruptorInputsYAgregarLinea('haber')
 			$('.row.debe').not(':first').remove()
-
 		)
+	activaCalculos()
 	$('a.agregar_campos_D, a.agregar_campos_H').prop('tabindex',-1)
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']

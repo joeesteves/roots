@@ -40,39 +40,22 @@ class Rad::Operacion < ActiveRecord::Base
 		asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1, 
 			:cotizacion =>1, :desc => 'Operacion:'  + desc, 
 			:esgenerado => true, :empresa_id => empresa_id)
-		case operaciontipo.codigo
-		# INGRESO Y COBRANZA
-	when 1, 2
+		case operaciontipo.codigo 
+			when 1, 2, 3 # INGRESO Y COBRANZA
 				aplicaAl = "aplicaciones_debe" # COBRANZA
 				metodo = "reg_debe_id"
-				ctas1 = ctaH_id
+				ctas1 = ctasAlHaberNoGuardadasAun
 				col1 = "haber_op".to_sym
-				cta2 = ctaD_id
-				col2 = "debe_op".to_sym	
-			when -1,-2, 0 # EGRESO, PAGO Y MOV. FONDOS
-				aplicaAl = "aplicaciones_haber" # PAGOS
-				metodo = "reg_haber_id"
-				ctas1 = ctaD_id
-				col1 = "debe_op".to_sym
-				cta2 = ctaH_id
-				col2 = "haber_op".to_sym
-			when 3 # PROVISION INGRESO
-				aplicaAl = "aplicaciones_debe" # INGRESOS
-				metodo = "reg_debe_id"
-				ctas1 = ctaH_id
-				col1 = "haber_op".to_sym
-				cta2 = ctaD_id
+				cta2 = ctasAlDebeNoGuardadasAun.first.cuenta_id
 				col2 = "debe_op".to_sym
-			# PROVISIÓN EGRESOS	
-		when -3 
-			aplicaAl = "aplicaciones_haber" 
-			metodo = "reg_haber_id"
-			ctas1 = ctasAlDebeNoGuardadasAun
-			col1 = "debe_op".to_sym
-			cta2 = ctasAlHaberNoGuardadasAun.first.cuenta_id
-			col2 = "haber_op".to_sym		
-		end
-		
+			when -1, -2, -3, 0	# PROVISIÓN EGRESOS	
+				aplicaAl = "aplicaciones_haber" 
+				metodo = "reg_haber_id"
+				ctas1 = ctasAlDebeNoGuardadasAun
+				col1 = "debe_op".to_sym
+				cta2 = ctasAlHaberNoGuardadasAun.first.cuenta_id
+				col2 = "haber_op".to_sym		
+			end
 		cuotasArr = cuotasArr(fecha, cuotas, importe, cuotaimporte)
 		
 		unless operaciontipo.codigo == 0 # - MOV. FONDOS
