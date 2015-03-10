@@ -27,7 +27,7 @@ class Rad::Operacion < ActiveRecord::Base
 		rPersist('rUpdate', ahAplicaciones,params)	
 	end
 
-	def rPersist(caller, ahAplicaciones,params)
+	def rPersist(caller, ahAplicaciones, params)
 		return false unless valid?
 		if caller == 'rUpdate'
 			if update_attributes(params)
@@ -41,14 +41,14 @@ class Rad::Operacion < ActiveRecord::Base
 			:cotizacion =>1, :desc => 'Operacion:'  + desc, 
 			:esgenerado => true, :empresa_id => empresa_id)
 		case operaciontipo.codigo 
-			when 1, 2, 3 # INGRESO Y COBRANZA
+			when 1, 2, 3 # INGRESO, COBRANZA Y PROVISION INGRESO
 				aplicaAl = "aplicaciones_debe" # COBRANZA
 				metodo = "reg_debe_id"
 				ctas1 = ctasAlHaberNoGuardadasAun
 				col1 = "haber_op".to_sym
 				cta2 = ctasAlDebeNoGuardadasAun.first.cuenta_id
 				col2 = "debe_op".to_sym
-			when -1, -2, -3, 0	# PROVISIÓN EGRESOS	
+			when -1, -2, -3, 0	# PROVISIÓN EGRESOS, EGRESOS Y PAGOS
 				aplicaAl = "aplicaciones_haber" 
 				metodo = "reg_haber_id"
 				ctas1 = ctasAlDebeNoGuardadasAun
@@ -61,7 +61,7 @@ class Rad::Operacion < ActiveRecord::Base
 		unless operaciontipo.codigo == 0 # - MOV. FONDOS
 			if rdosxmes == false # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
 				ctas1.each do |cta1|
-					regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => fecha)
+					@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => fecha)
 				end
 				cuotasArr.each do |k|
 					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha =>  k[:fecha])
@@ -69,7 +69,7 @@ class Rad::Operacion < ActiveRecord::Base
 			else
 				cuotasArr.each do |k|
 					ctas1.each do |cta1|
-						asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => k[:fecha])
+						@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => k[:fecha])
 					end
 					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])	
 				end
@@ -84,7 +84,7 @@ class Rad::Operacion < ActiveRecord::Base
 				unless ahAplicaciones.nil?
 					ahAplicaciones.each do |aplicacion|
 						aplicacion = aplicacion.split(', ')
-						regAplicable.send(aplicaAl).create(metodo.to_sym => aplicacion[0].to_i, :importe => aplicacion[1].to_f)
+						@regAplicable.send(aplicaAl).create(metodo.to_sym => aplicacion[0].to_i, :importe => aplicacion[1].to_f)
 					end
 				end
 				save
