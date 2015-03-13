@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150220214150) do
+ActiveRecord::Schema.define(version: 20150313155818) do
 
   create_table "rad_operaciones", force: true do |t|
     t.date     "fecha"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20150220214150) do
     t.decimal  "cuotaimporte",     precision: 12, scale: 4
     t.integer  "asiento_id"
     t.boolean  "rdosxmes",                                  default: false
+    t.integer  "organizacion_id"
   end
 
   add_index "rad_operaciones", ["ctaD_id"], name: "index_rad_operaciones_on_ctaD_id", using: :btree
