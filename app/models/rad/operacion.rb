@@ -61,21 +61,23 @@ class Rad::Operacion < ActiveRecord::Base
 		unless operaciontipo.codigo == 0 # - MOV. FONDOS
 			if rdosxmes == false # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
 				ctas1.each do |cta1|
-					@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => fecha)
+					@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => fecha, :organizacion_id => organizacion_id)
 				end
 				cuotasArr.each do |k|
-					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha =>  k[:fecha])
+					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha =>  k[:fecha], :organizacion_id => organizacion_id)
 				end
 			else
 				cuotasArr.each do |k|
 					ctas1.each do |cta1|
-						@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => k[:fecha])
+						@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => k[:fecha],:organizacion_id => organizacion_id)
 					end
-					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha])	
+					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha], :organizacion_id => organizacion_id)	
 				end
 			end
 		else # MOV. FONDOS
-			asiento.registros.new(:cuenta_id => cta1, col1 => importe, :fecha => fecha)
+			ctas1.each do |cta1|
+				asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => fecha)
+			end
 			asiento.registros.new(:cuenta_id => cta2, col2 => importe, :fecha => fecha)
 		end	
 		asiento.transaction do

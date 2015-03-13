@@ -88,7 +88,7 @@ actualizarCompatibles = (opcionesArray) ->
 	else #buscaPorCta
 		data = 
 			saldoTipo: opcionesArray[2]
-			cuenta_id: opcionesArray[1]
+			organizacion_id: opcionesArray[1]
 	$.ajax(
 		type: "POST"
 		url: $('#root_path').val() + 'rad/operaciones/compatibles'
@@ -143,26 +143,36 @@ getCuentaId = (saldoTipo) ->
 	switch saldoTipo
 		when "debe" then $('.row.debe:first select option:selected').val()
 		when "haber" then $('.row.haber:first select option:selected').val()
-getRMes = () ->
-	$('#rad_operacion_rdosxmes').prop('checked')
-getTipoOpCodigo = () ->
-	$('#rad_operacion_operaciontipo_id option:selected').data('codigo')
 getLineasVivas = () ->
 	switch getTipoOpCodigo()
 		when -3, 2,-1
 			saldoTipo = "debe"
 		when 1,-2,3
 			saldoTipo = "haber"
+getOrganizacionId = () ->
+	$('#rad_operacion_organizacion_id').val()
+getRMes = () ->
+	$('#rad_operacion_rdosxmes').prop('checked')
+getTipoOpCodigo = () ->
+	$('#rad_operacion_operaciontipo_id option:selected').data('codigo')
 interruptorInputsYAgregarLinea = (queHabilito) ->
-	if queHabilito == 'debe'
-		posicion = true
-		$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos').show()
-		$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos, .debe a.quitar_campos:first').hide()
-	else
-		$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos').show()
-		$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos, .haber a.quitar_campos:first').hide()
-		posicion = false
-	$('input.debe').prop('readonly',!posicion)
+	switch queHabilito
+		when 'debe'
+			posicion = true
+			$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos').show()
+			$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos, .debe a.quitar_campos:first').hide()
+			rev
+		when 'haber'
+			posicion = false
+			$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos').show()
+			$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos, .haber a.quitar_campos:first').hide()
+			rev
+		when 'movientoFondos'
+			posicion = false
+			rev = !
+			$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos').hide()
+			$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos').hide()
+	$('input.debe').prop('readonly',rev+!posicion)
 	$('input.haber').prop('readonly',posicion)
 	$('[readonly]').prop('tabindex',-1)
 interruptorCuotas = (posicion) ->
@@ -171,6 +181,10 @@ interruptorRdosxmes = (posicion) ->
 	$('#rad_operacion_rdosxmes').prop('disabled', posicion)
 	$('#rad_operacion_rdosxmes').prop('checked', !posicion)
 	setPlaceHolder(!posicion)
+interruptorOrganizacion = (io) ->
+	switch io
+		when 'i' then $('#rad_operacion_organizacion_id').prop('disabled',true).parent().show()
+		when 'o' then $('#rad_operacion_organizacion_id').prop('disabled',false).parent().hide()
 setPlaceHolder = (posicion) ->
 	placeHolder = "Valor mensual" if posicion == true
 	placeHolder = "Valor" if posicion == false	
@@ -201,15 +215,21 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 	# opcionesArray [opCodigo, operacion_id (si es edit)]
 	switch opcionesArray[0]
 		#MOV DE FONDOS
-		when 0 then interruptorCuotas(true); interruptorRdosxmes(true)
+		when 0 then (
+			interruptorCuotas(true)
+			interruptorRdosxmes(true)
+			interruptorOrganizacion('o')
+			interruptorInputsYAgregarLinea('movientoFondos')
+		)
 		#PROVISIÓN EGRESOS, EGRESOS Y COBRANZAS
 		when -1, 2, -3 then (
+			interruptorOrganizacion('i')
 			if opcionesArray[0] == -3
 				interruptorRdosxmes(false)
 			else
 				interruptorRdosxmes(true)
 			if opcionesArray[1] == undefined
-				actualizarCompatibles(["buscaPorCta", getCuentaId("haber"),"haber"])
+				actualizarCompatibles(["buscaPorCta", getOrganizacionId(),"haber"])
 			else
 				actualizarCompatibles(["buscaPorReg", opcionesArray[1], "haber"])
 			activaCuentasCompatiblesOnChange("haber")
@@ -218,12 +238,13 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 		)
 		#PROVISIÓN INGRESOS, INGRESOS Y PAGOS
 		when 1, -2, 3 then (
+			interruptorOrganizacion('i')
 			if opcionesArray[0] == 3
 				interruptorRdosxmes(false)
 			else
 				interruptorRdosxmes(true) 
 			if opcionesArray[1] == undefined
-				actualizarCompatibles(["buscaPorCta", getCuentaId("debe"),"debe"])
+				actualizarCompatibles(["buscaPorCta", getOrganizacionId(),"debe"])
 			else
 				actualizarCompatibles(["buscaPorReg", opcionesArray[1], "debe"])
 			activaCuentasCompatiblesOnChange("debe")

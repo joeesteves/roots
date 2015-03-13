@@ -11,8 +11,8 @@ class Rco::Registro < ActiveRecord::Base
   has_many :aplicaciones_haber, class_name: "Rco::Aplicacion", foreign_key: "reg_debe_id"
   has_many :reg_debe, through: :aplicaciones_debe, :dependent => :destroy
   has_many :reg_haber, through: :aplicaciones_haber, :dependent => :destroy
-  scope :alDebe, -> { where(:haber => 0 ) }
-  scope :alHaber, -> { where(:debe => 0 ) }
+  scope :alDebe, -> { where(:haber => 0 ).joins(cuenta: :cuentatipo).where(rco_cuentatipos: {codigo: Rco::Cuenta.ctasCtes}) }
+  scope :alHaber, -> { where(:debe => 0 ).joins(cuenta: :cuentatipo).where(rco_cuentatipos: {codigo: Rco::Cuenta.ctasCtes}) }
   scope :conCuenta, -> (cuentas) {  where('rco_registros.cuenta_id in (?)', cuentas) unless cuentas == [""] }
   validates :cuenta_id, presence:  { message: "Debe indicar una cuenta"}
 
@@ -64,28 +64,23 @@ class Rco::Registro < ActiveRecord::Base
     references(:asiento)
   end
 
-  def self.compatiblesXCta(cuenta_id, saldoTipo)
-    cuenta = Rco::Cuenta.find(cuenta_id)
-    if cuenta.esCtaCte?
-      case saldoTipo
+  def self.compatiblesXOrganizacion(organizacion_id, saldoTipo)
+    case saldoTipo
       when "haber"
         alDebe.
-        where(:cuenta_id => cuenta_id).
+        where(:organizacion_id => organizacion_id).
         includes(:aplicaciones_haber).
         having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_haber)
       when "debe"
         alHaber.
-        where(:cuenta_id => cuenta_id).
+        where(:organizacion_id => organizacion_id).
         includes(:aplicaciones_debe).
         having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_debe)
       else
         none
       end
-    else
-      none
-    end
   end
 
   # devuelve las aplicaciones que tiene cada registro y guarda la logica si es debe o haber
@@ -112,7 +107,7 @@ class Rco::Registro < ActiveRecord::Base
   end
 
   def compatibles
-    Rco::Registro.compatiblesXCta(cuenta_id, saldoTipo) | aplicados
+    Rco::Registro.compatiblesXOrganizacion(organizacion_id, saldoTipo) | aplicados
   end
 
 end

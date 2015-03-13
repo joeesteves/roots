@@ -5,6 +5,10 @@ class Rco::Cuenta < ActiveRecord::Base
   delegate :codigo, :to => :cuentatipo, :prefix => true
   has_many :registros
   belongs_to :empresagrupo, :class_name => "Rba::Empresagrupo"
+
+  def self.ctasCtes
+    ['1.2','1.9','2.2','2.9']
+  end
   
   def self.xTipos(tipos, empresagrupo_id)
     deEmpresaGrupoXId(empresagrupo_id).
@@ -50,7 +54,7 @@ class Rco::Cuenta < ActiveRecord::Base
   end  
 
   def esCtaCte?
-   ['1.2','2.2','2.9'].include? cuentatipo_codigo 
+   Rco::Cuenta.ctasCtes.include? cuentatipo_codigo 
   end
 
 end
