@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150313155818) do
+ActiveRecord::Schema.define(version: 20150313174257) do
 
   create_table "rad_operaciones", force: true do |t|
     t.date     "fecha"
@@ -307,14 +307,15 @@ ActiveRecord::Schema.define(version: 20150313155818) do
     t.date     "fecha"
     t.integer  "asiento_id"
     t.integer  "cuenta_id"
-    t.decimal  "debe",        precision: 12, scale: 4, default: 0.0, null: false
-    t.decimal  "haber",       precision: 12, scale: 4, default: 0.0, null: false
+    t.decimal  "debe",            precision: 12, scale: 4, default: 0.0, null: false
+    t.decimal  "haber",           precision: 12, scale: 4, default: 0.0, null: false
     t.date     "vencimiento"
     t.text     "desc"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "debe_op",     precision: 12, scale: 4, default: 0.0, null: false
-    t.decimal  "haber_op",    precision: 12, scale: 4, default: 0.0, null: false
+    t.decimal  "debe_op",         precision: 12, scale: 4, default: 0.0, null: false
+    t.decimal  "haber_op",        precision: 12, scale: 4, default: 0.0, null: false
+    t.integer  "organizacion_id"
   end
 
   add_index "rco_registros", ["asiento_id"], name: "index_rco_registros_on_asiento_id", using: :btree
