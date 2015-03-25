@@ -8,6 +8,6 @@ $('select.debe').trigger("chosen:updated");
 	$('select.haber').append(new Option('<%= c.nombre%>','<%= c.id %>' ));
 <% end %>
 $('select.haber').trigger("chosen:updated");
-$.fn.defineUiXOpTipo([$('#rad_operacion_operaciontipo_id option:selected').data('codigo'), undefined])	
+$.fn.defineUiXOpTipo({ "op_tipo": $('#rad_operacion_operaciontipo_id option:selected').data('codigo'), "operacion_id": undefined })	
 
 

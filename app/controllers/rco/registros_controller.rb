@@ -61,7 +61,7 @@ class Rco::RegistrosController < ApplicationController
 
   # def buscarCompatibles(action)
   #   if action == "new"
-  #     Rco::Registro.compatiblesXCta(cuenta_id, saldoTipo)
+  #     Rco::Registro.compatiblesXCta(cuenta_id, saldo_tipo)
   #   else
        
  

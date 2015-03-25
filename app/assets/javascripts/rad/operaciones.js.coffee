@@ -6,26 +6,27 @@ ready = ->
 		calcularValores(false)
 	$('#rad_operacion_operaciontipo_id').change ->
 		interruptorCuotas(false); interruptorRdosxmes(true)
-		actualizarCuentas(getTipoOpCodigo())
-		$.fn.defineUiXOpTipo([getTipoOpCodigo(), undefined])
+		actualizarCuentas(getOpTipo())
+	$('#rad_operacion_organizacion_id').change ->
+		actualizarCompatibles({"modo_busqueda": "busca_por_org"})
 	switch $('#action_name').val()
-		when 'new' then actualizarCuentas(getTipoOpCodigo())		
-		when 'edit' then $.fn.defineUiXOpTipo([getTipoOpCodigo(), $('#rad_operacion_id').val()])
-		when 'create' then $.fn.defineUiXOpTipo([getTipoOpCodigo(), undefined])
+		when 'new' then actualizarCuentas(getOpTipo())
+		when 'edit' then $.fn.defineUiXOpTipo({"op_tipo": getOpTipo(), "operacion_id":  $('#rad_operacion_id').val()})
+		when 'create' then $.fn.defineUiXOpTipo({"op_tipo": getOpTipo(), "operacion_id": undefined})
 	$('.agregar_campos_D, .agregar_campos_H').click () ->
 		time = new Date().getTime()
 		regexp = new RegExp($(this).data('id'), 'g')
 		if $(this).attr("class").match(/agregar_campos_D/g) != null
-			afterRow = '.row.debe'
-			containerClass = 'ContainerDebe'
+			after_row = '.row.debe'
+			container_class = 'ContainerDebe'
 		else
-			afterRow = '.row.haber'
-			containerClass = 'ContainerHaber'
-		if $(afterRow).length != 0
-			$(afterRow+':last').after($(this).data('fields').replace(regexp, time))
-			$(afterRow+':last select').empty().append($(afterRow+':first select option').clone()).trigger("chosen:updated")
+			after_row = '.row.haber'
+			container_class = 'ContainerHaber'
+		if $(after_row).length != 0
+			$(after_row +':last').after($(this).data('fields').replace(regexp, time))
+			$(after_row +':last select').empty().append($(after_row+':first select option').clone()).trigger("chosen:updated")
 		else
-			$("#container."+containerClass).append($(this).data('fields').replace(regexp, time)) 			
+			$("#container."+container_class).append($(this).data('fields').replace(regexp, time)) 			
 		$.fn.initChosen()
 		activaCalculos(false)
 		setPlaceHolder($('#rad_operacion_rdosxmes').prop('checked'))
@@ -49,52 +50,78 @@ activaCalculos = (ejecuta) ->
 	$(lineasVivas + ' input[name*=valor], #rad_operacion_rdosxmes').change ->
 		calculos(lineasVivas)
 
-calculos = (lineasVivas) ->
-	total = 0
-	$.each $(lineasVivas + ' input[name*=valor]'), () ->
-		valor = 0
-		valor = $(this).val() if $(this).val() != ""
-		total += parseInt(valor)
-	switch getRMes()
-		when true then rm = 'cuotaimporte'
-		when false then rm = 'importe'
-	$('#rad_operacion_'+rm).val(total.toFixed(2)).change()
+armaArrayConOpcionesAgrupadas = () ->
+	cuenta_ant = undefined
+	disponible = 0
+	index = -1
+	array = []
+	$.each opcionesSeleccionadasOrdenadas(), () ->
+		cuenta_actual = $(this).data("cuenta")
+		if cuenta_actual == cuenta_ant
+			disponible +=  parseFloat($(this).data("disponible"))
+		else
+			index += 1
+			disponible = parseFloat($(this).data("disponible"))
+		array[index] = {"cuenta": cuenta_actual, "disponible": disponible}
+		cuenta_ant = cuenta_actual
+	array
 
-activaCuentasCompatiblesOnChange = (saldoTipo) ->
-	switch saldoTipo
-		when "debe" then (
-			$('.row.debe select, .row.haber select').unbind("change")
-			$('.row.debe select').change ->
-				actualizarCompatibles(["buscaPorCta", getCuentaId("debe"),"debe"])
-		)
-		when "haber" then (
-			$('.row.debe select, .row.haber select').unbind("change")
-			$('.row.haber select').change ->
-				actualizarCompatibles(["buscaPorCta", getCuentaId("haber"),"haber"])
-		)
-actualizarCuentas = (operaciontipo_codigo) ->
+opcionesSeleccionadasOrdenadas = () ->	
+	$('#aplicaciones option:selected').sort (a,b) -> 
+		$(a).data("cuenta") - $(b).data("cuenta")
+
+armaOpDesdeArrayConOpciones = () ->
+	opciones = armaArrayConOpcionesAgrupadas()
+	saldo_tipo = getLineasAplicacion()
+	seleccionarCuentas = () ->
+		$('.row.' + saldo_tipo).each (i) ->
+			$('select.' + saldo_tipo, this).val(opciones[i].cuenta)
+			$('input[type=text].' + saldo_tipo, this).val(opciones[i].disponible.toFixed(2))
+		$('.row.' + saldo_tipo + ' select').trigger("chosen:updated")
+	if opciones.length  != $('.row.' + saldo_tipo).length
+		$('.row.' + saldo_tipo).not(':first').empty()
+		num = opciones.length
+		while num -= 1
+			$('a.agregar_campos_' + saldo_tipo[0].toUpperCase()).click()
+	seleccionarCuentas()
+# activaCuentasCompatiblesOnChange = () ->
+# 	switch getLineasAplicacion()
+# 		when "debe" then (
+# 			$('.row.debe select, .row.haber select').unbind("change")
+# 			$('.row.debe select').change ->
+# 				actualizarCompatibles({"modo_busqueda":"busca_por_org"})
+# 		)
+# 		when "haber" then (
+# 			$('.row.debe select, .row.haber select').unbind("change")
+# 			$('.row.haber select').change ->
+# 				actualizarCompatibles({"modo_busqueda":"busca_por_org"})
+# 		)
+actualizarCuentas = (op_tipo) ->
 	$.ajax(
 		type: "POST"
 		url: $('#root_path').val() + 'rco/cuentas/x_operacion_tipo'
 		data:
-			operaciontipo_codigo: operaciontipo_codigo
+			operaciontipo_codigo: op_tipo
 		dataType: "script"
 		)
-actualizarCompatibles = (opcionesArray) ->
-	if opcionesArray[0] == "buscaPorReg"
-		data =
-			rad_operacion_id: opcionesArray[1]
-			saldoTipo: opcionesArray[2]
-	else #buscaPorCta
-		data = 
-			saldoTipo: opcionesArray[2]
-			organizacion_id: opcionesArray[1]
+actualizarCompatibles = (opciones) ->
+	switch opciones.modo_busqueda 
+		when "busca_por_reg" then (
+			data =
+				saldo_tipo: getLineasAplicacion()
+				rad_operacion_id: opciones.operacion_id
+		)
+		when "busca_por_org" then (
+			data = 
+				saldo_tipo: getLineasAplicacion()
+				organizacion_id: getOrganizacionId()
+		)
 	$.ajax(
 		type: "POST"
 		url: $('#root_path').val() + 'rad/operaciones/compatibles'
 		data: data
 		dataType: "script"
-    )
+		)
 agregaEditorRegistro = (registro, momento) ->
 	id = "reg_" + registro.attr("id")
 	if registro.data("aplicado") == 'undefined' || momento == 'onSelect'
@@ -105,12 +132,12 @@ agregaEditorRegistro = (registro, momento) ->
 	$('#compatiblesImporte input').change ->
 		calculaImporteDesdeAplicaciones()
 calcularValores = (desdeAplicacion) ->
-	opTipo = $('#rad_operacion_operaciontipo_id option:selected').data('codigo')
+	op_tipo = $('#rad_operacion_operaciontipo_id option:selected').data('codigo')
 	pf = '#rad_operacion_' #pf
 	importe = $(pf + 'importe').val()
 	cuotas = $(pf + 'cuotas').val()
 	importeCuota = $(pf + 'cuotaimporte').val(importeCuota)
-	switch opTipo
+	switch op_tipo
 		when -3,2,-1
 			contraPartida = 'input.haber'
 		when 1,-2,3
@@ -124,7 +151,8 @@ calcularValores = (desdeAplicacion) ->
 	 		valorAActualizar = (importe / cuotas).toFixed(2)
 	 		idQueSeActualiza = 'cuotaimporte'
 	 		if desdeAplicacion == true
-	 			$('input.debe, input.haber').val(importe)
+	 			lineaViva = getLineasVivas()
+	 			$('input.'+lineaViva).val(importe)
  			else
 	 			$(contraPartida).val(importe)
 	$(pf + idQueSeActualiza).val(valorAActualizar)
@@ -139,21 +167,38 @@ calculaImporteDesdeAplicaciones = () ->
 		opcion.val(id + ', ' + $(this).val()) 
 	# $('#rad_operacion_importe').change()
 		calcularValores(true)
-getCuentaId = (saldoTipo) ->
-	switch saldoTipo
+		armaOpDesdeArrayConOpciones()
+calculos = (lineasVivas) ->
+	total = 0
+	$.each $(lineasVivas + ' input[name*=valor]'), () ->
+		valor = 0
+		valor = $(this).val() if $(this).val() != ""
+		total += parseInt(valor)
+	switch getRMes()
+		when true then rm = 'cuotaimporte'
+		when false then rm = 'importe'
+	$('#rad_operacion_'+rm).val(total.toFixed(2)).change()
+getCuentaId = (saldo_tipo) ->
+	switch saldo_tipo
 		when "debe" then $('.row.debe:first select option:selected').val()
 		when "haber" then $('.row.haber:first select option:selected').val()
-getLineasVivas = () ->
-	switch getTipoOpCodigo()
-		when -3, 2,-1
-			saldoTipo = "debe"
+getLineasAplicacion = () ->
+	switch getOpTipo()
 		when 1,-2,3
-			saldoTipo = "haber"
+			saldo_tipo = "debe"
+		when -3, 2,-1
+			saldo_tipo = "haber"
+getLineasVivas = () ->
+	switch getOpTipo()
+		when -3, 2,-1
+			saldo_tipo = "debe"
+		when 1,-2,3
+			saldo_tipo = "haber"
 getOrganizacionId = () ->
 	$('#rad_operacion_organizacion_id').val()
 getRMes = () ->
 	$('#rad_operacion_rdosxmes').prop('checked')
-getTipoOpCodigo = () ->
+getOpTipo = () ->
 	$('#rad_operacion_operaciontipo_id option:selected').data('codigo')
 interruptorInputsYAgregarLinea = (queHabilito) ->
 	switch queHabilito
@@ -183,8 +228,8 @@ interruptorRdosxmes = (posicion) ->
 	setPlaceHolder(!posicion)
 interruptorOrganizacion = (io) ->
 	switch io
-		when 'i' then $('#rad_operacion_organizacion_id').prop('disabled',true).parent().show()
-		when 'o' then $('#rad_operacion_organizacion_id').prop('disabled',false).parent().hide()
+		when 'i' then $('#rad_operacion_organizacion_id').prop('disabled',false).parent().show()
+		when 'o' then $('#rad_operacion_organizacion_id').prop('disabled',true).parent().hide()
 setPlaceHolder = (posicion) ->
 	placeHolder = "Valor mensual" if posicion == true
 	placeHolder = "Valor" if posicion == false	
@@ -197,6 +242,7 @@ $.fn.cargaCompatibles = (datos) ->
 		$.each datos, (i) ->
 			opcion = '<option id="'+ this.id + '" value="'+ this.id + ', ' + this.disponible + '" data-disponible="'+ this.disponible + '"' +
 			'data-aplicado="'+ this.aplicadoATransaccion + '"' +
+			'data-cuenta="'+ this.cuenta_id + '"' +
 			'data-desc="'+this.desc+'">' + 
 			this.desc + 
 			' -- disp: '+ this.disponible +
@@ -210,10 +256,10 @@ $.fn.cargaCompatibles = (datos) ->
 			calculaImporteDesdeAplicaciones()
 			$('#compatiblesImporte input').focus()
 		$.fn.initChosen()
-$.fn.defineUiXOpTipo = (opcionesArray) ->
-	# [cuenta_id, saldoTipo] si es edit [rad_operacion_id]
+$.fn.defineUiXOpTipo = (opciones) ->
+	# [cuenta_id, saldo_tipo] si es edit [rad_operacion_id]
 	# opcionesArray [opCodigo, operacion_id (si es edit)]
-	switch opcionesArray[0]
+	switch opciones.op_tipo
 		#MOV DE FONDOS
 		when 0 then (
 			interruptorCuotas(true)
@@ -224,30 +270,30 @@ $.fn.defineUiXOpTipo = (opcionesArray) ->
 		#PROVISIÓN EGRESOS, EGRESOS Y COBRANZAS
 		when -1, 2, -3 then (
 			interruptorOrganizacion('i')
-			if opcionesArray[0] == -3
+			if opciones.op_tipo == -3
 				interruptorRdosxmes(false)
 			else
 				interruptorRdosxmes(true)
-			if opcionesArray[1] == undefined
-				actualizarCompatibles(["buscaPorCta", getOrganizacionId(),"haber"])
+			if opciones.operacion_id == undefined
+				actualizarCompatibles({"modo_busqueda":"busca_por_org"})
 			else
-				actualizarCompatibles(["buscaPorReg", opcionesArray[1], "haber"])
-			activaCuentasCompatiblesOnChange("haber")
+				actualizarCompatibles({"modo_busqueda":"busca_por_reg", "operacion_id": opciones.operacion_id})
+			# activaCuentasCompatiblesOnChange()
 			interruptorInputsYAgregarLinea('debe')
 			$('.row.haber').not(':first').remove()
 		)
 		#PROVISIÓN INGRESOS, INGRESOS Y PAGOS
 		when 1, -2, 3 then (
 			interruptorOrganizacion('i')
-			if opcionesArray[0] == 3
+			if opciones.op_tipo == 3
 				interruptorRdosxmes(false)
 			else
 				interruptorRdosxmes(true) 
-			if opcionesArray[1] == undefined
-				actualizarCompatibles(["buscaPorCta", getOrganizacionId(),"debe"])
+			if opciones.operacion_id == undefined
+				actualizarCompatibles({"modo_busqueda":"busca_por_org"})
 			else
-				actualizarCompatibles(["buscaPorReg", opcionesArray[1], "debe"])
-			activaCuentasCompatiblesOnChange("debe")
+				actualizarCompatibles({"modo_busqueda":"busca_por_reg", "operacion_id": opciones.operacion_id})
+			# activaCuentasCompatiblesOnChange()
 			interruptorInputsYAgregarLinea('haber')
 			$('.row.debe').not(':first').remove()
 		)

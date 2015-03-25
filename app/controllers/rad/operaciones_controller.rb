@@ -14,8 +14,8 @@ class Rad::OperacionesController < ApplicationController
   def new
 
     @rad_operacion = Rad::Operacion.new
-    @rad_operacion.operacionregistros.new(:saldotipo => 'debe')
-    @rad_operacion.operacionregistros.new(:saldotipo => 'haber')
+    @rad_operacion.operacionregistros.new(:saldo_tipo => 'debe')
+    @rad_operacion.operacionregistros.new(:saldo_tipo => 'haber')
     @operacionCodigo = -1 # Se define por default el egreso (-1) que es la mas habitual
     @rad_operacion.operaciontipo_id = Rad::Operaciontipo.where(:codigo => @operacionCodigo).last.id
     @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])
@@ -70,20 +70,20 @@ class Rad::OperacionesController < ApplicationController
  
  def compatibles
   aplicados_ids = []
-  if params[:rad_operacion_id]
+  if params[:rad_operacion_id] # cuando es edit
     operacion_id = params[:rad_operacion_id].to_i
-    if (params[:saldoTipo] == "haber")
-      regOri = Rad::Operacion.find(operacion_id).registros.alHaber.first
-      compatibles = regOri.compatibles
-      aplicados_ids = regOri.aplicados.collect(&:id)
-    else
-      regOri =  Rad::Operacion.find(operacion_id).registros.alDebe.first
-      compatibles = regOri.compatibles
-      aplicados_ids = regOri.aplicados.collect(&:id)
+    case params[:saldo_tipo]
+      when "debe"
+        regOri =  Rad::Operacion.find(operacion_id).registros.alDebe.first
+        compatibles = regOri.compatibles
+        aplicados_ids = regOri.aplicados.collect(&:id)
+      when "haber"
+        regOri = Rad::Operacion.find(operacion_id).registros.alHaber.first
+        compatibles = regOri.compatibles
+        aplicados_ids = regOri.aplicados.collect(&:id)
     end    
   else
-
-    compatibles = Rco::Registro.compatiblesXOrganizacion(params[:cuenta_id], params[:saldoTipo])
+    compatibles = Rco::Registro.compatiblesXOrganizacion(params[:organizacion_id], params[:saldo_tipo])
   end
   compatibles = [] if compatibles.nil?
 
@@ -91,9 +91,10 @@ class Rad::OperacionesController < ApplicationController
   compatibles.each do |reg|
     opcion = Hash.new
     opcion['id'] = reg.id.to_s
+    opcion['cuenta_id'] = reg.cuenta_id
     opcion['desc'] = reg.desc
     opcion['fecha'] = reg.fecha.strftime("%d/%m")
-    if (params[:saldoTipo] == "haber")
+    if (params[:saldo_tipo] == "haber")
       opcion['disponible'] = reg.debe - reg.aplicaciones_haber.sum(:importe).to_f
       if params[:rad_operacion_id]
         # esta linea le vuelve a sumar lo aplicado para esa op. en particular. Ya que esta disponible
@@ -134,6 +135,6 @@ class Rad::OperacionesController < ApplicationController
     def rad_operacion_params
       params.require(:rad_operacion).permit(:fecha, :importe, :operaciontipo_id, :cuotas, 
         :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes, :aplicaciones, :organizacion_id,
-         operacionregistros_attributes: [:id, :cuenta_id, :valor, :saldotipo, :_destroy])
+         operacionregistros_attributes: [:id, :cuenta_id, :valor, :saldo_tipo, :_destroy])
     end
 end

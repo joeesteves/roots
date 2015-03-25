@@ -64,8 +64,8 @@ class Rco::Registro < ActiveRecord::Base
     references(:asiento)
   end
 
-  def self.compatiblesXOrganizacion(organizacion_id, saldoTipo)
-    case saldoTipo
+  def self.compatiblesXOrganizacion(organizacion_id, saldo_tipo)
+    case saldo_tipo
       when "haber"
         alDebe.
         where(:organizacion_id => organizacion_id).
@@ -88,15 +88,15 @@ class Rco::Registro < ActiveRecord::Base
 
   def aplicados
     case saldoTipo
-    when "debe"
-      reg_haber
-    when "haber"
-      reg_debe
-    else
-      none
+	    when "debe"
+	      reg_haber
+	    when "haber"
+	      reg_debe
+	    else
+	     none
     end
-  end
-  
+ end
+
   #devuelve si el registro tiene saldo al debe o al haber
   def saldoTipo
     unless debe == 0 || debe.nil?

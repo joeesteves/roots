@@ -7,16 +7,16 @@ class Rad::Operacion < ActiveRecord::Base
 	belongs_to :empresa, class_name: "Rba::Empresa"
 	before_destroy :liberaAsiento
 	belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
-	has_many :operacionregistros, -> {order(:saldotipo)}, dependent: :destroy
+	has_many :operacionregistros, -> {order(:saldo_tipo)}, dependent: :destroy
 	delegate :registros, :to => :asiento
 	accepts_nested_attributes_for :operacionregistros, allow_destroy: true
 	
 	def ctasAlDebeNoGuardadasAun
-		operacionregistros.select{|x| x['saldotipo'] == "debe"}
+		operacionregistros.select{|x| x['saldo_tipo'] == "debe"}
 	end
 
 	def ctasAlHaberNoGuardadasAun
-		operacionregistros.select{|x| x['saldotipo'] == "haber"}
+		operacionregistros.select{|x| x['saldo_tipo'] == "haber"}
 	end
 
 	def rSave(ahAplicaciones) # ArrayHashAplicaciones [{cuenta_id: x, importe: xx.xx}]	
