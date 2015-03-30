@@ -79,8 +79,11 @@ class Rad::OperacionesController < ApplicationController
         aplicados_ids = regOri.aplicados.collect(&:id)
       when "haber"
         regOri = Rad::Operacion.find(operacion_id).registros.alHaber.first
+        regOris = Rad::Operacion.find(operacion_id).registros.alHaber
         compatibles = regOri.compatibles
-        aplicados_ids = regOri.aplicados.collect(&:id)
+        regOris.each do |r|
+          aplicados_ids = aplicados_ids | r.aplicados.collect(&:id)
+        end
     end    
   else
     compatibles = Rco::Registro.compatiblesXOrganizacion(params[:organizacion_id], params[:saldo_tipo])

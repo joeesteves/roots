@@ -71,7 +71,7 @@ opcionesSeleccionadasOrdenadas = () ->
 
 armaOpDesdeArrayConOpciones = () ->
 	opciones = armaArrayConOpcionesAgrupadas()
-	saldo_tipo = getLineasAplicacion()
+	saldo_tipo = getSaldoAplicacion()
 	seleccionarCuentas = () ->
 		$('.row.' + saldo_tipo).each (i) ->
 			$('select.' + saldo_tipo, this).val(opciones[i].cuenta)
@@ -96,12 +96,12 @@ actualizarCompatibles = () ->
 	switch $('#action_name').val()
 		when 'edit' then (
 			data =
-				saldo_tipo: getLineasAplicacion()
+				saldo_tipo: getSaldoAplicacion()
 				rad_operacion_id: getOperacionId()
 		)
 		when 'new','create' then (
 			data = 
-				saldo_tipo: getLineasAplicacion()
+				saldo_tipo: getSaldoAplicacion()
 				organizacion_id: getOrganizacionId()
 		)
 	$.ajax(
@@ -170,7 +170,7 @@ getCuentaId = (saldo_tipo) ->
 	switch saldo_tipo
 		when "debe" then $('.row.debe:first select option:selected').val()
 		when "haber" then $('.row.haber:first select option:selected').val()
-getLineasAplicacion = () ->
+getSaldoAplicacion = () ->
 	switch getOpTipo()
 		when 1,-2,3
 			saldo_tipo = "debe"

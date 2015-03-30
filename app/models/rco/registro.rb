@@ -85,13 +85,20 @@ class Rco::Registro < ActiveRecord::Base
 
   # devuelve las aplicaciones que tiene cada registro y guarda la logica si es debe o haber
 
+  def operacion
+    asiento.operacion
+  end
 
   def aplicados
     case saldoTipo
 	    when "debe"
 	      reg_haber
 	    when "haber"
-	      reg_debe
+        registros = Array.new()
+        operacion.registros.alHaber.each do |reg|
+          registros += reg.reg_debe
+        end
+        registros
 	    else
 	     none
     end
