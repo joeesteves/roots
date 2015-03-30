@@ -68,76 +68,90 @@ class Rad::OperacionesController < ApplicationController
     render nothing: true  
   end
  
- def compatibles
-  aplicados_ids = []
-  if params[:rad_operacion_id] # cuando es edit
-    operacion_id = params[:rad_operacion_id].to_i
-    case params[:saldo_tipo]
+  def compatibles
+    aplicados_ids = []
+    compatibles = []
+    regOri = nil
+    if params[:rad_operacion_id] # cuando es edit
+      operacion_id = params[:rad_operacion_id].to_i
+      case params[:saldo_tipo]
       when "debe"
-        regOri =  Rad::Operacion.find(operacion_id).registros.alDebe.first
-        compatibles = regOri.compatibles
-        aplicados_ids = regOri.aplicados.collect(&:id)
-      when "haber"
-        regOri = Rad::Operacion.find(operacion_id).registros.alHaber.first
-        regOris = Rad::Operacion.find(operacion_id).registros.alHaber
-        compatibles = regOri.compatibles
-        regOris.each do |r|
-          aplicados_ids = aplicados_ids | r.aplicados.collect(&:id)
+        regOris =  Rad::Operacion.find(operacion_id).registros.alDebe
+        regOris.each do |regOri|
+          compatibles = regOri.compatibles
+          aplicados_ids = regOri.aplicados.collect(&:id)
         end
-    end    
-  else
-    compatibles = Rco::Registro.compatiblesXOrganizacion(params[:organizacion_id], params[:saldo_tipo])
-  end
-  compatibles = [] if compatibles.nil?
-
-  @compatibles = Array.new
-  compatibles.each do |reg|
-    opcion = Hash.new
-    opcion['id'] = reg.id.to_s
-    opcion['cuenta_id'] = reg.cuenta_id
-    opcion['desc'] = reg.desc
-    opcion['fecha'] = reg.fecha.strftime("%d/%m")
-    if (params[:saldo_tipo] == "haber")
-      opcion['disponible'] = reg.debe - reg.aplicaciones_haber.sum(:importe).to_f
-      if params[:rad_operacion_id]
-        # esta linea le vuelve a sumar lo aplicado para esa op. en particular. Ya que esta disponible
-        opcion['aplicadoATransaccion'] = reg.aplicaciones_haber.where(:reg_haber_id => regOri.id).sum(:importe).to_f
-        opcion['disponible'] += opcion['aplicadoATransaccion']
-      end
+      when "haber"
+        # regOri = Rad::Operacion.find(operacion_id).registros.alHaber.first
+        regOris = Rad::Operacion.find(operacion_id).registros.alHaber
+        regOris.each do |regOri|
+          compatibles |= regOri.compatibles
+          aplicados_ids |= regOri.aplicados.collect(&:id)
+        end
+      end    
     else
-      opcion['disponible'] = reg.haber - reg.aplicaciones_debe.sum(:importe).to_f
-      if params[:rad_operacion_id]
-        opcion['aplicadoATransaccion'] = reg.aplicaciones_debe.where(:reg_debe_id => regOri.id).sum(:importe).to_f
-        opcion['disponible'] += opcion['aplicadoATransaccion']
+      compatibles = Rco::Registro.compatiblesXOrganizacion(params[:organizacion_id], params[:saldo_tipo])
+    end
+    compatibles = [] if compatibles.nil?
+
+    @compatibles = compatibleToOpciones(compatibles, params[:saldo_tipo], regOris)
+
+    @compatibles = @compatibles.to_json
+    unless aplicados_ids.empty?
+      @aplicados = ""
+      aplicados_ids.each do |ap|
+        @aplicados += "#" + ap.to_s + ","
       end
+      @aplicados = @aplicados[0...-1]
+    end 
+
+    respond_to do |format|
+      format.js {}
     end
-    @compatibles.push(opcion)
   end
 
-  @compatibles = @compatibles.to_json
-  unless aplicados_ids.empty?
-    @aplicados = ""
-    aplicados_ids.each do |ap|
-      @aplicados += "#" + ap.to_s + ","
+  
+  def compatibleToOpciones(compatibles, saldo_tipo, regOris)
+    @compatibles = Array.new
+    compatibles.each do |reg|
+      opcion = Hash.new
+      opcion['id'] = reg.id.to_s
+      opcion['cuenta_id'] = reg.cuenta_id
+      opcion['desc'] = reg.desc
+      opcion['fecha'] = reg.fecha.strftime("%d/%m")
+      opcion['aplicadoATransaccion'] = 0
+      case saldo_tipo
+      when "debe"
+        inv_saldo_tipo = "haber"
+        inv_saldo_tipo_metodo = "reg_debe_id".to_sym
+        aplicaciones_al = "aplicaciones_debe"
+      when "haber"
+        inv_saldo_tipo = "debe"
+        inv_saldo_tipo_metodo = "reg_haber_id".to_sym
+        aplicaciones_al = "aplicaciones_haber"
+      end
+      opcion['disponible'] = reg.send(inv_saldo_tipo) - reg.send(aplicaciones_al).sum(:importe).to_f
+      unless regOris.nil?
+        regOris.each do |regOri|
+          opcion['aplicadoATransaccion'] += reg.send(aplicaciones_al).where(inv_saldo_tipo_metodo => regOri.id).sum(:importe).to_f
+        end
+      end
+      opcion['disponible'] += opcion['aplicadoATransaccion']
+      @compatibles.push(opcion)
     end
-    @aplicados = @aplicados[0...-1]
-  end 
-
-  respond_to do |format|
-    format.js {}
+    @compatibles
   end
-
- end
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_rad_operacion
-      @rad_operacion = Rad::Operacion.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def rad_operacion_params
-      params.require(:rad_operacion).permit(:fecha, :importe, :operaciontipo_id, :cuotas, 
-        :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes, :aplicaciones, :organizacion_id,
-         operacionregistros_attributes: [:id, :cuenta_id, :valor, :saldo_tipo, :_destroy])
-    end
+
+  def set_rad_operacion
+    @rad_operacion = Rad::Operacion.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def rad_operacion_params
+    params.require(:rad_operacion).permit(:fecha, :importe, :operaciontipo_id, :cuotas, 
+      :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes, :aplicaciones, :organizacion_id,
+       operacionregistros_attributes: [:id, :cuenta_id, :valor, :saldo_tipo, :_destroy])
+  end  
 end
