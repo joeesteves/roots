@@ -8,12 +8,18 @@ ready = ->
 		desde = $('#filtro_desde').val()
 		hasta = $('#filtro_hasta').val()
 		cuentas = $('#filtro_cuentas').val().split(" ")
+		filtro_ver_saldos_checked = $('#filtro_ver_saldos_checked').val()
+		if filtro_ver_saldos_checked == "true"
+			ver_saldos_checked = '&ver_saldos_checked=1'
+		else
+			ver_saldos_checked = ''
 		cuentaUrl = ''
 		$.each cuentas, (i,v) -> 
 			cuentaUrl += '&cuentas[]='+v
 
-		$.fn.agregarFiltros([['desde','date',desde],['hasta','date',hasta],['rco/cuentas','select',cuentas]])
-		query = '?desde='+desde+'&hasta='+hasta+cuentaUrl
+		$.fn.agregarFiltros([['desde','date',desde],['hasta','date',hasta],['ver_saldos', 'checkbox'],['rco/cuentas','select',cuentas]])
+		query = '?desde='+desde+'&hasta='+hasta+ver_saldos_checked+cuentaUrl
+		$('#ver_saldos').prop('checked',$('#filtro_ver_saldos_checked').val())
 	$.fn.gridRequest(query)
 
 $.fn.gridRequest = (query) ->

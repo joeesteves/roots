@@ -6,9 +6,12 @@ class Rco::RegistrosController < ApplicationController
     @desde = params[:desde]
     @hasta = params[:hasta]
     @cuentas = params[:cuentas]
+    @ver_saldos_checked = true if params[:ver_saldos]
+
+
     if request.format == 'application/json'
       @rco_registros = Rco::Registro.filtros(session[:empresa_id],
-        params[:desde],params[:hasta],params[:cuentas])
+        params[:desde],params[:hasta],params[:cuentas],params[:ver_saldos_checked])
     end
     
   end

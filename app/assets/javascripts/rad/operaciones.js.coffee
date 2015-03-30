@@ -3,7 +3,7 @@ ready = ->
 		$.fn.arbolInit()
 	$.fn.gridRequest()
 	$('.calcularValores').change ->
-		calcularValores(false)
+		calcularValores()
 	$('#rad_operacion_operaciontipo_id').change ->
 		interruptorCuotas("I"); interruptorRdosxmes("O")
 		actualizarCuentas()
@@ -119,13 +119,12 @@ agregaEditorRegistro = (registro, momento) ->
 	$('#compatiblesImporte').append('<span>Ref '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
 	$('#compatiblesImporte input').change ->
 		calculaImporteDesdeAplicaciones()
-calcularValores = (desdeAplicacion) ->
-	op_tipo = $('#rad_operacion_operaciontipo_id option:selected').data('codigo')
+calcularValores = (opciones) ->
 	pf = '#rad_operacion_' #pf
 	importe = $(pf + 'importe').val()
 	cuotas = $(pf + 'cuotas').val()
 	importeCuota = $(pf + 'cuotaimporte').val(importeCuota)
-	switch op_tipo
+	switch getOpTipo()
 		when -3,2,-1
 			contraPartida = 'input.haber'
 		when 1,-2,3
@@ -135,12 +134,13 @@ calcularValores = (desdeAplicacion) ->
 	 		valorAActualizar = (cuotas * importeCuota).toFixed(2)
 	 		idQueSeActualiza = 'importe'
 	 		$(contraPartida).val(importeCuota)
+	 		$('input.'+getSaldoAplicacion()).val(importeCuota)
  		when false
 	 		valorAActualizar = (importe / cuotas).toFixed(2)
 	 		idQueSeActualiza = 'cuotaimporte'
-	 		if desdeAplicacion == true
-	 			lineaViva = getInvSaldoAplicacion()
-	 			$('input.'+lineaViva).val(importe)
+	 		if opciones.solicitante == 'edita_registros'
+	 			$('input.'+getInvSaldoAplicacion()).val(importe)
+	 			$('input.'+getSaldoAplicacion()).val(importe)
  			else
 	 			$(contraPartida).val(importe)
 	$(pf + idQueSeActualiza).val(valorAActualizar)
@@ -153,9 +153,8 @@ calculaImporteDesdeAplicaciones = () ->
 		importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
 		$('#rad_operacion_importe').val(importe.toFixed(2))
 		opcion.val(id + ', ' + $(this).val()) 
-	# $('#rad_operacion_importe').change()
-		calcularValores(true)
 		armaOpDesdeArrayConOpciones()
+		calcularValores({"solicitante": "edita_registros"})
 calculos = (lineasVivas) ->
 	total = 0
 	$.each $(lineasVivas + ' input[name*=valor]'), () ->

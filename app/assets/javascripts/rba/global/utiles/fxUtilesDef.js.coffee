@@ -116,21 +116,33 @@ $.fn.dynamicForm = (mostrarCampos, ocultarCampos) ->
 $.fn.agregarFiltros = (filtros) ->
 	for filtro in filtros
 		do (filtro) ->
-			if filtro[1] == 'select'
-				$('#filtroRow').append('<div class="small-5 columns">
-			<span class="prefix">'+filtro[0].split("/")[1]+'</span>
-		</div>')
-				$.ajax(
-        type: "GET"
-        url: $('#root_path').val()+filtro[0]
-        data:
-        	filtro_valor: filtro[2]
-        dataType: "script")
-			else
-				$('#filtroRow').append('<div class="small-5 columns">
-			<span class="prefix">'+filtro[0]+'</span>
-		</div>')
-				$('#filtroRow').append('<div class="small-7 columns">
-			<input type="'+filtro[1]+'" id="'+filtro[0]+'" name="'+filtro[0]+'" 
-		tabindex="1" value="'+filtro[2]+'"/>
+			switch filtro[1]
+				when 'select' then (
+					$('#filtroRow').append('<div class="small-5 columns">
+				<span class="prefix">'+filtro[0].split("/")[1]+'</span>
 			</div>')
+					$.ajax(
+	        type: "GET"
+	        url: $('#root_path').val()+filtro[0]
+	        data:
+	        	filtro_valor: filtro[2]
+	        dataType: "script")
+				)
+				when 'checkbox' then (
+					$('#filtroRow').append('<div class="small-5 columns">
+				<span class="prefix">'+filtro[0]+'</span>
+			</div>')
+					$('#filtroRow').append('<div class="small-7 columns">
+				<input type="'+filtro[1]+'" id="'+filtro[0]+'" name="'+filtro[0]+'" 
+			tabindex="1" value="1"/>
+				</div>')
+				)
+				else (
+					$('#filtroRow').append('<div class="small-5 columns">
+				<span class="prefix">'+filtro[0]+'</span>
+			</div>')
+					$('#filtroRow').append('<div class="small-7 columns">
+				<input type="'+filtro[1]+'" id="'+filtro[0]+'" name="'+filtro[0]+'" 
+			tabindex="1" value="'+filtro[2]+'"/>
+				</div>')
+			)

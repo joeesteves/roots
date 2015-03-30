@@ -55,13 +55,26 @@ class Rco::Registro < ActiveRecord::Base
     sum('coalesce(debe,0) -coalesce(haber,0)', :group => :cuenta_id)
   end  
 
-  def self.filtros(empresa_ids, desde, hasta, cuentas)
-    includes(:asiento).
-    where('rco_asientos.empresa_id in (?)', empresa_ids).
-    where('rco_registros.fecha >= ?', desde).
-    where('rco_registros.fecha <= ?', hasta).
-    conCuenta(cuentas).order(:cuenta_id, :fecha, :id).
-    references(:asiento)
+  def self.filtros(empresa_ids, desde, hasta, cuentas, ver_saldos)
+    if ver_saldos == "1"
+      includes(:asiento).
+      where('rco_asientos.empresa_id in (?)', empresa_ids).
+      where('rco_registros.fecha >= ?', desde).
+      where('rco_registros.fecha <= ?', hasta).
+      includes(:aplicaciones_haber).
+      having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
+      includes(:aplicaciones_debe).
+      having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
+      conCuenta(cuentas).order(:cuenta_id, :fecha, :id).
+      group('rco_registros.id').references(:asiento, :aplicaciones_debe, :aplicaciones_haber)
+    else 
+      includes(:asiento).
+      where('rco_asientos.empresa_id in (?)', empresa_ids).
+      where('rco_registros.fecha >= ?', desde).
+      where('rco_registros.fecha <= ?', hasta).
+      conCuenta(cuentas).order(:cuenta_id, :fecha, :id).
+      references(:asiento)
+    end
   end
 
   def self.compatiblesXOrganizacion(organizacion_id, saldo_tipo)
