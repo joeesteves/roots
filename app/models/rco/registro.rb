@@ -57,16 +57,13 @@ class Rco::Registro < ActiveRecord::Base
 
   def self.filtros(empresa_ids, desde, hasta, cuentas, ver_saldos)
     if ver_saldos == "1"
+      pendientes.
       includes(:asiento).
       where('rco_asientos.empresa_id in (?)', empresa_ids).
       where('rco_registros.fecha >= ?', desde).
       where('rco_registros.fecha <= ?', hasta).
-      includes(:aplicaciones_haber).
-      having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
-      includes(:aplicaciones_debe).
-      having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
       conCuenta(cuentas).order(:cuenta_id, :fecha, :id).
-      group('rco_registros.id').references(:asiento, :aplicaciones_debe, :aplicaciones_haber)
+      references(:asiento)
     else 
       includes(:asiento).
       where('rco_asientos.empresa_id in (?)', empresa_ids).
@@ -76,6 +73,14 @@ class Rco::Registro < ActiveRecord::Base
       references(:asiento)
     end
   end
+  def self.pendientes
+    joins('left join rco_aplicaciones as apDebe on rco_registros.id = apDebe.reg_haber_id').
+    joins('left join rco_aplicaciones as apHaber on rco_registros.id = apHaber.reg_debe_id').
+    group('rco_registros.id').
+    having('coalesce(sum(apDebe.importe),0) < rco_registros.haber OR coalesce(sum(apHaber.importe),0) < rco_registros.debe')
+  end
+
+
 
   def self.compatiblesXOrganizacion(organizacion_id, saldo_tipo)
     case saldo_tipo
