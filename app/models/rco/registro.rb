@@ -15,11 +15,11 @@ class Rco::Registro < ActiveRecord::Base
   scope :alHaber, -> { where(:debe => 0 ).joins(cuenta: :cuentatipo).where(rco_cuentatipos: {codigo: Rco::Cuenta.ctasCtes}) }
   scope :conCuenta, -> (cuentas) {  where('rco_registros.cuenta_id in (?)', cuentas) unless cuentas == [""] }
   validates :cuenta_id, presence:  { message: "Debe indicar una cuenta"}
-
+  
   validate do |registro|
     registro.debe_haber
   end
-
+  
   def debe_haber
   	unless debe_op != haber_op and [haber_op,debe_op].include? 0
   		destroy
@@ -56,14 +56,16 @@ class Rco::Registro < ActiveRecord::Base
   end  
 
   def self.filtros(empresa_ids, desde, hasta, cuentas, ver_saldos)
+    ##revisar esto genera el json ok. Pero jqxgrid lee solo algunos registros
     if ver_saldos == "1"
+      select('rco_registros.*, (rco_registros.debe - coalesce(sum(apHaber.importe),0)) as pendienteDebe, 
+        (rco_registros.haber - coalesce(sum(apDebe.importe),0)) as pendienteHaber, rco_asientos.*').
       pendientes.
-      includes(:asiento).
+      joins('INNER JOIN rco_asientos on rco_asientos.id = rco_registros.asiento_id').
       where('rco_asientos.empresa_id in (?)', empresa_ids).
       where('rco_registros.fecha >= ?', desde).
       where('rco_registros.fecha <= ?', hasta).
-      conCuenta(cuentas).order(:cuenta_id, :fecha, :id).
-      references(:asiento)
+      conCuenta(cuentas).order(:cuenta_id, :fecha, :id)
     else 
       includes(:asiento).
       where('rco_asientos.empresa_id in (?)', empresa_ids).
@@ -73,14 +75,15 @@ class Rco::Registro < ActiveRecord::Base
       references(:asiento)
     end
   end
+  
+
   def self.pendientes
     joins('left join rco_aplicaciones as apDebe on rco_registros.id = apDebe.reg_haber_id').
     joins('left join rco_aplicaciones as apHaber on rco_registros.id = apHaber.reg_debe_id').
     group('rco_registros.id').
-    having('coalesce(sum(apDebe.importe),0) < rco_registros.haber OR coalesce(sum(apHaber.importe),0) < rco_registros.debe')
+    having('coalesce(sum(apDebe.importe),0) < rco_registros.haber OR coalesce(sum(apHaber.importe),0) < rco_registros.debe').
+    references(:aplicaciones_haber).references(:aplicaciones_debe)
   end
-
-
 
   def self.compatiblesXOrganizacion(organizacion_id, saldo_tipo)
     case saldo_tipo

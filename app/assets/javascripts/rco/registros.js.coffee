@@ -23,7 +23,7 @@ ready = ->
 	$.fn.gridRequest(query)
 
 $.fn.gridRequest = (query) ->
-	nombres = ['orden','id','fecha','id_padre','cuenta',['debe','float'],'haber',['saldo','float'],'desc','desc_asiento']
+	nombres = ['orden','id','fecha','id_padre','cuenta',['debe','float'],['haber','float'],['saldo','float'],'desc','desc_asiento']
 	propiedades = [['Id','5%'],['Fecha','auto'],['Cuenta','auto'],['Debe','auto'],
 	['Haber','auto'],['Saldo','auto'],['desc','auto', 'Descripción'],['desc_asiento','auto', 'Descripción Asiento']]
 	$.fn.gridPrepDatos(nombres, propiedades, query, 'cuenta')	
