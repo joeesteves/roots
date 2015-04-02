@@ -7,13 +7,26 @@ json.array!(@rco_registros) do |rco_registro|
   json.orden orden
   json.id id
   json.id_padre id_padre
-  json.extract! rco_registro, :debe, :haber, :desc
+  begin
+    debe = rco_registro.pendienteDebe
+  rescue
+	 debe = rco_registro.debe
+  end
+  
+  begin
+    haber = rco_registro.pendienteHaber
+  rescue
+    haber = rco_registro.haber
+  end
+  json.debe debe
+  json.haber haber
+  json.extract! rco_registro, :desc
   json.fecha rco_registro.fecha.strftime("%d/%m/%Y") rescue nil
-	cuenta = rco_registro.cuenta
-	if cuenta.id == cuenta_ant_id
-		saldo += rco_registro.debe - rco_registro.haber
+  cuenta = rco_registro.cuenta
+  if cuenta.id == cuenta_ant_id
+		saldo += debe - haber
 	else
-		saldo = rco_registro.debe - rco_registro.haber
+		saldo = debe - haber
 	end
 	json.cuenta cuenta.nombre
   json.saldo saldo
