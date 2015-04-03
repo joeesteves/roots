@@ -16,7 +16,8 @@
   </div>
 
   <div class="small-6 columns">
-    <%= f.collection_select :evento_id, Rga::Evento.all, :id, :nombre, {}, {label: "Evento", class:"actualizaDisponible"} %>
+   <%= f.select :evento_id,  Rga::Evento.all.includes(:eventotipo).
+    map {|c| [c.nombre, c.id, {data: {codigo: c.eventotipo.codigo}}]}, {:selected => @rga_registro.evento_id}, {label: "Evento", class: "actualizaDisponible" } %>
   </div>
  
   <div class="small-3 columns">

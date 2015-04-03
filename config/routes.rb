@@ -77,7 +77,7 @@ Roots::Application.routes.draw do
     end
   
     resources :eventos do
-      get :tipocodigo, on: :member
+      get :actualizar_selectores, on: :member
       concerns [:globales]
     end
   end

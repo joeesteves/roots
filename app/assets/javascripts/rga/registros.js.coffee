@@ -6,10 +6,12 @@ ready = ->
 	if $('#action_name').val() == 'edit'
 		$('#rga_registro_evento_id').prop('disabled',true).trigger("chosen:updated")
 	$('#rga_registro_evento_id').change ->
-		$.fn.eventoTipoCodigo($('#rga_registro_evento_id').val())
+		evento_tipo_codigo = $('#rga_registro_evento_id option:selected').data('codigo')
+		$.fn.dynamicFormRegistros(evento_tipo_codigo)		
+		$.fn.rgaActualizarSelectores($('#rga_registro_evento_id').val())
 	$('.actualizaDisponible').change -> 
-		empresa_id = 1
-		establecimiento_id = 1
+		empresa_id = $('#empresa_actual_id').val()
+		establecimiento_id = $('#establecimiento_actual_id').val()
 		origcategoria_id = $('#rga_registro_origcategoria_id').val()
 		origrodeo_id = $('#rga_registro_origrodeo_id').val()
 		origestado_id = $('#rga_registro_origestado_id').val()

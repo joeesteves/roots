@@ -18,7 +18,7 @@ class Rga::EventosController < ApplicationController
 
   # GET /rga/eventos/1/edit
   def edit
-    @eventoTipoCodigo = @rga_evento.evento.eventotipo.codigo
+    @eventoTipoCodigo = @rga_evento.eventotipo.codigo
   end
 
   # POST /rga/eventos
@@ -55,8 +55,14 @@ class Rga::EventosController < ApplicationController
     Rga::Evento.destroy(params[:ids]) 
     render nothing: true  
   end
-  def tipocodigo     
-    @eventoTipoCodigo = Rga::Evento.find(params[:id]).eventotipo.codigo
+  def actualizar_selectores     
+    evento = Rga::Evento.find(params[:id])
+    @eventoTipoCodigo = evento.eventotipo.codigo
+    @orig_estados = evento.origestados
+    @dest_estados = evento.destestados
+    @categorias = Rga::Categoria.joins(categoriatipo: :eventos).where('rga_eventos.id = ?',evento.id)
+
+
     respond_to do |format|
       format.js 
     end
