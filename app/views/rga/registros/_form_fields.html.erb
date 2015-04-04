@@ -26,10 +26,10 @@
  
 
   <div id="origrodeo" class="small-3 columns">
-    <%= f.collection_select :origrodeo_id, Rga::Rodeo.all, :id, :nombre, {}, {label:"Rodeo Origen", class:"actualizaDisponible"} %>
+    <%= f.collection_select :origrodeo_id, Rga::Rodeo.all, :id, :nombre, {}, {label:"Rodeo Origen"} %>
   </div>
   <div id="origcategoria" class="small-3 columns">
-    <%= f.collection_select :origcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Origen",  class:"actualizaDisponible"} %>
+    <%= f.collection_select :origcategoria_id, Rga::Categoria.all, :id, :nombre, {}, {label:"Categoria Origen"} %>
   </div>
   
   <div id="origestado" class="small-3 columns">

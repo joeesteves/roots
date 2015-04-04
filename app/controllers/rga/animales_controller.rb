@@ -54,8 +54,8 @@ class Rga::AnimalesController < ApplicationController
   end
 
   def disponibles
-    empresa_id = params[:empresa_id]
-    establecimiento_id = params[:establecimiento_id]
+    empresa_id = @empresa_actual.id
+    establecimiento_id = @establecimiento_actual.id
     origcategoria_id = params[:origcategoria_id]
     origrodeo_id = params[:origrodeo_id]
     origestado_id = params[:origestado_id]
