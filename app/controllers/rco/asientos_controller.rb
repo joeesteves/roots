@@ -68,6 +68,6 @@ class Rco::AsientosController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def rco_asiento_params
       params.require(:rco_asiento).permit(:fecha, :moneda_id, :cotizacion, :desc, :esgenerado,
-        registros_attributes: [:id, :cuenta_id, :debe, :haber, :debe_op, :haber_op, :desc, :fecha, :_destroy])
+        registros_attributes: [:id, :cuenta_id, :debe, :haber, :debe_op, :haber_op, :desc, :fecha, :organizacion_id, :_destroy])
     end
 end
