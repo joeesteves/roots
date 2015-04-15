@@ -38,16 +38,19 @@ ready = ->
 		return false
 	$('form').on 'click', '.quitar_campos', () ->
 		$(this).parent().prev('input[type=hidden]').val('1')
-		$(this).closest('.row').remove()
+		$(this).closest('.row').find('input.valor').val(0)
+		$(this).closest('.row').find('input._destroy').val('true')
+		$(this).closest('.row').hide()
+		calculos()
 		$('.chosen-single:visible')[1].focus()
 		return false
 	$('#rad_operacion_rdosxmes').click () ->
 		setPlaceHolder($(this).prop('checked'))
 activaCalculos = (ejecuta) ->
 	lineasVivas = '.row.' + String(getInvSaldoAplicacion())
-	calculos(lineasVivas) if ejecuta == true
+	calculos() if ejecuta == true
 	$(lineasVivas + ' input[name*=valor], #rad_operacion_rdosxmes').change ->
-		calculos(lineasVivas)
+		calculos()
 
 armaArrayConOpcionesAgrupadas = () ->
 	cuenta_ant = undefined
@@ -155,7 +158,8 @@ calculaImporteDesdeAplicaciones = () ->
 		opcion.val(id + ', ' + $(this).val()) 
 		armaOpDesdeArrayConOpciones()
 		calcularValores({"solicitante": "edita_registros"})
-calculos = (lineasVivas) ->
+calculos = () ->
+	lineasVivas = '.row.' + String(getInvSaldoAplicacion())
 	total = 0
 	$.each $(lineasVivas + ' input[name*=valor]'), () ->
 		valor = 0

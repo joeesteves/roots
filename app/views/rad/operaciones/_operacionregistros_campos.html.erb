@@ -3,11 +3,11 @@
 		<%= f.collection_select :cuenta_id, Rco::Cuenta.all, :id, :nombre, {}, {sinEtiqueta: true, class: f.object.saldo_tipo} %>
 	</div>
 	<div class="small-2 columns">
-		<%= f.text_field :valor, sinEtiqueta: true, placeholder: 'Valor', class: f.object.saldo_tipo  %>
+		<%= f.text_field :valor, sinEtiqueta: true, placeholder: 'Valor', class: f.object.saldo_tipo + ' valor'  %>
 	</div>
 	<%= f.hidden_field :saldo_tipo %>
 	<div class="small-1 columns">
-		<%= f.hidden_field :_destroy %>
+		<%= f.hidden_field :_destroy, class: '_destroy' %>
 		<h4 style='text-align:center'>
 			<% if f.object.saldo_tipo == "debe" %>
 				<%= link_to "D", '#', class: "simil_agrega_campos_D", remote: true %>
