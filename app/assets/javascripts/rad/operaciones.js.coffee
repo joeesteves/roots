@@ -209,7 +209,7 @@ interruptorInputsYAgregarLinea = () ->
 			rev = !
 			$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos').hide()
 			$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos').hide()
-	$('.row.' + saldo_tipo).not(':first').remove() if saldo_tipo != 'movimiento_fondos'
+	$('.row.' + saldo_tipo).not(':first').remove() if saldo_tipo != 'movimiento_fondos' && $('#action_name').val() != 'edit'
 	$('input.debe').prop('readonly',rev+!posicion)
 	$('input.haber').prop('readonly',posicion)
 	$('[readonly]').prop('tabindex',-1)
