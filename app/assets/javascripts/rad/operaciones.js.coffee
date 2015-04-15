@@ -3,7 +3,7 @@ ready = ->
 		$.fn.arbolInit()
 	$.fn.gridRequest()
 	$('.calcularValores').change ->
-		calcularValores()
+		calcularValores({})
 	$('#rad_operacion_operaciontipo_id').change ->
 		interruptorCuotas("I"); interruptorRdosxmes("O")
 		actualizarCuentas()
@@ -116,9 +116,9 @@ actualizarCompatibles = () ->
 agregaEditorRegistro = (registro, momento) ->
 	id = "reg_" + registro.attr("id")
 	if registro.data("aplicado") == 'undefined' || momento == 'onSelect'
-		valorEditorRegistro = registro.data("disponible")
+		valorEditorRegistro = parseFloat(registro.data("disponible"))
 	else
-		valorEditorRegistro = registro.data("aplicado")
+		valorEditorRegistro = parseFloat(registro.data("aplicado"))
 	$('#compatiblesImporte').append('<span>Ref '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
 	$('#compatiblesImporte input').change ->
 		calculaImporteDesdeAplicaciones()
@@ -164,7 +164,7 @@ calculos = () ->
 	$.each $(lineasVivas + ' input[name*=valor]'), () ->
 		valor = 0
 		valor = $(this).val() if $(this).val() != ""
-		total += parseInt(valor)
+		total += parseFloat(valor)
 	switch getRMes()
 		when true then rm = 'cuotaimporte'
 		when false then rm = 'importe'

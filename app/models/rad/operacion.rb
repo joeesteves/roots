@@ -69,7 +69,7 @@ class Rad::Operacion < ActiveRecord::Base
 			else
 				cuotasArr.each do |k|
 					ctas1.each do |cta1|
-						@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => k[:fecha],:organizacion_id => organizacion_id)
+						@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => k[:fecha], :organizacion_id => organizacion_id)
 					end
 					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha], :organizacion_id => organizacion_id)	
 				end
