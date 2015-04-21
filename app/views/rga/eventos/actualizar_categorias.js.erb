@@ -1,0 +1,9 @@
+$('#rga_registro_origcategoria_id').empty();
+$('#rga_registro_destcategoria_id').empty();
+<% @categorias.each do |categoria| %>
+$('#rga_registro_origcategoria_id').append('<option value= <%=categoria.id%> >'+
+	'<%= categoria.nombre %></option>');
+$('#rga_registro_destcategoria_id').append('<option value= <%=categoria.id%> >'+
+	'<%= categoria.nombre %></option>');
+<% end %>
+$('#rga_registro_origcategoria_id,#rga_registro_destcategoria_id').trigger("chosen:updated").change();

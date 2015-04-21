@@ -3,7 +3,8 @@ class Rga::RegistrosController < ApplicationController
   
   # GET /rga/registros
   def index
-    arbol_index(params[:nodo], flash_nodo: flash[:nodo])
+    arbol_index(params[:nodo], flash_nodo: flash[:nodo], includes: [:origestado, :destestado, 
+      :origcategoria, :destcategoria, :origrodeo, :destrodeo, :evento])
   end
 
   # GET /rga/registros/1

@@ -18,8 +18,8 @@ class Rga::Animal < ActiveRecord::Base
 		on a.id = b.animal_id join rga_registros as c on b.registro_id = c.id where a.estado = 1 group by a.id) 
 		as sc join rga_registros as d on sc.registro_id = d.id where 
 		d.empresa_id = #{empresa_id} and d.establecimiento_id = #{establecimiento_id} and
-		d.origcategoria_id = #{origcategoria_id} and
-		d.origrodeo_id = #{origrodeo_id} and
-		d.origestado_id = #{origestado_id} #{sCantidad} ")
+		d.destcategoria_id = #{origcategoria_id} and
+		d.destrodeo_id = #{origrodeo_id} and
+		d.destestado_id = #{origestado_id} #{sCantidad} ")
 	end
 end

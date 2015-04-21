@@ -6,18 +6,20 @@ ready = ->
 	if $('#action_name').val() == 'edit'
 		$('#rga_registro_evento_id').prop('disabled',true).trigger("chosen:updated")
 	$('#rga_registro_evento_id').change ->
-		$.fn.eventoTipoCodigo($('#rga_registro_evento_id').val())
+		evento_tipo_codigo = $('#rga_registro_evento_id option:selected').data('codigo')
+		$.fn.dynamicFormRegistros(evento_tipo_codigo)
+		$.fn.rgaActualizarCategorias($('#rga_registro_evento_id').val())
+	$('#rga_registro_origcategoria_id, #rga_registro_destcategoria_id').change ->
+		$.fn.rgaActualizarEstados($('#rga_registro_evento_id').val(), $(this).val(), $(this).attr('id'))
 	$('.actualizaDisponible').change -> 
-		empresa_id = 1
-		establecimiento_id = 1
 		origcategoria_id = $('#rga_registro_origcategoria_id').val()
 		origrodeo_id = $('#rga_registro_origrodeo_id').val()
 		origestado_id = $('#rga_registro_origestado_id').val()
-		$.fn.animalesDisponibles(empresa_id,establecimiento_id,origcategoria_id, origrodeo_id, origestado_id)
+		$.fn.animalesDisponibles(origcategoria_id, origrodeo_id, origestado_id)
 
 $.fn.gridRequest = (query) ->
-	nombres = ['id','fecha','origcategoria','origrodeo','origestado','destcategoria','destrodeo','destestado','cantidad','peso','dest']
-	propiedades = [['Fecha','auto'],['origcategoria','auto'],['origrodeo','auto'],['origestado','auto'],['destcategoria','auto'],['destrodeo','auto'],['destestado','auto'],['cantidad','auto'],['peso','auto'],['desc','auto','Descripcion']]
+	nombres = ['id','fecha','evento','origcategoria','origrodeo','origestado','destcategoria','destrodeo','destestado','cantidad','peso','dest']
+	propiedades = [['Fecha','auto'],['evento','auto'],['origcategoria','auto'],['origrodeo','auto'],['origestado','auto'],['destcategoria','auto'],['destrodeo','auto'],['destestado','auto'],['cantidad','auto'],['peso','auto'],['desc','auto','Descripcion']]
 	$.fn.gridPrepDatos(nombres, propiedades, query)
 
 $.fn.dynamicFormRegistros = (eventoTipoCodigo) ->

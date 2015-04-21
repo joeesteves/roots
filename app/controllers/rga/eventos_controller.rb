@@ -18,7 +18,7 @@ class Rga::EventosController < ApplicationController
 
   # GET /rga/eventos/1/edit
   def edit
-    @eventoTipoCodigo = @rga_evento.evento.eventotipo.codigo
+    @eventoTipoCodigo = @rga_evento.eventotipo.codigo
   end
 
   # POST /rga/eventos
@@ -26,7 +26,7 @@ class Rga::EventosController < ApplicationController
     @rga_evento = Rga::Evento.new(rga_evento_params)
 
     if @rga_evento.save
-      actualizar_estados(@rga_evento, params[:rga_evento][:origestado_ids], params[:rga_evento][:destestado_ids])
+      persist_estados(@rga_evento, params[:rga_evento][:origestado_ids], params[:rga_evento][:destestado_ids])
       redirect_to rga_eventos_path, notice: 'Evento guardado.'
       ubica_en_nodo(params[:nodo])
     else
@@ -37,7 +37,7 @@ class Rga::EventosController < ApplicationController
   # PATCH/PUT /rga/eventos/1
   def update
     if @rga_evento.update(rga_evento_params)
-      actualizar_estados(@rga_evento, params[:rga_evento][:origestado_ids], params[:rga_evento][:destestado_ids])
+      persist_estados(@rga_evento, params[:rga_evento][:origestado_ids], params[:rga_evento][:destestado_ids])
       flash[:nodo] = @rga_evento.nodos.first.id rescue nil
       redirect_to rga_eventos_path, notice: 'Evento actualizado.'
     else
@@ -55,12 +55,27 @@ class Rga::EventosController < ApplicationController
     Rga::Evento.destroy(params[:ids]) 
     render nothing: true  
   end
-  def tipocodigo     
-    @eventoTipoCodigo = Rga::Evento.find(params[:id]).eventotipo.codigo
+  def actualizar_categorias
+    evento = Rga::Evento.find(params[:id])
+    @categorias = Rga::Categoria.joins(categoriatipo: :eventos).where('rga_eventos.id = ?',evento.id)
     respond_to do |format|
       format.js 
     end
   end
+  def actualizar_estados
+    evento = Rga::Evento.find(params[:id])
+    eventos_categoria = Rga::Categoria.find(params[:categoria_id]).categoriatipo.estados
+    case params[:solicitante]
+      when 'rga_registro_origcategoria_id'
+        @orig_estados = evento.origestados & eventos_categoria
+      when 'rga_registro_destcategoria_id'
+        @dest_estados = evento.destestados & eventos_categoria
+    end
+    respond_to do |format|
+      format.js 
+    end
+  end
+
   
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -68,7 +83,7 @@ class Rga::EventosController < ApplicationController
       @rga_evento = Rga::Evento.find(params[:id])
     end
 
-  def actualizar_estados(rga_evento, origestados, destestados)
+  def persist_estados(rga_evento, origestados, destestados)
     comunestados = origestados & destestados
     origestados -= comunestados
     destestados -= comunestados

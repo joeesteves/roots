@@ -93,16 +93,21 @@ $.fn.dynamicForm = (mostrarCampos, ocultarCampos) ->
 		do (campo) -> 
 			if $.isArray(campo)
 				$('#' + campo[0]).show()
+				$('#' + campo[0] select).prop('disabled', false)
 				$('#' + campo[0]).addClass(campo[1])
 			else
 				$('#' + campo).show()
+				$('#' + campo + ' select').prop('disabled', false)
 	for campo in ocultarCampos
 		do (campo) -> 
 			if $.isArray(campo)
 				$('#' + campo[0]).hide()
+				$('#' + campo[0] select).prop('disabled',true).trigger("chosen:updated")
 				$('#' + campo[0]).removeClass(campo[1])
 			else
 				$('#' + campo).hide()
+				$('#' + campo + ' select').prop('disabled', true)
+
 
 
 # funcion que agrega filtros. Se llama desde el js de cada controlador solo desde index. ver asientos.js
