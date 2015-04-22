@@ -63,22 +63,25 @@ class Rga::Registro < ActiveRecord::Base
 
   def self.regx_categoria
     # Devuelve un hash["codigo"] = cantida codigo "[E;S] - cat_id - evento_id"
-    resultado = ActiveRecord::Base.connection.select_all("select concat(if(c.origcategoria_id is null, '0 - ',concat(c.origcategoria_id, ' - ')),
-      if(c.destcategoria_id is null, '0 - ',concat(c.destcategoria_id, ' - ')) , c.evento_id) as codigo,count(a.id) as cantidad from rga_animales as a 
-      join rga_animales_registros as b on a.id = b.animal_id 
-      join rga_registros as c on c.id = b.registro_id group by c.origcategoria_id, c.destcategoria_id, c.evento_id")
+    resultado = ActiveRecord::Base.connection.select_all("select concat(if(c.origcategoria_id is null, '0 - ',concat(c.origcategoria_id, ' - ')), 
+if(c.destcategoria_id is null, '0 - ',concat(c.destcategoria_id, ' - ')) , d.codigo) as codigo, 
+count(a.id) as cantidad from rga_animales as a 
+join rga_animales_registros as b on a.id = b.animal_id 
+join rga_registros as c on c.id = b.registro_id 
+join rga_eventos as d on d.id = c.evento_id
+group by c.origcategoria_id, c.destcategoria_id, c.evento_id")
     obj = Hash.new
     resultado.each do |r|
-      codigo = r["codigo"].split(" - ").map { |x| x.to_i }
-      codigo_entrada = "E - " + codigo[1].to_s + " - " + codigo[2].to_s
-      codigo_salida = "S - " + codigo[0].to_s + " - " +codigo[2].to_s
+      codigo = r["codigo"].split(" - ")
+      codigo_entrada = "E - " + codigo[1] + " - " + codigo[2]
+      codigo_salida = "S - " + codigo[0] + " - " + codigo[2]
 
-      if codigo[0] & codigo[1] != 0 
+      if codigo[0] and codigo[1] != '0'
         obj[codigo_entrada] = r["cantidad"]
         obj[codigo_salida] = r["cantidad"]
-      elsif codigo[0] == 0
+      elsif codigo[0] == '0'
         obj[codigo_entrada] = r["cantidad"]
-      elsif codigo[1] == 0
+      elsif codigo[1] == '0'
         obj[codigo_salida] = r["cantidad"]
       end
 

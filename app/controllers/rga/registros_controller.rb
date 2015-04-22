@@ -63,7 +63,7 @@ class Rga::RegistrosController < ApplicationController
     @categorias_inicio = Rga::Categoria.categorias_disponibles(session[:empresa_id],session[:establecimiento_id], fecha: @desde)
     @categorias_fin = Rga::Categoria.categorias_disponibles(session[:empresa_id],session[:establecimiento_id], fecha: @hasta)
     @categorias = @categorias_inicio | @categorias_fin 
-
+    @regx_categoria = Rga::Registro.regx_categoria
   end
 
   def mostrar_existencia
