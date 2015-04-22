@@ -1,9 +1,16 @@
 $('#rga_registro_origcategoria_id').empty();
 $('#rga_registro_destcategoria_id').empty();
-<% @categorias.each do |categoria| %>
-$('#rga_registro_origcategoria_id').append('<option value= <%=categoria.id%> >'+
+<% if @origcategorias %>
+<% @origcategorias.each do |categoria| %>
+$('#rga_registro_origcategoria_id').append('<option value="<%=categoria.id%>" data-peso="<%=categoria.pesopromedio %>">'+
 	'<%= categoria.nombre %></option>');
-$('#rga_registro_destcategoria_id').append('<option value= <%=categoria.id%> >'+
-	'<%= categoria.nombre %></option>');
+$('#rga_registro_origcategoria_id').trigger("chosen:updated").change();
 <% end %>
-$('#rga_registro_origcategoria_id,#rga_registro_destcategoria_id').trigger("chosen:updated").change();
+<% end %>
+<% if @destcategorias %>
+<% @destcategorias.each do |categoria| %>
+$('#rga_registro_destcategoria_id').append('<option value="<%=categoria.id%>" data-peso="<%=categoria.pesopromedio %>">'+
+	'<%= categoria.nombre %></option>');
+$('#rga_registro_destcategoria_id').trigger("chosen:updated").change();
+<% end %>
+<% end %>

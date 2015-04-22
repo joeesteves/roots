@@ -22,4 +22,5 @@ class Rga::Animal < ActiveRecord::Base
 		d.destrodeo_id = #{origrodeo_id} and
 		d.destestado_id = #{origestado_id} #{sCantidad} ")
 	end
+
 end

@@ -1,0 +1,57 @@
+<%= hidden_field_tag 'filtro_desde', @desde %>
+<%= hidden_field_tag 'filtro_hasta', @hasta %>
+  
+<h1>PLANILLA DE HACIENDA (<%= @desde %> hasta <%= @hasta %> )</h1>
+<div class="row">
+	<div class="small-12 large-12 columns">
+		<div class="panel">
+<table class="notDT">
+  <tr>
+  	<th>CATEGORIA</th>
+ <!-- 	<th>ESTADO</th> -->
+    <th>EI</th>
+    <th>NAC</th>
+		<th>REC</th>
+	  <th>TR+</th>
+		<th>RE+</th>
+		<th>DI+</th>
+		<th class="neg">MOR</th>
+		<th class="neg">DES</th>
+    <th class="neg">TR-</th>
+    <th class="neg">RE-</th>
+    <th class="neg">DI-</th>
+    <th>EF</th>
+	</tr>
+
+<%if @categorias %>
+<% @categorias.each do |cat| %>    
+ <tr>
+   
+    
+    <td style="text-align:left">cat.nombre</td>  
+    <td></td>
+    <td>nac</td>
+    <td>rec</td>
+    <td>rt+</td>  
+  	<td>re+</td>  
+  	<td>di+</td>  
+    <td class="neg">mor</td>
+    <td class="neg">des</td>
+    <td class="neg">tr-</td>
+    <td class="neg">re-</td>  
+  	<td class="neg">di-</td>  
+ 		<td></td>  
+
+
+
+
+    
+	</tr>
+<% end %>
+<% end %>
+	
+
+</table>
+</div>
+	</div>
+</div>

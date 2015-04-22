@@ -1,0 +1,26 @@
+
+ENTRADAS
+select concat("E - ", c.destcategoria_id," - " , c.evento_id) as codigo,count(a.id) as cantidad from rga_animales as a
+join rga_animales_registros as b on a.id = b.animal_id
+join rga_registros as c on c.id = b.registro_id
+where c.destcategoria_id is not null
+group by c.destcategoria_id, c.evento_id
+
+SALIDAS
+
+select concat("E - ", c.origcategoria_id," - " , c.evento_id) as codigo,count(a.id) as cantidad from rga_animales as a
+join rga_animales_registros as b on a.id = b.animal_id
+join rga_registros as c on c.id = b.registro_id
+where c.origcategoria_id is not null
+group by c.origcategoria_id, c.evento_id
+
+EXECUTE SQL
+
+ActiveRecord::Base.connection.select_all
+
+LUEGO SE PASA A UN HASH
+b = Hash.new
+
+a.each do |x|
+	b[x["codigo"]] = x["cantidad"]
+end

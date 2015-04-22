@@ -1,0 +1,29 @@
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.neg {
+background-color: #F27575;
+
+
+
+}
+table.notDT {
+border-collapse: collapse;
+width: 100%;
+
+}
+
+
+table.notDT th, table.notDT td:not(.group) {
+text-align: center;
+border: 1px solid black;
+padding: 1px,1px,1px,1px
+}
+
+
+table.notDT th {
+white-space: nowrap;
+text-wrap: none;
+
+}
+
+

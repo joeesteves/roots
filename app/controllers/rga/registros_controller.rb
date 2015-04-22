@@ -57,6 +57,19 @@ class Rga::RegistrosController < ApplicationController
     redirect_to rga_registros_url, notice: 'Registro eliminado.'
   end
 
+  def mostrar_planilla
+    @desde = params[:desde] || Date.today.at_beginning_of_month
+    @hasta = params[:hasta] || Date.today.end_of_month
+    @categorias_inicio = Rga::Categoria.categorias_disponibles(session[:empresa_id],session[:establecimiento_id], fecha: @desde)
+    @categorias_fin = Rga::Categoria.categorias_disponibles(session[:empresa_id],session[:establecimiento_id], fecha: @hasta)
+    @categorias = @categorias_inicio | @categorias_fin 
+
+  end
+
+  def mostrar_existencia
+  
+  end
+  
   def borrar_seleccion
     Rga::Registro.destroy(params[:ids]) 
     render nothing: true  

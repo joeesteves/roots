@@ -68,11 +68,16 @@ Roots::Application.routes.draw do
     :estados,
     :estados_eventos,
     :eventotipos,
-    :registros, 
     :rodeos,
     concerns: [:globales]
     resources :animales do
       post :disponibles, on: :collection
+      concerns [:globales]
+    end
+
+    resources :registros do
+      get :mostrar_planilla, on: :collection
+      get :mostrar_existencia, on: :collection
       concerns [:globales]
     end
   

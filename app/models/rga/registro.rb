@@ -14,9 +14,9 @@ class Rga::Registro < ActiveRecord::Base
   has_many :animales, through: :animales_registros, dependent: :destroy
 
   def rSave
+    return false unless valid?
     save
     codigoEvento = evento.eventotipo.codigo.to_i
-    cantidad.times do
       case codigoEvento
         when -1
           animalesOrigen = Rga::Animal.disponibles(empresa_id, establecimiento_id, 
@@ -26,9 +26,14 @@ class Rga::Registro < ActiveRecord::Base
           end
           update_attributes(:animal_ids => animalesOrigen.collect(&:id))
         when 1
-          animales.create()
+          cantidad.times do
+            animales.create()
+          end
+        when 2
+          animalesOrigen = Rga::Animal.disponibles(empresa_id, establecimiento_id, 
+            origcategoria_id, origrodeo_id, origestado_id, {cantidad: cantidad.to_s})
+          update_attributes(:animal_ids => animalesOrigen.collect(&:id))
       end
-    end
   end  
 
   def rUpdate(rga_registro_params, cantidadFinal)
@@ -53,11 +58,32 @@ class Rga::Registro < ActiveRecord::Base
         if diferencia < 0 
           animales.delete(animales.last(diferencia.abs))
         end
-    
-    end
-      
+    end      
   end
 
+  def self.regx_categoria
+    # Devuelve un hash["codigo"] = cantida codigo "[E;S] - cat_id - evento_id"
+    resultado = ActiveRecord::Base.connection.select_all("select concat(if(c.origcategoria_id is null, '0 - ',concat(c.origcategoria_id, ' - ')),
+      if(c.destcategoria_id is null, '0 - ',concat(c.destcategoria_id, ' - ')) , c.evento_id) as codigo,count(a.id) as cantidad from rga_animales as a 
+      join rga_animales_registros as b on a.id = b.animal_id 
+      join rga_registros as c on c.id = b.registro_id group by c.origcategoria_id, c.destcategoria_id, c.evento_id")
+    obj = Hash.new
+    resultado.each do |r|
+      codigo = r["codigo"].split(" - ").map { |x| x.to_i }
+      codigo_entrada = "E - " + codigo[1].to_s + " - " + codigo[2].to_s
+      codigo_salida = "S - " + codigo[0].to_s + " - " +codigo[2].to_s
 
+      if codigo[0] & codigo[1] != 0 
+        obj[codigo_entrada] = r["cantidad"]
+        obj[codigo_salida] = r["cantidad"]
+      elsif codigo[0] == 0
+        obj[codigo_entrada] = r["cantidad"]
+      elsif codigo[1] == 0
+        obj[codigo_salida] = r["cantidad"]
+      end
+
+    end
+    obj
+  end
 
 end
