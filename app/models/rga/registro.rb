@@ -61,7 +61,7 @@ class Rga::Registro < ActiveRecord::Base
     end      
   end
 
-  def self.regx_categoria
+  def self.regx_categoria(desde, hasta)
     # Devuelve un hash["codigo"] = cantida codigo "[E;S] - cat_id - evento_id"
     resultado = ActiveRecord::Base.connection.select_all("select concat(if(c.origcategoria_id is null, '0 - ',concat(c.origcategoria_id, ' - ')), 
 if(c.destcategoria_id is null, '0 - ',concat(c.destcategoria_id, ' - ')) , d.codigo) as codigo, 
@@ -69,6 +69,7 @@ count(a.id) as cantidad from rga_animales as a
 join rga_animales_registros as b on a.id = b.animal_id 
 join rga_registros as c on c.id = b.registro_id 
 join rga_eventos as d on d.id = c.evento_id
+where c.fecha >= '#{desde}' and c.fecha <= '#{hasta}' 
 group by c.origcategoria_id, c.destcategoria_id, c.evento_id")
     obj = Hash.new
     resultado.each do |r|
@@ -76,7 +77,7 @@ group by c.origcategoria_id, c.destcategoria_id, c.evento_id")
       codigo_entrada = "E - " + codigo[1] + " - " + codigo[2]
       codigo_salida = "S - " + codigo[0] + " - " + codigo[2]
 
-      if codigo[0] and codigo[1] != '0'
+      if codigo[0] != codigo[1] and codigo[0] != '0' and codigo[1] != '0'
         obj[codigo_entrada] = r["cantidad"]
         obj[codigo_salida] = r["cantidad"]
       elsif codigo[0] == '0'
@@ -89,4 +90,7 @@ group by c.origcategoria_id, c.destcategoria_id, c.evento_id")
     obj
   end
 
+  def self.entre_fechas(desde, hasta)
+    includes(:origcategoria, :destcategoria, :evento).where("fecha >= '#{desde}' and fecha <= '#{hasta}'").references(:origcategoria, :destcategoria, :evento)
+  end
 end

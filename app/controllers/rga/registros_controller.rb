@@ -60,10 +60,11 @@ class Rga::RegistrosController < ApplicationController
   def mostrar_planilla
     @desde = params[:desde] || Date.today.at_beginning_of_month
     @hasta = params[:hasta] || Date.today.end_of_month
-    @categorias_inicio = Rga::Categoria.categorias_disponibles(session[:empresa_id],session[:establecimiento_id], fecha: @desde)
-    @categorias_fin = Rga::Categoria.categorias_disponibles(session[:empresa_id],session[:establecimiento_id], fecha: @hasta)
-    @categorias = @categorias_inicio | @categorias_fin 
-    @regx_categoria = Rga::Registro.regx_categoria
+    @categorias_inicio = Rga::Categoria.categorias_disponibles(session[:empresa_id],session[:establecimiento_id], fecha: @desde, estados: '0,1')
+    @categorias_fin = Rga::Categoria.categorias_disponibles(session[:empresa_id],session[:establecimiento_id], fecha: @hasta, estados: '0,1')
+    @categorias = @categorias_inicio[:categorias] | @categorias_fin[:categorias] 
+    @regx_categoria = Rga::Registro.regx_categoria(@desde, @hasta)
+    @rga_registros = Rga::Registro.entre_fechas(@desde, @hasta)
   end
 
   def mostrar_existencia
