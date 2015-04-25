@@ -1,0 +1,22 @@
+<%= hidden_field_tag 'filtro_hasta', @hasta %>
+
+
+<h1>EXISTENCIA DE HACIENDA ( A FECHA: <%= @hasta %> )</h1>
+<div class="row">
+	<div class="small-12 large-12 columns">
+		<div class="panel">
+			<table class="notDT">
+				<tr>
+				 <th>CATEGORIA</th>
+				 <th>CABEZAS</th>
+				</tr>
+				<% @categoria_existencia[:categorias].each do |cat| %>
+				<tr>	
+				 <td><%= cat.nombre %></td>
+				 <td><%= cat.existencia %></td>
+				</tr>
+				<% end %>
+			</table>
+		</div>
+	</div>
+</div>

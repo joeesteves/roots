@@ -24,6 +24,10 @@ ready = ->
 			hasta = $('#filtro_hasta').val()
 			$.fn.agregarFiltros([['desde','date',desde],['hasta','date',hasta]])
 		)
+		when 'mostrar_existencia' then (
+			hasta = $('#filtro_hasta').val()
+			$.fn.agregarFiltros([['hasta','date',hasta]])
+		)
 getCodigo = () ->
 	$('#rga_registro_evento_id option:selected').data('codigo')
 

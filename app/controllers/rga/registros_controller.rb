@@ -68,7 +68,9 @@ class Rga::RegistrosController < ApplicationController
   end
 
   def mostrar_existencia
-  
+    @hasta = params[:hasta] || Date.today
+    @categoria_existencia = Rga::Categoria.categorias_disponibles(session[:empresa_id],session[:establecimiento_id], fecha: @hasta, estados: '1')
+
   end
   
   def borrar_seleccion
