@@ -1,0 +1,10 @@
+var html = '<div id="comunicacionPrincipal" data-alert class="alert-box comunicado">' +
+'<ul>' +
+<% @errores_array.each do |msg| %>
+'<li><%= msg.upcase.html_safe %></li>' +
+<% end %>
+'</ul>' +
+'</div>';
+
+$('#info').append(html)
+$.fn.ocultarComunicados()

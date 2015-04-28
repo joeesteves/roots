@@ -10,8 +10,10 @@ class Rga::Registro < ActiveRecord::Base
   belongs_to :destcategoria, class_name: "Rga::Categoria"
   belongs_to :destrodeo, class_name: "Rga::Rodeo"
   belongs_to :destestado, class_name: "Rga::Estado"
+  before_destroy :libera_animales
   has_many :animales_registros
-  has_many :animales, through: :animales_registros, dependent: :destroy
+  has_many :animales, through: :animales_registros
+
 
   def rSave
     return false unless valid?
@@ -21,9 +23,6 @@ class Rga::Registro < ActiveRecord::Base
         when -1
           animalesOrigen = Rga::Animal.disponibles(empresa_id, establecimiento_id, 
             origcategoria_id, origrodeo_id, origestado_id, {cantidad: cantidad.to_s})
-          animalesOrigen.each do |ao|
-            ao.update_attributes(:estado => 0)
-          end
           update_attributes(:animal_ids => animalesOrigen.collect(&:id))
         when 1
           cantidad.times do
@@ -57,6 +56,10 @@ class Rga::Registro < ActiveRecord::Base
         # Si la diferencia es - solo borrar la relacion
         if diferencia < 0 
           animales.delete(animales.last(diferencia.abs))
+        elsif diferencia > 0
+          agregar_animales = Rga::Animal.disponibles(empresa_id, establecimiento_id, 
+            origcategoria_id, origrodeo_id, origestado_id, {cantidad: diferencia.to_s})
+          animales << agregar_animales
         end
     end      
   end
@@ -71,26 +74,47 @@ join rga_registros as c on c.id = b.registro_id
 join rga_eventos as d on d.id = c.evento_id
 where c.fecha >= '#{desde}' and c.fecha <= '#{hasta}' 
 group by c.origcategoria_id, c.destcategoria_id, c.evento_id")
-    obj = Hash.new
+    categorias = Array.new
+    cantidad_categoria_registro = Hash.new
     resultado.each do |r|
       codigo = r["codigo"].split(" - ")
       codigo_entrada = "E - " + codigo[1] + " - " + codigo[2]
       codigo_salida = "S - " + codigo[0] + " - " + codigo[2]
 
       if codigo[0] != codigo[1] and codigo[0] != '0' and codigo[1] != '0'
-        obj[codigo_entrada] = r["cantidad"]
-        obj[codigo_salida] = r["cantidad"]
+        cantidad_categoria_registro[codigo_entrada] = r["cantidad"]
+        cantidad_categoria_registro[codigo_salida] = r["cantidad"]
+        categorias << codigo[0].to_i << codigo[1].to_i
       elsif codigo[0] == '0'
-        obj[codigo_entrada] = r["cantidad"]
+        cantidad_categoria_registro[codigo_entrada] = r["cantidad"]
+        categorias << codigo[1].to_i
       elsif codigo[1] == '0'
-        obj[codigo_salida] = r["cantidad"]
+        categorias << codigo[0].to_i
+        cantidad_categoria_registro[codigo_salida] = r["cantidad"]
       end
 
     end
-    obj
+    {:cantidad_categoria_registro => cantidad_categoria_registro, :categoria_ids => categorias }
   end
 
   def self.entre_fechas(desde, hasta)
     includes(:origcategoria, :destcategoria, :evento).where("fecha >= '#{desde}' and fecha <= '#{hasta}'").references(:origcategoria, :destcategoria, :evento)
+  end
+
+
+  def libera_animales
+    son_registro_unicos = true
+    animales.each do |a|
+      unless a.registros.last.id == id
+        errors.add(:base, 'LOS ANIMALES HAN SIDO UTILIZADOS PARA TRANSACCIONES POSTERIORES')
+        return false
+      end
+      son_registro_unicos = son_registro_unicos && a.registros.count == 1 
+    end
+    if son_registro_unicos
+      animales.each do |a|
+        a.destroy
+      end
+    end
   end
 end

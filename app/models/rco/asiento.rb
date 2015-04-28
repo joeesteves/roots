@@ -67,9 +67,12 @@ class Rco::Asiento < ActiveRecord::Base
   end
 
   def esGenerado?
-    unless esgenerado == false
-      errors.add(:base, "Asiento generado por otra transacción")
+    if esgenerado == true & !operacion.nil? 
+      errors.add(:base, "Asiento generado por otra transacción. Debe borrar la operación")
       false
+    else
+      errors.add(:base, "Asiento generado por una operacion que fue borrada") if operacion.nil?
+      true
     end
   end
 

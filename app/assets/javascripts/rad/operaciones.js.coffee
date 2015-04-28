@@ -46,6 +46,7 @@ ready = ->
 		return false
 	$('#rad_operacion_rdosxmes').click () ->
 		setPlaceHolder($(this).prop('checked'))
+		
 activaCalculos = (ejecuta) ->
 	lineasVivas = '.row.' + String(getInvSaldoAplicacion())
 	calculos() if ejecuta == true

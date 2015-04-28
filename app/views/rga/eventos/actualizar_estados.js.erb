@@ -1,17 +1,17 @@
 <% if @orig_estados %>
-$('#rga_registro_origestado_id').empty();
-<% @orig_estados.each do |orig_estados| %>
-$('#rga_registro_origestado_id').append('<option value= <%=orig_estados.id%> >'+
-	'<%= orig_estados.nombre %></option>');
-<% end %>
-$('#rga_registro_origestado_id').trigger("chosen:updated").change();
+	$('#rga_registro_origestado_id').empty();
+	<% @orig_estados.each do |orig_estados| %>
+	$('#rga_registro_origestado_id').append('<option value= <%=orig_estados.id%> >'+
+		'<%= orig_estados.nombre %></option>');
+	<% end %>
+	$('#rga_registro_origestado_id').trigger("chosen:updated").change();
 <% end %>
 
 <% if @dest_estados %>
-$('#rga_registro_destestado_id').empty();
-<% @dest_estados.each do |dest_estados| %>
-$('#rga_registro_destestado_id').append('<option value= <%=dest_estados.id%> >'+
-	'<%= dest_estados.nombre %></option>');
-<% end %>
-$('#rga_registro_destestado_id').trigger("chosen:updated");
+	$('#rga_registro_destestado_id').empty();
+	<% @dest_estados.each do |dest_estados| %>
+	$('#rga_registro_destestado_id').append('<option value= <%=dest_estados.id%> >'+
+		'<%= dest_estados.nombre %></option>');
+	<% end %>
+	$('#rga_registro_destestado_id').trigger("chosen:updated");
 <% end %>

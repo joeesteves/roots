@@ -92,7 +92,8 @@ class Rco::Registro < ActiveRecord::Base
     having('coalesce(sum(apDebe.importe),0) < rco_registros.haber OR coalesce(sum(apHaber.importe),0) < rco_registros.debe')
   end
 
-  def self.compatiblesXOrganizacion(organizacion_id, saldo_tipo)
+  def self.compatiblesXOrganizacion(organizacion_id, saldo_tipo, opciones = {})
+    saldo_tipo = "debe_haber" if [1,-1].include? opciones[:operaciontipo_codigo].to_i
     case saldo_tipo
       when "haber"
         alDebe.
@@ -101,6 +102,17 @@ class Rco::Registro < ActiveRecord::Base
         having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
         group('rco_registros.id').references(:aplicaciones_haber)
       when "debe"
+        alHaber.
+        where(:organizacion_id => organizacion_id).
+        includes(:aplicaciones_debe).
+        having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
+        group('rco_registros.id').references(:aplicaciones_debe)
+      when "debe_haber"
+        alDebe.
+        where(:organizacion_id => organizacion_id).
+        includes(:aplicaciones_haber).
+        having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
+        group('rco_registros.id').references(:aplicaciones_haber) |
         alHaber.
         where(:organizacion_id => organizacion_id).
         includes(:aplicaciones_debe).

@@ -110,6 +110,10 @@ class Rad::Operacion < ActiveRecord::Base
 	end  
 
 	def liberaAsiento
-		asiento.update_columns(:esgenerado => false) if asiento.esgenerado == true
+		begin
+			asiento.update_columns(:esgenerado => false) if asiento.esgenerado == true
+		rescue
+			errors.add(:base, "Ojo! El asiento del registro #{id} ya había sido eliminado")
+		end
 	end
 end

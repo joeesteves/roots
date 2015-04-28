@@ -56,16 +56,15 @@ class Rga::EventosController < ApplicationController
     render nothing: true  
   end
   def actualizar_categorias
-    if ['-1','2'].include?(params[:codigo])
-      categorias_disponibles = Rga::Categoria.categorias_disponibles(session[:empresa_id], session[:establecimiento_id])
+    if ['-1','2','0'].include?(params[:codigo])
+      categorias_disponibles = Rga::Categoria.categorias_disponibles(session[:empresa_id], session[:establecimiento_id])[:categorias]
     end
-
     evento = Rga::Evento.find(params[:id])
     @categorias = Rga::Categoria.joins(categoriatipo: :eventos).where('rga_eventos.id = ?',evento.id)
     case params[:codigo]
       when '1'
         @destcategorias = @categorias
-      when '-1'
+      when '-1','0'
         @origcategorias = @categorias & categorias_disponibles if categorias_disponibles
       else
         @destcategorias = @categorias
@@ -79,7 +78,7 @@ class Rga::EventosController < ApplicationController
   def actualizar_estados
     evento = Rga::Evento.find(params[:id])
     estados_categoria = Rga::Categoria.find(params[:categoria_id]).categoriatipo.estados
-    if ['-1','2'].include?(params[:codigo])
+    if ['-1','2','0'].include?(params[:codigo])
       estados_disponibles = Rga::Estado.estadosDisponibles(session[:empresa_id], session[:establecimiento_id],params[:categoria_id])
     end
     case params[:solicitante]

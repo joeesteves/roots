@@ -63,11 +63,6 @@ class Rad::OperacionesController < ApplicationController
     redirect_to rad_operaciones_url, notice: 'Operacion eliminado.'
   end
 
-  def borrar_seleccion
-    Rad::Operacion.destroy(params[:ids]) 
-    render nothing: true  
-  end
- 
   def compatibles
     aplicados_ids = []
     compatibles = []
@@ -90,7 +85,7 @@ class Rad::OperacionesController < ApplicationController
         end
       end    
     else
-      compatibles = Rco::Registro.compatiblesXOrganizacion(params[:organizacion_id], params[:saldo_tipo])
+      compatibles = Rco::Registro.compatiblesXOrganizacion(params[:organizacion_id], params[:saldo_tipo], operaciontipo_codigo: params[:operaciontipo_codigo])
     end
     compatibles = [] if compatibles.nil?
 

@@ -76,8 +76,8 @@ Roots::Application.routes.draw do
     end
 
     resources :registros do
-      get :mostrar_planilla, on: :collection
-      get :mostrar_existencia, on: :collection
+      get :planilla, on: :collection
+      get :existencia, on: :collection
       concerns [:globales]
     end
   

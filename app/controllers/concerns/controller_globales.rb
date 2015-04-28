@@ -78,6 +78,24 @@ module ControllerGlobales
     end
   end 
 
+  def borrar_seleccion
+    v = getVariables(controller_path)
+    @coleccion = instance_variable_set(v[:coleccion], v[:clase].find(params[:ids]))
+    @errores_array = []
+    @coleccion.each do |member|
+      member.destroy
+      @errores_array += member.errors.to_a unless member.errors.blank? 
+    end
+
+    if @errores_array.empty?
+      render nothing: true
+    else
+      respond_to do |format|
+        format.js {render template: '/layouts/globals/_borrar_seleccion.js.erb'}
+      end
+    end
+  end
+
   def define_nodo(nodo)
     if nodo
       @nodo = nodo

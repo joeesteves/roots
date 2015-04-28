@@ -51,7 +51,7 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 
 		def submit
 
-			super("Guardar", :class => 'button tiny boton_largo')
+			super("Guardar", :class => 'button tiny boton_largo', :id => "guardar")
 
 		end
 		

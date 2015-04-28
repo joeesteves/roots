@@ -52,10 +52,10 @@ class Rco::AsientosController < ApplicationController
     redirect_to rco_asientos_url, notice: 'Asiento eliminado'
   end
 
-  def borrar_seleccion
-    Rco::Asiento.destroy(params[:ids]) 
-    render nothing: true  
-  end
+  # def borrar_seleccion
+  #   Rco::Asiento.destroy(params[:ids]) 
+  #   render nothing: true  
+  # end
  
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -9,12 +9,12 @@
 			</ul>
 			<ul>
 				<li class="menu_label"><label>ANALIZAR</label></li>		
-				<li><a>MOVIMIENTOS</a></li>			
-				<li><a>EXISTENCIAS</a></li>			
+				<li><%= link_to 'PLANILLA', planilla_rga_registros_path%></li>			
+				<li><%= link_to 'EXISTENCIA', existencia_rga_registros_path%></li>			
 			</ul>
 			<ul>
 				<li class="menu_label"><label>CONFIGURAR</label></li>
-				<li><%= link_to 'CATEGORÍAS', rga_categorias_path%></li>			
+				<li><%= link_to 'CATEGORÍAS', rga_categorias_path %></li>			
 				<li><%= link_to 'RODEOS', rga_rodeos_path%></li>			
 				<li><%= link_to 'ESTADOS', rga_estados_path%></li>			
 				<li><%= link_to 'EVENTOS', rga_eventos_path%></li>

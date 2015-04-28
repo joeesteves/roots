@@ -9,6 +9,7 @@ ready = ->
 		evento_tipo_codigo = getCodigo()
 		$.fn.dynamicFormRegistros(evento_tipo_codigo)
 		$.fn.rgaActualizarCategorias($('#rga_registro_evento_id').val(), getCodigo())
+		interruptorGuardar()
 	$('#rga_registro_origcategoria_id, #rga_registro_destcategoria_id').change ->
 		$.fn.rgaActualizarEstados($('#rga_registro_evento_id').val(), $(this).val(), $(this).attr('id'), getCodigo())
 		$('#rga_registro_peso').val($('option:selected', this).data('peso'))
@@ -17,19 +18,33 @@ ready = ->
 		origrodeo_id = $('#rga_registro_origrodeo_id').val()
 		origestado_id = $('#rga_registro_origestado_id').val()
 		$.fn.animalesDisponibles(origcategoria_id, origrodeo_id, origestado_id)
+	$('#rga_registro_cantidad').change ->
+		interruptorGuardar()
+	interruptorGuardar()
 	switch $('#action_name').val()
 		when 'new' then $.fn.rgaActualizarCategorias($('#rga_registro_evento_id').val(), getCodigo())
-		when 'mostrar_planilla' then (
+		when 'planilla' then (
 			desde = $('#filtro_desde').val()
 			hasta = $('#filtro_hasta').val()
 			$.fn.agregarFiltros([['desde','date',desde],['hasta','date',hasta]])
 		)
-		when 'mostrar_existencia' then (
+		when 'existencia' then (
 			hasta = $('#filtro_hasta').val()
 			$.fn.agregarFiltros([['hasta','date',hasta]])
 		)
 getCodigo = () ->
 	$('#rga_registro_evento_id option:selected').data('codigo')
+
+interruptorGuardar = () ->
+	if [2,-1].indexOf(getCodigo()) != -1
+		if parseInt($('#rga_registro_cantidad').val()) <= parseInt($('#disponibles').text())
+			io = false
+		else
+			io = true
+	else
+		io = false
+	$('#guardar').prop('disabled', io) 
+
 
 
 $.fn.gridRequest = (query) ->
