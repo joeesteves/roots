@@ -1,4 +1,5 @@
 //= require rba/widgets
+//= require rba/global/utiles/initializers
 //= require rba/global/utiles/fxacciones
 //= require rba/global/utiles/atajos
 //= require rba/global/widgets/grid/grid_prep_datos

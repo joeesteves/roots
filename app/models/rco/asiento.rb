@@ -3,6 +3,7 @@ class Rco::Asiento < ActiveRecord::Base
   habtm_nodo
   has_many :registros, -> {order(:haber)}, :dependent => :destroy
   has_one :operacion, class_name: "Rad::Operacion", inverse_of: :asiento
+  delegate :codigo, :to => :operacion, :prefix => false
   accepts_nested_attributes_for :registros, allow_destroy: true
   belongs_to :empresa, class_name: "Rba::Empresa"
   belongs_to :moneda

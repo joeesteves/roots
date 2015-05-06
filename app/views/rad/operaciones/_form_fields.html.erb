@@ -18,12 +18,17 @@
     </h4>
   </div>
 </div>
+
 <div class="row">
-<div class="small-6 columns" id="compatibles">
+  <div class="small-6 columns" id="compatiblesOrigen"></div>
+  <div class="small-6 columns" id="compatiblesOrigenImporte"></div>
 </div>
 
-<div class="small-6 columns" id="compatiblesImporte">
-</div></div>
+<div class="row">
+  <div class="small-6 columns" id="compatiblesDestino"></div>
+  <div class="small-6 columns" id="compatiblesDestinoImporte"></div>
+</div>
+
   <%= f.fields_for :operacionregistros do |builder| %>
     <%= render 'operacionregistros_campos', f: builder %>
   <% end %>

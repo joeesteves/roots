@@ -1,7 +1,5 @@
 ready = ->
-	if $('#con_arbol').val() == 'true'
-		$.fn.arbolInit()
-	$.fn.gridRequest()
+	$.fn.comun()
 
 $.fn.gridRequest = (query) ->
 	nombres = ['id','codigo','nombre','estado']

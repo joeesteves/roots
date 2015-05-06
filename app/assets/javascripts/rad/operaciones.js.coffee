@@ -1,7 +1,5 @@
 ready = ->
-	if $('#con_arbol').val() == 'true'
-		$.fn.arbolInit()
-	$.fn.gridRequest()
+	$.fn.comun()
 	$('.calcularValores').change ->
 		calcularValores({})
 	$('#rad_operacion_operaciontipo_id').change ->
@@ -69,10 +67,6 @@ armaArrayConOpcionesAgrupadas = () ->
 		cuenta_ant = cuenta_actual
 	array
 
-opcionesSeleccionadasOrdenadas = () ->	
-	$('#aplicaciones option:selected').sort (a,b) -> 
-		$(a).data("cuenta") - $(b).data("cuenta")
-
 armaOpDesdeArrayConOpciones = () ->
 	opciones = armaArrayConOpcionesAgrupadas()
 	saldo_tipo = getSaldoAplicacion()
@@ -96,17 +90,20 @@ actualizarCuentas = ()  ->
 			operaciontipo_codigo: getOpTipo()
 		dataType: "script"
 		)
+
 actualizarCompatibles = () ->
 	switch $('#action_name').val()
 		when 'edit' then (
 			data =
 				saldo_tipo: getSaldoAplicacion()
 				rad_operacion_id: getOperacionId()
+				operaciontipo_codigo: getOpTipo()
 		)
 		when 'new','create' then (
 			data = 
 				saldo_tipo: getSaldoAplicacion()
 				organizacion_id: getOrganizacionId()
+				operaciontipo_codigo: getOpTipo()
 		)
 	$.ajax(
 		type: "POST"
@@ -114,15 +111,17 @@ actualizarCompatibles = () ->
 		data: data
 		dataType: "script"
 		)
+
 agregaEditorRegistro = (registro, momento) ->
 	id = "reg_" + registro.attr("id")
 	if registro.data("aplicado") == 'undefined' || momento == 'onSelect'
 		valorEditorRegistro = parseFloat(registro.data("disponible"))
 	else
 		valorEditorRegistro = parseFloat(registro.data("aplicado"))
-	$('#compatiblesImporte').append('<span>Ref '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
-	$('#compatiblesImporte input').change ->
+	$('#compatiblesOrigenImporte').append('<span>Ref '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
+	$('#compatiblesOrigenImporte input').change ->
 		calculaImporteDesdeAplicaciones()
+
 calcularValores = (opciones) ->
 	pf = '#rad_operacion_' #pf
 	importe = $(pf + 'importe').val()
@@ -148,9 +147,11 @@ calcularValores = (opciones) ->
  			else
 	 			$(contraPartida).val(importe)
 	$(pf + idQueSeActualiza).val(valorAActualizar)
+
+#solo debe usarse en compatibles en origen!
 calculaImporteDesdeAplicaciones = () ->
 	$('#rad_operacion_importe').val(0)
-	$('#compatiblesImporte input').each ->
+	$('#compatiblesOrigenImporte input').each ->
 		id = $(this).attr("id").substr(4)
 		opcion = $('#aplicaciones #' + id )
 		$(this).val(opcion.data("disponible")) if parseFloat($(this).val()) > parseFloat(opcion.data("disponible"))
@@ -159,6 +160,7 @@ calculaImporteDesdeAplicaciones = () ->
 		opcion.val(id + ', ' + $(this).val()) 
 		armaOpDesdeArrayConOpciones()
 		calcularValores({"solicitante": "edita_registros"})
+
 calculos = () ->
 	lineasVivas = '.row.' + String(getInvSaldoAplicacion())
 	total = 0
@@ -176,10 +178,12 @@ getCuentaId = (saldo_tipo) ->
 		when "haber" then $('.row.haber:first select option:selected').val()
 getSaldoAplicacion = () ->
 	switch getOpTipo()
-		when 1,-2,3
+		when -2,3
 			saldo_tipo = "debe"
-		when -3, 2,-1
+		when -3, 2
 			saldo_tipo = "haber"
+		when 1, -1
+			saldo_tipo = "debe_haber"
 getInvSaldoAplicacion = () ->
 	switch getOpTipo()
 		when -3, 2,-1
@@ -218,18 +222,26 @@ interruptorInputsYAgregarLinea = () ->
 	$('input.debe').prop('readonly',rev+!posicion)
 	$('input.haber').prop('readonly',posicion)
 	$('[readonly]').prop('tabindex',-1)
+
 interruptorCuotas = (IO) ->
 	traduccion = traduceIO(IO)
 	$('#rad_operacion_cuotas, #rad_operacion_cuotaimporte').prop('readonly', !traduccion)
+
 interruptorRdosxmes = (IO) ->
 	traduccion = traduceIO(IO)
 	$('#rad_operacion_rdosxmes').prop('disabled', !traduccion)
 	$('#rad_operacion_rdosxmes').prop('checked', traduccion)
 	setPlaceHolder(!traduccion)
+
 interruptorOrganizacion = (IO) ->
 	switch IO
 		when 'I' then $('#rad_operacion_organizacion_id').prop('disabled',false).parent().show()
 		when 'O' then $('#rad_operacion_organizacion_id').prop('disabled',true).parent().hide()
+
+opcionesSeleccionadasOrdenadas = () ->	
+	$('#aplicaciones option:selected').sort (a,b) -> 
+		$(a).data("cuenta") - $(b).data("cuenta")
+
 setPlaceHolder = (posicion) ->
 	placeHolder = "Valor mensual" if posicion == true
 	placeHolder = "Valor" if posicion == false	
@@ -238,11 +250,12 @@ traduceIO = (IO) ->
 	switch IO
 		when 'I' then true
 		when 'O' then false
+
 $.fn.cargaCompatibles = (datos) ->
-	$('#compatibles').empty()
-	$('#compatiblesImporte').empty()
+	$('#compatiblesOrigen').empty()
+	$('#compatiblesOrigenImporte').empty()
 	if datos.length != 0
-		$('#compatibles').append('<span>Aplicar</span><select  data-placeholder="Seleccionar registros" id="aplicaciones" name="aplicaciones[]" multiple></select>')
+		$('#compatiblesOrigen').append('<span>Aplicar</span><select  data-placeholder="Seleccionar registros" id="aplicaciones" name="aplicaciones[]" multiple></select>')
 		$.each datos, (i) ->
 			opcion = '<option id="'+ this.id + '" value="'+ this.id + ', ' + this.disponible + '" data-disponible="'+ this.disponible + '"' +
 			'data-aplicado="'+ this.aplicadoATransaccion + '"' +
@@ -254,12 +267,13 @@ $.fn.cargaCompatibles = (datos) ->
 			'</option>'
 			$('#aplicaciones').append(opcion)
 		$('#aplicaciones').change ->
-			$('#compatiblesImporte').empty()
+			$('#compatiblesOrigenImporte').empty()
 			$('#aplicaciones option:selected').each ->
 				agregaEditorRegistro($(this),'onSelect')
 			calculaImporteDesdeAplicaciones()
-			$('#compatiblesImporte input').focus()
+			$('#compatiblesOrigenImporte input').focus()
 		$.fn.initChosen()
+
 $.fn.defineUiXOpTipo = () ->
 	op_tipo = getOpTipo()
 	if op_tipo == 0
@@ -279,10 +293,12 @@ $.fn.defineUiXOpTipo = () ->
 	interruptorInputsYAgregarLinea()
 	activaCalculos(true)
 	$('a.agregar_campos_D, a.agregar_campos_H').prop('tabindex',-1)
+
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']
 	propiedades = [['Fecha','20%'],['Tipo','auto'],['Importe','20%'],['desc','auto', 'Descripción'],['cuotaimporte','auto','Cuota']]
 	$.fn.gridPrepDatos(nombres, propiedades, query)	
+
 $.fn.seleccionaAplicados = (aplicados_ids) ->
 	$('#aplicaciones ' + aplicados_ids).prop("selected", true).trigger("chosen:updated")
 	$.each $('#aplicaciones ' + aplicados_ids), () ->

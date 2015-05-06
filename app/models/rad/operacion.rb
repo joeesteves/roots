@@ -4,6 +4,7 @@ class Rad::Operacion < ActiveRecord::Base
 	validates :importe, :cuotas, :cuotaimporte, presence: { message: "no puede estar vacio"},
 	numericality: { message: "debe ser un número"}
 	belongs_to :operaciontipo
+	delegate :codigo, :to => :operaciontipo, :prefix => false
 	belongs_to :empresa, class_name: "Rba::Empresa"
 	before_destroy :liberaAsiento
 	belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion

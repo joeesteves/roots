@@ -2,10 +2,11 @@ class Rco::Registro < ActiveRecord::Base
   include ModeloGlobales
   habtm_nodo
   belongs_to :asiento
+  delegate :codigo, :to => :asiento, :prefix => false # delgado hasta asiento / operacion / operaciontipo
   has_one :organizacion, class_name: "Rba::Organizacion"
   delegate :id, :to => :asiento, :prefix => true 
   belongs_to :cuenta
-  delegate :codigo, :nombre, :esCtaCte?, :to => :cuenta, :prefix => true 
+  delegate :codigo, :nombre, :esCtaCte?, :to => :cuenta, :prefix => true
   # El registro tiene aplicaciones al debe a traves de reg_haber_id (que lo id) y al revés también
   has_many :aplicaciones_debe, class_name: "Rco::Aplicacion", foreign_key: "reg_haber_id"
   has_many :aplicaciones_haber, class_name: "Rco::Aplicacion", foreign_key: "reg_debe_id"
@@ -92,57 +93,90 @@ class Rco::Registro < ActiveRecord::Base
     having('coalesce(sum(apDebe.importe),0) < rco_registros.haber OR coalesce(sum(apHaber.importe),0) < rco_registros.debe')
   end
 
-  def self.compatiblesXOrganizacion(organizacion_id, saldo_tipo, opciones = {})
-    saldo_tipo = "debe_haber" if [1,-1].include? opciones[:operaciontipo_codigo].to_i
-    case saldo_tipo
-      when "haber"
-        alDebe.
-        where(:organizacion_id => organizacion_id).
-        includes(:aplicaciones_haber).
-        having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
-        group('rco_registros.id').references(:aplicaciones_haber)
-      when "debe"
-        alHaber.
-        where(:organizacion_id => organizacion_id).
-        includes(:aplicaciones_debe).
-        having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
-        group('rco_registros.id').references(:aplicaciones_debe)
-      when "debe_haber"
-        alDebe.
-        where(:organizacion_id => organizacion_id).
-        includes(:aplicaciones_haber).
-        having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
-        group('rco_registros.id').references(:aplicaciones_haber) |
-        alHaber.
-        where(:organizacion_id => organizacion_id).
-        includes(:aplicaciones_debe).
-        having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
-        group('rco_registros.id').references(:aplicaciones_debe)
+  def self.compatibles_organizacion(organizacion_id, codigo)
+    compatibles = {}
+    compatibles['origen'] = []
+    compatibles['destino'] = []
+    case codigo
+      when -2  # [pago]
+        compatibles['origen'] = compatibles_al_debe(organizacion_id)
+      when 2 # [cobranza] 
+        compatibles['origen'] = compatibles_al_haber(organizacion_id)
+      when 3 # [provision ingreso]
+        compatibles['destino'] = compatibles_al_haber(organizacion_id)
+      when -3 # [provision egreso]
+        compatibles['destino'] = compatibles_al_debe(organizacion_id)
+      when 1 # [ingreso]
+        compatibles['origen'] = compatibles_al_debe(organizacion_id)
+        compatibles['destino'] = compatibles_al_haber(organizacion_id)
+      when -1 # [egreso]
+        compatibles['origen'] = compatibles_al_haber(organizacion_id)
+        compatibles['destino'] = compatibles_al_debe(organizacion_id)
       else
         none
       end
+      compatibles
+   end
+
+  def self.compatibles_al_debe(organizacion_id)
+    alHaber.
+    where(:organizacion_id => organizacion_id).
+    includes(:aplicaciones_debe).
+    having('sum(rco_aplicaciones.importe) < rco_registros.haber OR rco_aplicaciones.importe is null').
+    group('rco_registros.id').references(:aplicaciones_debe)
   end
 
+  def self.compatibles_al_haber(organizacion_id)
+    alDebe.
+    where(:organizacion_id => organizacion_id).
+    includes(:aplicaciones_haber).
+    having('sum(rco_aplicaciones.importe) < rco_registros.debe OR rco_aplicaciones.importe is null').
+    group('rco_registros.id').references(:aplicaciones_haber)
+  end
   # devuelve las aplicaciones que tiene cada registro y guarda la logica si es debe o haber
 
   def operacion
     asiento.operacion
   end
 
-  def aplicados
-    case saldoTipo
-	    when "debe"
-	      reg_haber
-	    when "haber"
-        registros = Array.new()
+  def operacion_registros(al_haber_o_al_debe)
+    registros = []
+    case al_haber_o_al_debe 
+      when 'al_debe'
         operacion.registros.alHaber.each do |reg|
           registros += reg.reg_debe
         end
-        registros
-	    else
-	     none
+      when 'al_haber'
+        operacion.registros.alDebe.each do |reg|
+          registros += reg.reg_haber
+        end
+      end
+  end
+
+  def aplicados
+    aplicados = {}
+    aplicados['origen'] = []
+    aplicados['destino'] = []
+    case codigo
+      when -2 #[pago]
+        aplicados['origen'] = operacion_registros('al_haber')
+      when  2
+        aplicados['origen'] = operacion_registros('al_debe')
+      when -3
+        aplicados['destino'] = operacion_registros('al_debe')
+      when 3 
+        aplicados['destino'] = operacion_registros('al_haber')
+      when -2
+        aplicados['destino'] = operacion_registros('al_debe')
+        aplicados['origen'] = operacion_registros('al_haber')
+      when 2
+        aplicados['destino'] = operacion_registros('al_haber')
+        aplicados['origen'] = operacion_registros('al_debe')
+      else
+       none
     end
- end
+    aplicados
+  end
 
   #devuelve si el registro tiene saldo al debe o al haber
   def saldoTipo
@@ -154,7 +188,13 @@ class Rco::Registro < ActiveRecord::Base
   end
 
   def compatibles
-    Rco::Registro.compatiblesXOrganizacion(organizacion_id, saldoTipo) | aplicados
+    organizacion_id = organizacion_id
+    codigo = codigo
+    buscar_aplicados = aplicados
+    compatibles = Rco::Registro.compatibles_organizacion(organizacion_id, codigo)
+    compatibles['origen'] |= buscar_aplicados['origen']
+    compatibles['destino'] |= buscar_aplicados['destino']
+    compatibles
   end
 
 end

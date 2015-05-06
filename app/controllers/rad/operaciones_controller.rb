@@ -73,25 +73,27 @@ class Rad::OperacionesController < ApplicationController
       when "debe"
         regOris =  Rad::Operacion.find(operacion_id).registros.alDebe
         regOris.each do |regOri|
-          compatibles = regOri.compatibles
-          aplicados_ids = regOri.aplicados.collect(&:id)
+          compatibles = regOri.compatibles['origen']
+          aplicados_ids = regOri.aplicados['origen'].collect(&:id)
         end
       when "haber"
         # regOri = Rad::Operacion.find(operacion_id).registros.alHaber.first
         regOris = Rad::Operacion.find(operacion_id).registros.alHaber
         regOris.each do |regOri|
-          compatibles |= regOri.compatibles
-          aplicados_ids |= regOri.aplicados.collect(&:id)
+          compatibles |= regOri.compatibles['origen']
+          aplicados_ids |= regOri.aplicados['origen'].collect(&:id)
         end
       end    
-    else
-      compatibles = Rco::Registro.compatiblesXOrganizacion(params[:organizacion_id], params[:saldo_tipo], operaciontipo_codigo: params[:operaciontipo_codigo])
+    else # When new
+      compatibles = Rco::Registro.compatibles_organizacion(params[:organizacion_id], params[:operaciontipo_codigo].to_i)['origen']
+      puts "hola" + compatibles.to_s
     end
     compatibles = [] if compatibles.nil?
 
     @compatibles = compatibleToOpciones(compatibles, params[:saldo_tipo], regOris)
 
     @compatibles = @compatibles.to_json
+    puts @compatibles
     unless aplicados_ids.empty?
       @aplicados = ""
       aplicados_ids.each do |ap|
@@ -146,7 +148,7 @@ class Rad::OperacionesController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def rad_operacion_params
     params.require(:rad_operacion).permit(:fecha, :importe, :operaciontipo_id, :cuotas, 
-      :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes, :aplicaciones, :organizacion_id,
+      :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes, :aplicaciones, :organizacion_id, 
        operacionregistros_attributes: [:id, :cuenta_id, :valor, :saldo_tipo, :_destroy])
   end  
 end
