@@ -64,42 +64,29 @@ class Rad::OperacionesController < ApplicationController
   end
 
   def compatibles
-    aplicados_ids = []
-    compatibles = []
+    aplicados_origen_ids = []
+    compatibles_origen = []
     regOri = nil
     if params[:rad_operacion_id] # cuando es edit
-      operacion_id = params[:rad_operacion_id].to_i
-      case params[:saldo_tipo]
-      when "debe"
-        regOris =  Rad::Operacion.find(operacion_id).registros.alDebe
-        regOris.each do |regOri|
-          compatibles = regOri.compatibles['origen']
-          aplicados_ids = regOri.aplicados['origen'].collect(&:id)
-        end
-      when "haber"
-        # regOri = Rad::Operacion.find(operacion_id).registros.alHaber.first
-        regOris = Rad::Operacion.find(operacion_id).registros.alHaber
-        regOris.each do |regOri|
-          compatibles |= regOri.compatibles['origen']
-          aplicados_ids |= regOri.aplicados['origen'].collect(&:id)
-        end
-      end    
+      @rad_operacion = Rad::Operacion.find(params[:rad_operacion_id])
+      compatibles_aplicados = @rad_operacion.compatibles_aplicados
+      compatibles_origen = compatibles_aplicados['origen']['compatibles']
+      aplicados_origen_ids = compatibles_origen['origen']['aplicados']
+      registros_origen = compatibles_aplicados['origen']['registros']
     else # When new
-      compatibles = Rco::Registro.compatibles_organizacion(params[:organizacion_id], params[:operaciontipo_codigo].to_i)['origen']
-      puts "hola" + compatibles.to_s
+      compatibles_origen = Rco::Registro.compatibles_organizacion(params[:organizacion_id], params[:operaciontipo_codigo].to_i)['origen']     
     end
-    compatibles = [] if compatibles.nil?
 
-    @compatibles = compatibleToOpciones(compatibles, params[:saldo_tipo], regOris)
+    @compatibles_origen = compatibleToOpciones(compatibles_origen, params[:saldo_tipo], registros_origen)
+    @compatibles_origen = @compatibles_origen.to_json
 
-    @compatibles = @compatibles.to_json
-    puts @compatibles
-    unless aplicados_ids.empty?
-      @aplicados = ""
-      aplicados_ids.each do |ap|
-        @aplicados += "#" + ap.to_s + ","
+
+    unless aplicados_origen_ids.empty?
+      @aplicados_origen_ids = ""
+      aplicados_origen_ids.each do |ap|
+        @aplicados_origen_ids += "#" + ap.to_s + ","
       end
-      @aplicados = @aplicados[0...-1]
+      @aplicados_origen_ids = @aplicados_origen_ids[0...-1]
     end 
 
     respond_to do |format|

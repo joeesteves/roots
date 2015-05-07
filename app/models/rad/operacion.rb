@@ -117,4 +117,40 @@ class Rad::Operacion < ActiveRecord::Base
 			errors.add(:base, "Ojo! El asiento del registro #{id} ya había sido eliminado")
 		end
 	end
+
+	def compatibles_aplicados
+		registros = {}
+		origen = {}
+		destino = {}
+		case operaciontipo.codigo
+			when -2 #[pago] 
+				origen = compatibles_aplicados('alDebe', 'origen', origen)
+	    when 2 #[cobranza]
+	    	origen = compatibles_aplicados('alHaber', 'origen', origen)
+	    when -3 #[provisión engresos]
+	    	destino = compatibles_aplicados('alHaber', 'destino', destino)
+	    when 3 
+	    	destino = compatibles_aplicados('alDebe', 'destino', destino)
+	    when -1
+	      origen = compatibles_aplicados('alDebe', 'origen', origen)
+				destino = compatibles_aplicados('alHaber', 'destino', destino)
+	    when 1
+	    	origen = compatibles_aplicados('alHaber', 'origen', origen)
+				destino = compatibles_aplicados('alDebe', 'destino', destino)
+		end
+    compatibles_aplicados = {}
+    compatibles_aplicados['origen'] = origen
+    compatibles_aplicados['destino'] = destino
+    compatibles_aplicados
+  end
+
+  def compatibles_aplicados(al_debe_o_al_haber, origen_o_destino, objeto_hash)
+  	objeto_hash['registros'] = registros.send(al_debe_o_al_haber)
+		objeto_hash['registros'].each do |registro|
+      objeto_hash['compatibles'] |= registro.compatibles[origen_o_destino]
+      objeto_hash['aplicaciones_ids'] |= registro.aplicados[origen_o_destino].collect(&:id)
+    end
+    objeto_hash
+
+  end
 end

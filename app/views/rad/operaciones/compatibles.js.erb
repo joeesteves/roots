@@ -1,4 +1,4 @@
-$.fn.cargaCompatibles(<%= raw @compatibles.as_json %>)
+$.fn.cargaCompatibles(<%= raw @compatibles_origen.as_json %>)
 <%if @aplicados %>
-	$.fn.seleccionaAplicados("<%= @aplicados %>")
+	$.fn.seleccionaAplicados("<%= @aplicados_origen_ids %>")
 <% end %>

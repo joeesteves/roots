@@ -160,16 +160,16 @@ class Rco::Registro < ActiveRecord::Base
     case codigo
       when -2 #[pago]
         aplicados['origen'] = operacion_registros('al_haber')
-      when  2
+      when  2 #[cobranza]
         aplicados['origen'] = operacion_registros('al_debe')
-      when -3
+      when -3 #[prov egresos]
         aplicados['destino'] = operacion_registros('al_debe')
-      when 3 
+      when 3 #[prov ingresos]
         aplicados['destino'] = operacion_registros('al_haber')
-      when -2
+      when -2 #[egresos]
         aplicados['destino'] = operacion_registros('al_debe')
         aplicados['origen'] = operacion_registros('al_haber')
-      when 2
+      when 2 #[ingresos]
         aplicados['destino'] = operacion_registros('al_haber')
         aplicados['origen'] = operacion_registros('al_debe')
       else
