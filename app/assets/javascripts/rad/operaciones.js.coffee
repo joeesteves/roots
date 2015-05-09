@@ -51,12 +51,12 @@ activaCalculos = (ejecuta) ->
 	$(lineasVivas + ' input[name*=valor], #rad_operacion_rdosxmes').change ->
 		calculos()
 
-armaArrayConOpcionesAgrupadas = () ->
+armaArrayConOpcionesAgrupadas = (ood) ->
 	cuenta_ant = undefined
 	disponible = 0
 	index = -1
 	array = []
-	$.each opcionesSeleccionadasOrdenadas(), () ->
+	$.each opcionesSeleccionadasOrdenadas(ood), () ->
 		cuenta_actual = $(this).data("cuenta")
 		if cuenta_actual == cuenta_ant
 			disponible +=  parseFloat($(this).data("disponible"))
@@ -67,8 +67,8 @@ armaArrayConOpcionesAgrupadas = () ->
 		cuenta_ant = cuenta_actual
 	array
 
-armaOpDesdeArrayConOpciones = () ->
-	opciones = armaArrayConOpcionesAgrupadas()
+armaOpDesdeArrayConOpciones = (ood) ->
+	opciones = armaArrayConOpcionesAgrupadas(ood)
 	saldo_tipo = getSaldoAplicacion()
 	seleccionarCuentas = () ->
 		$('.row.' + saldo_tipo).each (i) ->
@@ -153,12 +153,12 @@ calculaImporteDesdeAplicaciones = (ood) ->
 	$('#rad_operacion_importe').val(0)
 	$('#compatibles_' + ood + '_importe input').each ->
 		id = $(this).attr("id").substr(4)
-		opcion = $('#aplicaciones_' + ood + ' #' + id )
+		opcion = $('#aplicaciones_' + ood + ' #' + id)
 		$(this).val(opcion.data("disponible")) if parseFloat($(this).val()) > parseFloat(opcion.data("disponible"))
 		importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
 		$('#rad_operacion_importe').val(importe.toFixed(2))
 		opcion.val(id + ', ' + $(this).val()) 
-		armaOpDesdeArrayConOpciones()
+		armaOpDesdeArrayConOpciones(ood)
 		calcularValores({"solicitante": "edita_registros"})
 
 calculos = () ->
@@ -236,8 +236,8 @@ interruptorOrganizacion = (IO) ->
 		when 'I' then $('#rad_operacion_organizacion_id').prop('disabled',false).parent().show()
 		when 'O' then $('#rad_operacion_organizacion_id').prop('disabled',true).parent().hide()
 
-opcionesSeleccionadasOrdenadas = () ->	
-	$('#aplicaciones option:selected').sort (a,b) -> 
+opcionesSeleccionadasOrdenadas = (ood) ->	
+	$('#aplicaciones_' + ood + ' option:selected').sort (a,b) -> 
 		$(a).data("cuenta") - $(b).data("cuenta")
 
 setPlaceHolder = (posicion) ->
