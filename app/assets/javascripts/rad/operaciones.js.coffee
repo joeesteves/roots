@@ -112,15 +112,15 @@ actualizarCompatibles = () ->
 		dataType: "script"
 		)
 
-agregaEditorRegistro = (registro, momento) ->
+agregaEditorRegistro = (registro, momento, ood) ->
 	id = "reg_" + registro.attr("id")
 	if registro.data("aplicado") == 'undefined' || momento == 'onSelect'
 		valorEditorRegistro = parseFloat(registro.data("disponible"))
 	else
 		valorEditorRegistro = parseFloat(registro.data("aplicado"))
-	$('#compatiblesOrigenImporte').append('<span>Ref '+registro.data("desc")+'</span><input id='+id+' name='+id+' type="text" value="' + valorEditorRegistro + '">')
-	$('#compatiblesOrigenImporte input').change ->
-		calculaImporteDesdeAplicaciones()
+	$('#compatibles_origen_importe').append('<span>Ref ' + registro.data("desc") + '</span><input id=' + id + ' name=' + id + ' type="text" value="' + valorEditorRegistro + '">')
+	$('#compatibles_origen_importe input').change ->
+		calculaImporteDesdeAplicaciones(ood)
 
 calcularValores = (opciones) ->
 	pf = '#rad_operacion_' #pf
@@ -149,11 +149,11 @@ calcularValores = (opciones) ->
 	$(pf + idQueSeActualiza).val(valorAActualizar)
 
 #solo debe usarse en compatibles en origen!
-calculaImporteDesdeAplicaciones = () ->
+calculaImporteDesdeAplicaciones = (ood) ->
 	$('#rad_operacion_importe').val(0)
-	$('#compatiblesOrigenImporte input').each ->
+	$('#compatibles_' + ood + '_importe input').each ->
 		id = $(this).attr("id").substr(4)
-		opcion = $('#aplicaciones #' + id )
+		opcion = $('#aplicaciones_' + ood + ' #' + id )
 		$(this).val(opcion.data("disponible")) if parseFloat($(this).val()) > parseFloat(opcion.data("disponible"))
 		importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
 		$('#rad_operacion_importe').val(importe.toFixed(2))
@@ -178,12 +178,10 @@ getCuentaId = (saldo_tipo) ->
 		when "haber" then $('.row.haber:first select option:selected').val()
 getSaldoAplicacion = () ->
 	switch getOpTipo()
-		when -2,3
+		when -1,-2,3
 			saldo_tipo = "debe"
-		when -3, 2
+		when -3, 2, 1
 			saldo_tipo = "haber"
-		when 1, -1
-			saldo_tipo = "debe_haber"
 getInvSaldoAplicacion = () ->
 	switch getOpTipo()
 		when -3, 2,-1
@@ -251,11 +249,11 @@ traduceIO = (IO) ->
 		when 'I' then true
 		when 'O' then false
 
-$.fn.cargaCompatibles = (datos) ->
-	$('#compatiblesOrigen').empty()
-	$('#compatiblesOrigenImporte').empty()
+$.fn.cargaCompatibles = (datos, ood) ->
+	$('#compatibles_' + ood).empty()
+	$('#compatibles_' + ood + '_importe').empty()
 	if datos.length != 0
-		$('#compatiblesOrigen').append('<span>Aplicar</span><select  data-placeholder="Seleccionar registros" id="aplicaciones" name="aplicaciones[]" multiple></select>')
+		$('#compatibles_' + ood).append('<span>Aplicar ' + ood + '</span><select data-placeholder="Seleccionar registros" id="aplicaciones_' + ood + '" name="aplicaciones_' + ood + '[]" multiple></select>')
 		$.each datos, (i) ->
 			opcion = '<option id="'+ this.id + '" value="'+ this.id + ', ' + this.disponible + '" data-disponible="'+ this.disponible + '"' +
 			'data-aplicado="'+ this.aplicadoATransaccion + '"' +
@@ -265,13 +263,13 @@ $.fn.cargaCompatibles = (datos) ->
 			' -- disp: '+ this.disponible +
 			' -- venc: ' + this.fecha + 
 			'</option>'
-			$('#aplicaciones').append(opcion)
-		$('#aplicaciones').change ->
-			$('#compatiblesOrigenImporte').empty()
-			$('#aplicaciones option:selected').each ->
-				agregaEditorRegistro($(this),'onSelect')
-			calculaImporteDesdeAplicaciones()
-			$('#compatiblesOrigenImporte input').focus()
+			$('#aplicaciones_' + ood).append(opcion)
+		$('#aplicaciones_' + ood).change ->
+			$('#compatibles_' + ood + '_importe').empty()
+			$('#aplicaciones_' + ood + ' option:selected').each ->
+				agregaEditorRegistro($(this),'onSelect', ood)
+			calculaImporteDesdeAplicaciones(ood)
+			$('#compatibles_' + ood + '_importe input').focus()
 		$.fn.initChosen()
 
 $.fn.defineUiXOpTipo = () ->

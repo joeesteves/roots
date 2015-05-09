@@ -35,8 +35,9 @@ class Rad::OperacionesController < ApplicationController
 
     @rad_operacion = Rad::Operacion.new(rad_operacion_params)
     @rad_operacion.empresa_id = session[:empresa_id]
-    ahAplicaciones = params[:aplicaciones]
-    if @rad_operacion.rSave(ahAplicaciones)
+    aplicaciones_origen = params[:aplicaciones_origen]
+    aplicaciones_destino = params[:aplicaciones_destino]
+    if @rad_operacion.rSave(aplicaciones_origen, aplicaciones_destino)
       redirect_to rad_operaciones_path, notice: 'Operacion guardado.'
       ubica_en_nodo(params[:nodo])
     else
@@ -47,8 +48,10 @@ class Rad::OperacionesController < ApplicationController
 
   # PATCH/PUT /rad/operaciones/1
   def update
-    ahAplicaciones = params[:aplicaciones]
-    if @rad_operacion.rUpdate(rad_operacion_params, ahAplicaciones)
+    aplicaciones_origen = params[:aplicaciones_origen]
+    aplicaciones_destino = params[:aplicaciones_destino]
+
+    if @rad_operacion.rUpdate(rad_operacion_params, aplicaciones_origen, aplicaciones_destino)
       flash[:nodo] = @rad_operacion.nodos.first.id rescue nil
       redirect_to rad_operaciones_path, notice: 'Operacion actualizado.'
     else
@@ -66,22 +69,35 @@ class Rad::OperacionesController < ApplicationController
   def compatibles
     aplicados_origen_ids = []
     compatibles_origen = []
-    regOri = nil
+    registros_origen = nil
+    aplicados_destino_ids = []
+    compatibles_destino = []
+    registros_destino = nil
+   
     if params[:rad_operacion_id] # cuando es edit
       @rad_operacion = Rad::Operacion.find(params[:rad_operacion_id])
       compatibles_aplicados = @rad_operacion.compatibles_aplicados
       compatibles_origen = compatibles_aplicados['origen']['compatibles']
-      aplicados_origen_ids = compatibles_origen['origen']['aplicados']
+      aplicados_origen_ids = compatibles_aplicados['origen']['aplicados']
       registros_origen = compatibles_aplicados['origen']['registros']
+      compatibles_destino = compatibles_aplicados['destino']['compatibles']
+      aplicados_destino_ids = compatibles_aplicados['destino']['aplicados']
+      registros_destino = compatibles_aplicados['destino']['registros']
     else # When new
-      compatibles_origen = Rco::Registro.compatibles_organizacion(params[:organizacion_id], params[:operaciontipo_codigo].to_i)['origen']     
+      compatibles_origen = Rco::Registro.compatibles_organizacion(params[:organizacion_id], params[:operaciontipo_codigo].to_i)['origen']
+      compatibles_destino = Rco::Registro.compatibles_organizacion(params[:organizacion_id], params[:operaciontipo_codigo].to_i)['destino']     
     end
+    unless compatibles_origen.presence.nil?
+      compatibles_origen = compatibles_a_opciones(compatibles_origen, params[:operaciontipo_codigo].to_i, registros_origen, 'origen')
+    end
+    @compatibles_origen = compatibles_origen.to_json 
+    unless compatibles_destino.presence.nil?
+      compatibles_destino = compatibles_a_opciones(compatibles_destino, params[:operaciontipo_codigo].to_i, registros_destino, 'destino')
+    end
+    @compatibles_destino = compatibles_destino.to_json
 
-    @compatibles_origen = compatibleToOpciones(compatibles_origen, params[:saldo_tipo], registros_origen)
-    @compatibles_origen = @compatibles_origen.to_json
 
-
-    unless aplicados_origen_ids.empty?
+    unless aplicados_origen_ids.presence.nil?
       @aplicados_origen_ids = ""
       aplicados_origen_ids.each do |ap|
         @aplicados_origen_ids += "#" + ap.to_s + ","
@@ -89,45 +105,42 @@ class Rad::OperacionesController < ApplicationController
       @aplicados_origen_ids = @aplicados_origen_ids[0...-1]
     end 
 
+    unless aplicados_destino_ids.presence.nil?
+      @aplicados_destino_ids = ""
+      aplicados_destino_ids.each do |ap|
+        @aplicados_destino_ids += "#" + ap.to_s + ","
+      end
+      @aplicados_destino_ids = @aplicados_destino_ids[0...-1]
+    end 
     respond_to do |format|
       format.js {}
     end
   end
 
   
-  def compatibleToOpciones(compatibles, saldo_tipo, regOris)
-    @compatibles = Array.new
-    compatibles.each do |reg|
+  def compatibles_a_opciones(compatibles, codigo, registros, origen_o_destino)
+    comatibles_array = []
+    compatibles.each do |compatible|
       opcion = Hash.new
-      opcion['id'] = reg.id.to_s
-      opcion['cuenta_id'] = reg.cuenta_id
-      opcion['desc'] = reg.desc
-      opcion['fecha'] = reg.fecha.strftime("%d/%m")
-      opcion['aplicadoATransaccion'] = 0
-      case saldo_tipo
-      when "debe"
-        inv_saldo_tipo = "haber"
-        inv_saldo_tipo_metodo = "reg_debe_id".to_sym
-        aplicaciones_al = "aplicaciones_debe"
-      when "haber"
-        inv_saldo_tipo = "debe"
-        inv_saldo_tipo_metodo = "reg_haber_id".to_sym
-        aplicaciones_al = "aplicaciones_haber"
-      end
-      opcion['disponible'] = reg.send(inv_saldo_tipo) - reg.send(aplicaciones_al).sum(:importe).to_f
-      unless regOris.nil?
-        regOris.each do |regOri|
-          opcion['aplicadoATransaccion'] += reg.send(aplicaciones_al).where(inv_saldo_tipo_metodo => regOri.id).sum(:importe).to_f
+      opcion['id'] = compatible.id.to_s
+      opcion['cuenta_id'] = compatible.cuenta_id
+      opcion['desc'] = compatible.desc
+      opcion['fecha'] = compatible.fecha.strftime("%d/%m")
+      opcion['aplicado_a_registro'] = 0
+      vars = Rad::Operacion.set_vars(origen_o_destino, codigo)      
+      opcion['disponible'] = compatible.send(vars[:valor_al]) - compatible.send(vars[:inv_valor_al_metodo_aplica]).sum(:importe).to_f
+      unless registros.nil?
+        registros.each do |registro|
+          opcion['aplicado_a_registro'] += registro.send(vars[:registro_aplicaciones]).sum(:importe).to_f
         end
       end
-      opcion['disponible'] += opcion['aplicadoATransaccion']
-      @compatibles.push(opcion)
+      opcion['disponible'] += opcion['aplicado_a_registro']
+      comatibles_array.push(opcion)
     end
-    @compatibles
+    comatibles_array
   end
+
   private
-
-
   def set_rad_operacion
     @rad_operacion = Rad::Operacion.find(params[:id])
   end
@@ -135,7 +148,8 @@ class Rad::OperacionesController < ApplicationController
   # Only allow a trusted parameter "white list" through.
   def rad_operacion_params
     params.require(:rad_operacion).permit(:fecha, :importe, :operaciontipo_id, :cuotas, 
-      :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes, :aplicaciones, :organizacion_id, 
-       operacionregistros_attributes: [:id, :cuenta_id, :valor, :saldo_tipo, :_destroy])
-  end  
+      :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes, :organizacion_id,
+      :aplicaciones_origen, :aplicaciones_destino,
+      operacionregistros_attributes: [:id, :cuenta_id, :valor, :saldo_tipo, :_destroy])
+  end
 end

@@ -12,23 +12,23 @@ class Rad::Operacion < ActiveRecord::Base
 	delegate :registros, :to => :asiento
 	accepts_nested_attributes_for :operacionregistros, allow_destroy: true
 	
-	def ctasAlDebeNoGuardadasAun
+	def ctas_debe_instancia
 		operacionregistros.select{|x| x['saldo_tipo'] == "debe"}
 	end
 
-	def ctasAlHaberNoGuardadasAun
+	def ctas_haber_instancia
 		operacionregistros.select{|x| x['saldo_tipo'] == "haber"}
 	end
 
-	def rSave(ahAplicaciones) # ArrayHashAplicaciones [{cuenta_id: x, importe: xx.xx}]	
-		rPersist('rSave',ahAplicaciones,nil)
+	def rSave(aplicaciones_origen, aplicaciones_destino) # ArrayHashAplicaciones [{cuenta_id: x, importe: xx.xx}]	
+		rPersist('rSave', aplicaciones_origen, aplicaciones_destino, nil)
 	end
 
-	def rUpdate(params, ahAplicaciones)
-		rPersist('rUpdate', ahAplicaciones,params)	
+	def rUpdate(params, aplicaciones_origen, aplicaciones_destino)
+		rPersist('rUpdate', params, aplicaciones_origen, aplicaciones_destino)	
 	end
 
-	def rPersist(caller, ahAplicaciones, params)
+	def rPersist(caller, params, aplicaciones_origen, aplicaciones_destino)
 		return false unless valid?
 		if caller == 'rUpdate'
 			if update_attributes(params)
@@ -41,55 +41,51 @@ class Rad::Operacion < ActiveRecord::Base
 		asiento = Rco::Asiento.new(:fecha => fecha, :moneda_id => 1, 
 			:cotizacion =>1, :desc => 'Operacion:'  + desc, 
 			:esgenerado => true, :empresa_id => empresa_id)
-		case operaciontipo.codigo 
-			when 1, 2, 3 # INGRESO, COBRANZA Y PROVISION INGRESO
-				aplicaAl = "aplicaciones_debe" # COBRANZA
-				metodo = "reg_debe_id"
-				ctas1 = ctasAlHaberNoGuardadasAun
-				col1 = "haber_op".to_sym
-				cta2 = ctasAlDebeNoGuardadasAun.first.cuenta_id
-				col2 = "debe_op".to_sym
-			when -1, -2, -3, 0	# PROVISIÓN EGRESOS, EGRESOS Y PAGOS
-				aplicaAl = "aplicaciones_haber" 
-				metodo = "reg_haber_id"
-				ctas1 = ctasAlDebeNoGuardadasAun
-				col1 = "debe_op".to_sym
-				cta2 = ctasAlHaberNoGuardadasAun.first.cuenta_id
-				col2 = "haber_op".to_sym		
-			end
-		cuotasArr = cuotasArr(fecha, cuotas, importe, cuotaimporte)
-		
+		vars = Rad::Operacion.set_vars('registros', operaciontipo.codigo)		
+		cuentas_origen = send(vars[:cuentas_origen])
+		cuenta_destino = send(vars[:cuentas_destino]).first.cuenta_id #por ahora se permite una sola
+		cuotas_array = cuotas_array(fecha, cuotas, importe, cuotaimporte)
+
 		unless operaciontipo.codigo == 0 # - MOV. FONDOS
-			if rdosxmes == false # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
-				ctas1.each do |cta1|
-					@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => fecha, :organizacion_id => organizacion_id)
+			if rdosxmes == false
+				cuentas_origen.each do |cuenta_origen|
+					asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, vars[:valor_al_metodo_op] => cuenta_origen.valor, :fecha => fecha, :organizacion_id => organizacion_id)
 				end
-				cuotasArr.each do |k|
-					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha =>  k[:fecha], :organizacion_id => organizacion_id)
+				cuotas_array.each do |k|
+					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha =>  k[:fecha], :organizacion_id => organizacion_id)
 				end
-			else
-				cuotasArr.each do |k|
-					ctas1.each do |cta1|
-						@regAplicable = asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => k[:fecha], :organizacion_id => organizacion_id)
+			else  # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
+				cuotas_array.each do |k|
+					cuentas_origen.each do |cuenta_origen|
+						asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, vars[:valor_al_metodo_op] => cuenta_origen.valor, :fecha => k[:fecha], :organizacion_id => organizacion_id)
 					end
-					asiento.registros.new(:cuenta_id => cta2, col2 => k[:valorCuota], :fecha => k[:fecha], :organizacion_id => organizacion_id)	
+					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha => k[:fecha], :organizacion_id => organizacion_id)	
 				end
 			end
 		else # MOV. FONDOS
-			ctas1.each do |cta1|
-				asiento.registros.new(:cuenta_id => cta1.cuenta_id, col1 => cta1.valor, :fecha => fecha)
+			cuentas_origen.each do |cuenta_origen|
+				asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, vars[:valor_al_metodo_op] => cuenta_origen.valor, :fecha => fecha)
 			end
-			asiento.registros.new(:cuenta_id => cta2, col2 => importe, :fecha => fecha)
-		end	
+			asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => importe, :fecha => fecha)
+		end
+
 		asiento.transaction do
 			if asiento.valid_save
 				# UNA VEZ GUARDADO EL ASIENTO GUARDA LAS APLICACIONES
-				unless ahAplicaciones.nil?
-					ahAplicaciones.each do |aplicacion|
-						aplicacion = aplicacion.split(', ')
-						@regAplicable.send(aplicaAl).create(metodo.to_sym => aplicacion[0].to_i, :importe => aplicacion[1].to_f)
-					end
-				end
+				#APLICACION AL ORIGEN
+				# unless aplicaciones_origen.nil?
+				# 	aplicaciones_origen.each do |aplicacion|
+				# 		aplicacion = aplicacion.split(', ')
+				# 		@regAplicable.send(vars[:inv_valor_al_metodo_aplica]).create(vars[:inv_valor_al_metodo_reg].to_sym => aplicacion[0].to_i, :importe => aplicacion[1].to_f)
+				# 	end
+				# end
+				# unless aplicaciones_destino.nil?
+				# 	aplicaciones_destino.each do |aplicacion|
+				# 		aplicacion = aplicacion.split(', ')
+				# 		@regAplicable.send(vars[:valor_al_metodo_aplica]).create(vars[:valor_al_metodo_reg].to_sym => aplicacion[0].to_i, :importe => aplicacion[1].to_f)
+				# 	end
+				# end
+				
 				save
 				update_attributes(:asiento_id => asiento.id)
 			else
@@ -99,15 +95,15 @@ class Rad::Operacion < ActiveRecord::Base
 		end
 	end
 	# FX PARA EL CALCULO DE CUENTAS
-	def cuotasArr(fecha, cuotas, importe, valorCuota)
-		cuotasArr = []
+	def cuotas_array(fecha, cuotas, importe, valorCuota)
+		cuotas_array = []
 		cuotaAcu = 0
 		cuotas.times do |c|
 			valorCuota = importe - cuotaAcu if c == cuotas - 1
 			cuotaAcu += valorCuota
-			cuotasArr.push({fecha: fecha.advance(:months => c), valorCuota: valorCuota})
+			cuotas_array.push({fecha: fecha.advance(:months => c), valorCuota: valorCuota})
 		end	
-		cuotasArr
+		cuotas_array
 	end  
 
 	def liberaAsiento
@@ -122,35 +118,89 @@ class Rad::Operacion < ActiveRecord::Base
 		registros = {}
 		origen = {}
 		destino = {}
+
 		case operaciontipo.codigo
 			when -2 #[pago] 
-				origen = compatibles_aplicados('alDebe', 'origen', origen)
+				origen = set_compatibles_aplicados('alDebe', 'origen', origen)
 	    when 2 #[cobranza]
-	    	origen = compatibles_aplicados('alHaber', 'origen', origen)
+	    	origen = set_compatibles_aplicados('alHaber', 'origen', origen)
 	    when -3 #[provisión engresos]
-	    	destino = compatibles_aplicados('alHaber', 'destino', destino)
+	    	destino = set_compatibles_aplicados('alHaber', 'destino', destino)
 	    when 3 
-	    	destino = compatibles_aplicados('alDebe', 'destino', destino)
+	    	destino = set_compatibles_aplicados('alDebe', 'destino', destino)
 	    when -1
-	      origen = compatibles_aplicados('alDebe', 'origen', origen)
-				destino = compatibles_aplicados('alHaber', 'destino', destino)
+	      origen = set_compatibles_aplicados('alDebe', 'origen', origen)
+				destino = set_compatibles_aplicados('alHaber', 'destino', destino)
 	    when 1
-	    	origen = compatibles_aplicados('alHaber', 'origen', origen)
-				destino = compatibles_aplicados('alDebe', 'destino', destino)
+	    	origen = set_compatibles_aplicados('alHaber', 'origen', origen)
+				destino = set_compatibles_aplicados('alDebe', 'destino', destino)
 		end
-    compatibles_aplicados = {}
-    compatibles_aplicados['origen'] = origen
-    compatibles_aplicados['destino'] = destino
-    compatibles_aplicados
+		compatibles_aplicados_hash = {}
+    compatibles_aplicados_hash['origen'] = origen
+    compatibles_aplicados_hash['destino'] = destino
+    compatibles_aplicados_hash
   end
 
-  def compatibles_aplicados(al_debe_o_al_haber, origen_o_destino, objeto_hash)
+  def set_compatibles_aplicados(al_debe_o_al_haber, origen_o_destino, objeto_hash)
+  	objeto_hash['compatibles'] = []
+  	objeto_hash['aplicados'] = []
   	objeto_hash['registros'] = registros.send(al_debe_o_al_haber)
 		objeto_hash['registros'].each do |registro|
       objeto_hash['compatibles'] |= registro.compatibles[origen_o_destino]
-      objeto_hash['aplicaciones_ids'] |= registro.aplicados[origen_o_destino].collect(&:id)
+      objeto_hash['aplicados'] |= registro.aplicados[origen_o_destino].collect(&:id)
     end
     objeto_hash
-
   end
+
+  def self.set_vars(caller, codigo)
+  	# callers [origen, destino] compatibles, [registro] comp unico. Se dan las var con sus inv. 
+    vars = {}
+    valor_al = ''
+    case caller
+	    when 'origen'
+	      case codigo
+		      when -1,-2
+		        valor_al = "haber" 
+		      when 1, 2
+		        valor_al = "debe"
+	      end
+	    when 'destino'
+	      case codigo
+		      when -1, -3
+		        valor_al = "debe"
+		      when 1, 3
+		        valor_al = "haber"
+	      end
+	    when 'registros'
+	    	case codigo
+		      when -1, -2, -3
+		        valor_al = "debe"
+		      when 1, 2, 3
+		        valor_al = "haber"
+				end
+		end
+
+    vars[:valor_al] = valor_al
+    vars[:inv_valor_al] = inversa_de(valor_al)
+    vars[:valor_al_metodo_op] = (valor_al + "_op").to_sym
+    vars[:valor_al_metodo_reg] = ("reg_" + valor_al + "_id").to_sym
+    vars[:inv_valor_al_metodo_op] = (inversa_de(valor_al) + "_op").to_sym
+    vars[:inv_valor_al_metodo_reg] = ("reg_" + inversa_de(valor_al) + "_id").to_sym
+    vars[:valor_al_metodo_aplica] = "aplicaciones_" + valor_al
+    vars[:inv_valor_al_metodo_aplica] = "aplicaciones_" + inversa_de(valor_al)
+    vars[:registro_aplicaciones] = "aplicaciones_" + valor_al
+    vars[:cuentas_origen] = 'ctas_' + valor_al + '_instancia'
+    vars[:cuentas_destino] = 'ctas_' + inversa_de(valor_al) + '_instancia'
+    vars
+  end
+
+  def self.inversa_de(saldo_tipo)
+    case saldo_tipo
+	    when 'debe'
+	      'haber'
+	    when 'haber'
+	      'debe'
+    end
+  end
+
 end

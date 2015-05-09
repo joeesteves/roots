@@ -99,26 +99,26 @@ class Rco::Registro < ActiveRecord::Base
     compatibles['destino'] = []
     case codigo
       when -2  # [pago]
-        compatibles['origen'] = compatibles_al_debe(organizacion_id)
+        compatibles['origen'] = compatibles_del_debe(organizacion_id)
       when 2 # [cobranza] 
-        compatibles['origen'] = compatibles_al_haber(organizacion_id)
+        compatibles['origen'] = compatibles_del_haber(organizacion_id)
       when 3 # [provision ingreso]
-        compatibles['destino'] = compatibles_al_haber(organizacion_id)
+        compatibles['destino'] = compatibles_del_haber(organizacion_id)
       when -3 # [provision egreso]
-        compatibles['destino'] = compatibles_al_debe(organizacion_id)
+        compatibles['destino'] = compatibles_del_debe(organizacion_id)
       when 1 # [ingreso]
-        compatibles['origen'] = compatibles_al_debe(organizacion_id)
-        compatibles['destino'] = compatibles_al_haber(organizacion_id)
+        compatibles['origen'] = compatibles_del_haber(organizacion_id)
+        compatibles['destino'] = compatibles_del_debe(organizacion_id)
       when -1 # [egreso]
-        compatibles['origen'] = compatibles_al_haber(organizacion_id)
-        compatibles['destino'] = compatibles_al_debe(organizacion_id)
+        compatibles['origen'] = compatibles_del_debe(organizacion_id)
+        compatibles['destino'] = compatibles_del_haber(organizacion_id)
       else
         none
       end
       compatibles
    end
 
-  def self.compatibles_al_debe(organizacion_id)
+  def self.compatibles_del_debe(organizacion_id)
     alHaber.
     where(:organizacion_id => organizacion_id).
     includes(:aplicaciones_debe).
@@ -126,7 +126,7 @@ class Rco::Registro < ActiveRecord::Base
     group('rco_registros.id').references(:aplicaciones_debe)
   end
 
-  def self.compatibles_al_haber(organizacion_id)
+  def self.compatibles_del_haber(organizacion_id)
     alDebe.
     where(:organizacion_id => organizacion_id).
     includes(:aplicaciones_haber).
@@ -173,7 +173,6 @@ class Rco::Registro < ActiveRecord::Base
         aplicados['destino'] = operacion_registros('al_haber')
         aplicados['origen'] = operacion_registros('al_debe')
       else
-       none
     end
     aplicados
   end
