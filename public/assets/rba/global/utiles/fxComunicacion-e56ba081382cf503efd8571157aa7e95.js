@@ -1,0 +1,1 @@
+(function(){$.fn.ocultarComunicados=function(){return $(".comunicado").delay(5e3).fadeOut()}}).call(this);

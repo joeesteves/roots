@@ -3,7 +3,7 @@ class Rco::Registro < ActiveRecord::Base
 	habtm_nodo
 	belongs_to :asiento
 	delegate :codigo, :to => :asiento, :prefix => false # delgado hasta asiento / operacion / operaciontipo
-	has_one :organizacion, class_name: "Rba::Organizacion"
+	belongs_to :organizacion, class_name: "Rba::Organizacion"
 	delegate :id, :to => :asiento, :prefix => true 
 	belongs_to :cuenta
 	delegate :codigo, :nombre, :esCtaCte?, :to => :cuenta, :prefix => true

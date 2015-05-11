@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Vencimientos para esta semana</h1>
+    <% unless @rco_registros.none? %>
+    <ul>
+    <% @rco_registros.each do |registro| %>
+    <li> <%= registro.cuenta.nombre %> -- <%= registro.organizacion.nombre %> -- <%= registro.debe - registro.haber %> -- <%= registro.desc %> </li>
+    <% end %>
+    </ul>
+    <% else %>
+    <p> No tiene vencimientos registrados para esta semana </p>
+    <% end %>
+
+  </body>
+</html>

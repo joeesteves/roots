@@ -1,7 +1,7 @@
 ready = ->
 	$.fn.comun()
 	$('.calcular_valores').change -> 
-		calcular_valores_desde_totales({})
+		calcular_valores_desde_totales()
 	# .calcular_valores importe, cuotaimporte y cuota
 	$('#rad_operacion_operaciontipo_id').change ->
 		interruptor_cuotas('i')
@@ -77,20 +77,20 @@ actualizar_cuentas_lineas_vivas_x_aplicaciones = () ->
 	opciones = array_cuentas_agrupadas()
 	lineas_vivas = get_origen()
 	if opciones.length  != $('.row.' + lineas_vivas).length
-		$('.row.' + lineas_vivas).not(':first').empty()
+		$('.row.' + lineas_vivas).not(':first').remove()
 		num = opciones.length
 		while num -= 1
 			$('a.agregar_campos_' + lineas_vivas[0].toUpperCase()).click()
 	seleccionar_cuentas = () ->
 		$('.row.' + lineas_vivas).each (i) ->
 			$('select.' + lineas_vivas, this).val(opciones[i].cuenta)
-			$('input[type=text].' + lineas_vivas, this).val(opciones[i].disponible.toFixed(2))
+			$('input[type=text].' + lineas_vivas, this).val(opciones[i].aplicado.toFixed(2))
 		$('.row.' + lineas_vivas + ' select').trigger("chosen:updated")
 	seleccionar_cuentas()
+	calcular_desde_lineas_vivas()
 
 actualizar_cuentas_lineas_destino = (cuenta_id) ->
 	$('.row.' + get_destino() + ':first select').val(cuenta_id).trigger("chosen:updated")
-
 
 actualizar_cuentas = ()  ->
 	$.ajax(
@@ -144,15 +144,14 @@ calcular_valores_desde_aplicaciones = (ood) ->
 		opcion_nuevo_valor = opcion_valor_array[0] + ', ' + opcion_valor_array[1] + ', ' + $(this).val()
 		opcion.val(opcion_nuevo_valor)
 		if ood == 'origen'
-			importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
-			$('#rad_operacion_importe').val(importe.toFixed(2))
-			actualizar_cuentas_lineas_vivas_x_aplicaciones() 
+			# importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
+			# $('#rad_operacion_importe').val(importe.toFixed(2))
+			actualizar_cuentas_lineas_vivas_x_aplicaciones()
 		else if ood == 'destino'
 			actualizar_cuentas_lineas_destino(opcion_valor_array[1])
-		#calcular_valores_desde_totales({"solicitante": "edita_registros"})
+	calcular_valores_desde_totales()
 
-
-calcular_valores_desde_totales = (opciones) ->
+calcular_valores_desde_totales = () ->
 	prefijo = '#rad_operacion_' #prefijo
 	importe = $(prefijo + 'importe').val()
 	cuotas = $(prefijo + 'cuotas').val()
@@ -166,15 +165,11 @@ calcular_valores_desde_totales = (opciones) ->
 		when false
 			nuevo_valor = (importe / cuotas).toFixed(2)
 			id_a_actualizar = 'cuotaimporte'
-			if opciones.solicitante == 'edita_registros'
-				$('input.' + get_destino()).val(importe)
-				# $('input.' + get_origen()).val(importe)
-			else
-				$('input.' + get_destino()).val(importe)
+			$('input.' + get_destino() + ':first').val(importe)
 	$(prefijo + id_a_actualizar).val(nuevo_valor)
 
 calcular_desde_lineas_vivas_init = (ejecuta) ->
-	lineas_vivas = '.row.' + get_origen() 
+	lineas_vivas = '.row.' + get_origen()
 	calcular_desde_lineas_vivas() if ejecuta == true
 	$(lineas_vivas + ' input[name*=valor], #rad_operacion_rdosxmes').change ->
 		calcular_desde_lineas_vivas()
@@ -189,12 +184,8 @@ calcular_desde_lineas_vivas = () ->
 	switch get_rmes()
 		when true then rm = 'cuotaimporte'
 		when false then rm = 'importe'
-	$('#rad_operacion_'+rm).val(total.toFixed(2)).change()
-
-# getCuentaId = (saldo_tipo) ->
-# 	switch saldo_tipo
-# 		when "debe" then $('.row.debe:first select option:selected').val()
-# 		when "haber" then $('.row.haber:first select option:selected').val()
+	$('#rad_operacion_'+ rm ).val(total.toFixed(2))
+	calcular_valores_desde_totales()
 
 get_origen = () ->
 	switch get_op_tipo()
