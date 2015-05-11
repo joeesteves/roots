@@ -69,7 +69,6 @@ class Rad::OperacionesController < ApplicationController
     aplicados_destino_ids = []
     compatibles_destino = []
     registros_destino = nil
-   
     if params[:rad_operacion_id] # cuando es edit
       @rad_operacion = Rad::Operacion.find(params[:rad_operacion_id])
       compatibles_aplicados = @rad_operacion.compatibles_aplicados
@@ -123,14 +122,18 @@ class Rad::OperacionesController < ApplicationController
       opcion['desc'] = compatible.desc
       opcion['fecha'] = compatible.fecha.strftime("%d/%m")
       opcion['aplicado_a_registro'] = 0
-      vars = Rad::Operacion.set_vars(origen_o_destino, codigo)      
-      opcion['disponible'] = compatible.send(vars[:valor_al]) - compatible.send(vars[:inv_valor_al_metodo_aplica]).sum(:importe).to_f
-      unless registros.nil?
-        registros.each do |registro|
-          opcion['aplicado_a_registro'] += registro.send(vars[:registro_aplicaciones]).sum(:importe).to_f
-        end
+      vars = Rad::Operacion.set_vars(origen_o_destino, codigo)
+      if registros.nil?
+        opcion['disponible'] = compatible.send(vars[:valor_al]) - compatible.send(vars[:inv_valor_al_metodo_aplica]).sum(:importe).to_f
+      else
+        compatible_registros_aplicados = compatible.send(vars[:inv_valor_al_metodo_aplica])
+        valor_compatible_registros_aplicados = compatible_registros_aplicados.sum(:importe).to_f
+        opcion['disponible'] = compatible.send(vars[:valor_al]) - valor_compatible_registros_aplicados
+        opcion['aplicado_a_registro'] = valor_compatible_registros_aplicados - compatible_registros_aplicados.where
+        .not('rco_aplicaciones.' + vars[:inv_valor_al_metodo_reg_string] + ' in (?)', registros.collect(&:id)).sum(:importe).to_f
+        opcion['disponible'] += opcion['aplicado_a_registro']
       end
-      opcion['disponible'] += opcion['aplicado_a_registro']
+           
       compatibles_array.push(opcion)
     end
     compatibles_array

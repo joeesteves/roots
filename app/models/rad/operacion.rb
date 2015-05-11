@@ -186,8 +186,10 @@ class Rad::Operacion < ActiveRecord::Base
     vars[:inv_valor_al] = inversa_de(valor_al)
     vars[:valor_al_metodo_op] = (valor_al + "_op").to_sym
     vars[:valor_al_metodo_reg] = ("reg_" + valor_al + "_id").to_sym
+    vars[:valor_al_metodo_reg_string] = ("reg_" + valor_al + "_id")
     vars[:inv_valor_al_metodo_op] = (inversa_de(valor_al) + "_op").to_sym
     vars[:inv_valor_al_metodo_reg] = ("reg_" + inversa_de(valor_al) + "_id").to_sym
+    vars[:inv_valor_al_metodo_reg_string] = ("reg_" + inversa_de(valor_al) + "_id")
     vars[:valor_al_metodo_aplica] = "aplicaciones_" + valor_al
     vars[:inv_valor_al_metodo_aplica] = "aplicaciones_" + inversa_de(valor_al)
     vars[:registro_aplicaciones] = "aplicaciones_" + valor_al

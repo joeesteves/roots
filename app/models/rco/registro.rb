@@ -183,8 +183,8 @@ class Rco::Registro < ActiveRecord::Base
 	end
 
 	def compatibles
-		organizacion_id = organizacion_id
-		codigo = codigo
+		# organizacion_id = organizacion_id
+		# codigo = codigo
 		buscar_aplicados = aplicados
 		compatibles = Rco::Registro.compatibles_organizacion(organizacion_id, codigo)
 		compatibles['origen'] |= buscar_aplicados['origen']
