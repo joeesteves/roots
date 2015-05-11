@@ -144,8 +144,6 @@ calcular_valores_desde_aplicaciones = (ood) ->
 		opcion_nuevo_valor = opcion_valor_array[0] + ', ' + opcion_valor_array[1] + ', ' + $(this).val()
 		opcion.val(opcion_nuevo_valor)
 		if ood == 'origen'
-			# importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
-			# $('#rad_operacion_importe').val(importe.toFixed(2))
 			actualizar_cuentas_lineas_vivas_x_aplicaciones()
 		else if ood == 'destino'
 			actualizar_cuentas_lineas_destino(opcion_valor_array[1])
@@ -161,7 +159,6 @@ calcular_valores_desde_totales = () ->
 			nuevo_valor = (cuotas * importe_cuota).toFixed(2)
 			id_a_actualizar = 'importe'
 			$('input.' + get_destino()).val(importe_cuota)
-			$('input.' + get_origen()).val(importe_cuota)
 		when false
 			nuevo_valor = (importe / cuotas).toFixed(2)
 			id_a_actualizar = 'cuotaimporte'
@@ -272,7 +269,7 @@ $.fn.defineUiXOpTipo = () ->
 				interruptor_rmes('i')
 			)
 			else (
-				interruptor_rmes('0')
+				interruptor_rmes('o')
 			)
 	interruptor_inputs_y_agregar_lineas()
 	calcular_desde_lineas_vivas_init(true)
