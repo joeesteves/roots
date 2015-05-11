@@ -104,9 +104,9 @@ class Rco::Registro < ActiveRecord::Base
 			when 2 # [cobranza] 
 				compatibles['origen'] = compatibles_del_haber(organizacion_id)
 			when 3 # [provision ingreso]
-				compatibles['destino'] = compatibles_del_haber(organizacion_id)
-			when -3 # [provision egreso]
 				compatibles['destino'] = compatibles_del_debe(organizacion_id)
+			when -3 # [provision egreso]
+				compatibles['destino'] = compatibles_del_haber(organizacion_id)
 			when 1 # [ingreso]
 				compatibles['origen'] = compatibles_del_haber(organizacion_id)
 				compatibles['destino'] = compatibles_del_debe(organizacion_id)

@@ -57,16 +57,19 @@ ordena_cuentas_opciones_seleccionadas = () ->
 array_cuentas_agrupadas = () ->
 	cuenta_ant = undefined
 	disponible = 0
+	aplicado = 0
 	index = -1
 	array = []
 	$.each ordena_cuentas_opciones_seleccionadas(), () ->
 		cuenta_actual = $(this).data("cuenta")
 		if cuenta_actual == cuenta_ant
 			disponible +=  parseFloat($(this).data("disponible"))
+			aplicado +=  parseFloat($(this).data("aplicado"))
 		else
 			index += 1
 			disponible = parseFloat($(this).data("disponible"))
-		array[index] = {"cuenta": cuenta_actual, "disponible": disponible}
+			aplicado =  parseFloat($(this).data("aplicado"))
+		array[index] = {"cuenta": cuenta_actual, "disponible": disponible, "aplicado": aplicado}
 		cuenta_ant = cuenta_actual
 	array
 	
@@ -84,6 +87,10 @@ actualizar_cuentas_lineas_vivas_x_aplicaciones = () ->
 			$('input[type=text].' + lineas_vivas, this).val(opciones[i].disponible.toFixed(2))
 		$('.row.' + lineas_vivas + ' select').trigger("chosen:updated")
 	seleccionar_cuentas()
+
+actualizar_cuentas_lineas_destino = (cuenta_id) ->
+	$('.row.' + get_destino() + ':first select').val(cuenta_id).trigger("chosen:updated")
+
 
 actualizar_cuentas = ()  ->
 	$.ajax(
@@ -122,9 +129,8 @@ agregar_editor_aplicacion = (registro, momento, ood) ->
 	else
 		valorEditorRegistro = parseFloat(registro.data("aplicado"))
 	$('#compatibles_' + ood + '_importe').append('<span>Ref ' + registro.data("desc") + '</span><input id=' + id + ' name=' + id + ' type="text" value="' + valorEditorRegistro + '">')
-	if ood == 'origen'
-		$('#compatibles_' + ood + '_importe input').change ->
-			calcular_valores_desde_aplicaciones(ood)
+	$('#compatibles_' + ood + '_importe input').change ->
+		calcular_valores_desde_aplicaciones(ood)
 
 #solo debe usarse en compatibles en origen!
 calcular_valores_desde_aplicaciones = (ood) ->
@@ -133,13 +139,18 @@ calcular_valores_desde_aplicaciones = (ood) ->
 		id = $(this).attr("id").substr(4) # los id de las opciones son reg_3213 al sacarle 4 dig queda el id del registro
 		opcion = $('#aplicaciones_' + ood + ' #' + id)
 		$(this).val(opcion.data("disponible")) if parseFloat($(this).val()) > parseFloat(opcion.data("disponible"))
-		importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
-		$('#rad_operacion_importe').val(importe.toFixed(2))
+		opcion.data('aplicado', $(this).val())
 		opcion_valor_array = opcion.val().split(', ')
 		opcion_nuevo_valor = opcion_valor_array[0] + ', ' + opcion_valor_array[1] + ', ' + $(this).val()
 		opcion.val(opcion_nuevo_valor)
-		actualizar_cuentas_lineas_vivas_x_aplicaciones() if ood == 'origen'
-		calcular_valores_desde_totales({"solicitante": "edita_registros"})
+		if ood == 'origen'
+			importe = parseFloat($('#rad_operacion_importe').val()) + parseFloat($(this).val())
+			$('#rad_operacion_importe').val(importe.toFixed(2))
+			actualizar_cuentas_lineas_vivas_x_aplicaciones() 
+		else if ood == 'destino'
+			actualizar_cuentas_lineas_destino(opcion_valor_array[1])
+		#calcular_valores_desde_totales({"solicitante": "edita_registros"})
+
 
 calcular_valores_desde_totales = (opciones) ->
 	prefijo = '#rad_operacion_' #prefijo
@@ -157,7 +168,7 @@ calcular_valores_desde_totales = (opciones) ->
 			id_a_actualizar = 'cuotaimporte'
 			if opciones.solicitante == 'edita_registros'
 				$('input.' + get_destino()).val(importe)
-				$('input.' + get_origen()).val(importe)
+				# $('input.' + get_origen()).val(importe)
 			else
 				$('input.' + get_destino()).val(importe)
 	$(prefijo + id_a_actualizar).val(nuevo_valor)

@@ -10,6 +10,9 @@
   <div class="small-3 columns">
     <%= f.collection_select :organizacion_id, Rba::Organizacion.deEmpresaGrupoXId(session[:empresagrupo_id]), :id, :nombre,  {label: "Tercero"} %>
   </div>
+  <div class="small-3 columns">
+    <%= f.text_field :comprobante, {label: "Numero de comprobante", data: {inputmask:"'mask': 'A-9999-99999999'" } }%>
+  </div>
   <div class="small-1 columns" style="float:left">
     <span class='prefix postfix'></span>
     <h4 style='widht:100%;text-align:center'> 

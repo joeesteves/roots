@@ -85,10 +85,12 @@ class Rad::OperacionesController < ApplicationController
     unless compatibles_origen.presence.nil?
       compatibles_origen = compatibles_a_opciones(compatibles_origen, params[:operaciontipo_codigo].to_i, registros_origen, 'origen')
     end
+    compatibles_origen ||= []
     @compatibles_origen = compatibles_origen.to_json 
     unless compatibles_destino.presence.nil?
       compatibles_destino = compatibles_a_opciones(compatibles_destino, params[:operaciontipo_codigo].to_i, registros_destino, 'destino')
     end
+    compatibles_destino ||= []
     @compatibles_destino = compatibles_destino.to_json
 
 
@@ -132,8 +134,7 @@ class Rad::OperacionesController < ApplicationController
         opcion['aplicado_a_registro'] = valor_compatible_registros_aplicados - compatible_registros_aplicados.where
         .not('rco_aplicaciones.' + vars[:inv_valor_al_metodo_reg_string] + ' in (?)', registros.collect(&:id)).sum(:importe).to_f
         opcion['disponible'] += opcion['aplicado_a_registro']
-      end
-           
+      end       
       compatibles_array.push(opcion)
     end
     compatibles_array
@@ -148,7 +149,7 @@ class Rad::OperacionesController < ApplicationController
   def rad_operacion_params
     params.require(:rad_operacion).permit(:fecha, :importe, :operaciontipo_id, :cuotas, 
       :cuotaimporte, :ctaD_id, :ctaH_id, :desc, :esgenerado, :empresa_id, :rdosxmes, :organizacion_id,
-      :aplicaciones_origen, :aplicaciones_destino,
+      :aplicaciones_origen, :aplicaciones_destino, :comprobante, 
       operacionregistros_attributes: [:id, :cuenta_id, :valor, :saldo_tipo, :_destroy])
   end
 end

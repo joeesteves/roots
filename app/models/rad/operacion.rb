@@ -81,12 +81,13 @@ class Rad::Operacion < ActiveRecord::Base
 						registro.send(vars[:inv_valor_al_metodo_aplica]).create(vars[:inv_valor_al_metodo_reg].to_sym => aplicacion_array[0].to_i, :importe => aplicacion_array[2].to_f)
 					end
 				end
-				# unless aplicaciones_destino.nil?
-				# 	aplicaciones_destino.each do |aplicacion|
-				# 		aplicacion = aplicacion.split(', ')
-				# 		@regAplicable.send(vars[:valor_al_metodo_aplica]).create(vars[:valor_al_metodo_reg].to_sym => aplicacion[0].to_i, :importe => aplicacion[1].to_f)
-				# 	end
-				# end
+				unless aplicaciones_destino.nil?
+					aplicaciones_destino.each do |aplicacion|
+						aplicacion_array = aplicacion.split(', ')
+						registro = asiento.registros.send('al_' + vars[:inv_valor_al]).find_by_cuenta_id(aplicacion_array[1].to_i)
+						registro.send(vars[:valor_al_metodo_aplica]).create(vars[:valor_al_metodo_reg].to_sym => aplicacion_array[0].to_i, :importe => aplicacion_array[2].to_f)
+					end
+				end
 				
 				save
 				update_attributes(:asiento_id => asiento.id)
