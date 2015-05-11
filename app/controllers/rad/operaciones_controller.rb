@@ -12,7 +12,6 @@ class Rad::OperacionesController < ApplicationController
 
   # GET /rad/operaciones/new
   def new
-
     @rad_operacion = Rad::Operacion.new
     @rad_operacion.operacionregistros.new(:saldo_tipo => 'debe')
     @rad_operacion.operacionregistros.new(:saldo_tipo => 'haber')
@@ -20,14 +19,11 @@ class Rad::OperacionesController < ApplicationController
     @rad_operacion.operaciontipo_id = Rad::Operaciontipo.where(:codigo => @operacionCodigo).last.id
     @cuentas = Rco::Cuenta.xOperacionTipo(@operacionCodigo.to_s, session[:empresagrupo_id])
     define_nodo(params[:nodo])
-    # @aplicaciones_dest = Rco: 
-     
   end
 
   # GET /rad/operaciones/1/edit
   def edit
     @cuentas = Rco::Cuenta.xOperacionTipo(@rad_operacion.operaciontipo.codigo.to_s, session[:empresagrupo_id])
-   
   end
 
   # POST /rad/operaciones
@@ -119,7 +115,7 @@ class Rad::OperacionesController < ApplicationController
 
   
   def compatibles_a_opciones(compatibles, codigo, registros, origen_o_destino)
-    comatibles_array = []
+    compatibles_array = []
     compatibles.each do |compatible|
       opcion = Hash.new
       opcion['id'] = compatible.id.to_s
@@ -135,9 +131,9 @@ class Rad::OperacionesController < ApplicationController
         end
       end
       opcion['disponible'] += opcion['aplicado_a_registro']
-      comatibles_array.push(opcion)
+      compatibles_array.push(opcion)
     end
-    comatibles_array
+    compatibles_array
   end
 
   private

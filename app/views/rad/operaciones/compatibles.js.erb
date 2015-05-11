@@ -1,9 +1,9 @@
 $.fn.cargaCompatibles(<%= raw @compatibles_origen.as_json %>, 'origen')
 <%if @aplicados_origen_ids %>
-	$.fn.seleccionaAplicados("<%= @aplicados_origen_ids %>")
+	$.fn.seleccionaAplicados("<%= @aplicados_origen_ids %>", 'origen')
 <% end %>
 $.fn.cargaCompatibles(<%= raw @compatibles_destino.as_json %>, 'destino')
 <%if @aplicados_destino_ids %>
-	$.fn.seleccionaAplicados("<%= @aplicados_destino_ids %>")
+	$.fn.seleccionaAplicados("<%= @aplicados_destino_ids %>", 'destino')
 <% end %>
 

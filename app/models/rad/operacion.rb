@@ -21,7 +21,7 @@ class Rad::Operacion < ActiveRecord::Base
 	end
 
 	def rSave(aplicaciones_origen, aplicaciones_destino) # ArrayHashAplicaciones [{cuenta_id: x, importe: xx.xx}]	
-		rPersist('rSave', aplicaciones_origen, aplicaciones_destino, nil)
+		rPersist('rSave', nil, aplicaciones_origen, aplicaciones_destino)
 	end
 
 	def rUpdate(params, aplicaciones_origen, aplicaciones_destino)
@@ -73,12 +73,14 @@ class Rad::Operacion < ActiveRecord::Base
 			if asiento.valid_save
 				# UNA VEZ GUARDADO EL ASIENTO GUARDA LAS APLICACIONES
 				#APLICACION AL ORIGEN
-				# unless aplicaciones_origen.nil?
-				# 	aplicaciones_origen.each do |aplicacion|
-				# 		aplicacion = aplicacion.split(', ')
-				# 		@regAplicable.send(vars[:inv_valor_al_metodo_aplica]).create(vars[:inv_valor_al_metodo_reg].to_sym => aplicacion[0].to_i, :importe => aplicacion[1].to_f)
-				# 	end
-				# end
+				unless aplicaciones_origen.nil?
+					# aplicacion es un string compuesto asi :registro_id, :cuenta_id, :importe
+					aplicaciones_origen.each do |aplicacion|
+						aplicacion_array = aplicacion.split(', ')
+						registro = asiento.registros.send('al_' + vars[:valor_al]).find_by_cuenta_id(aplicacion_array[1].to_i)
+						registro.send(vars[:inv_valor_al_metodo_aplica]).create(vars[:inv_valor_al_metodo_reg].to_sym => aplicacion_array[0].to_i, :importe => aplicacion_array[2].to_f)
+					end
+				end
 				# unless aplicaciones_destino.nil?
 				# 	aplicaciones_destino.each do |aplicacion|
 				# 		aplicacion = aplicacion.split(', ')
@@ -121,19 +123,19 @@ class Rad::Operacion < ActiveRecord::Base
 
 		case operaciontipo.codigo
 			when -2 #[pago] 
-				origen = set_compatibles_aplicados('alDebe', 'origen', origen)
+				origen = set_compatibles_aplicados('al_debe', 'origen', origen)
 	    when 2 #[cobranza]
-	    	origen = set_compatibles_aplicados('alHaber', 'origen', origen)
+	    	origen = set_compatibles_aplicados('al_haber', 'origen', origen)
 	    when -3 #[provisión engresos]
-	    	destino = set_compatibles_aplicados('alHaber', 'destino', destino)
-	    when 3 
-	    	destino = set_compatibles_aplicados('alDebe', 'destino', destino)
-	    when -1
-	      origen = set_compatibles_aplicados('alDebe', 'origen', origen)
-				destino = set_compatibles_aplicados('alHaber', 'destino', destino)
-	    when 1
-	    	origen = set_compatibles_aplicados('alHaber', 'origen', origen)
-				destino = set_compatibles_aplicados('alDebe', 'destino', destino)
+	    	destino = set_compatibles_aplicados('al_haber', 'destino', destino)
+	    when 3 #[provision ingresos] 
+	    	destino = set_compatibles_aplicados('al_debe', 'destino', destino)
+	    when -1 #[egreso] 
+	      origen = set_compatibles_aplicados('al_debe', 'origen', origen)
+				destino = set_compatibles_aplicados('al_haber', 'destino', destino)
+	    when 1 #[ingreso] 
+	    	origen = set_compatibles_aplicados('al_haber', 'origen', origen)
+				destino = set_compatibles_aplicados('al_debe', 'destino', destino)
 		end
 		compatibles_aplicados_hash = {}
     compatibles_aplicados_hash['origen'] = origen
