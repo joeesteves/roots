@@ -8,6 +8,8 @@ ready = ->
 		interruptor_rmes('o')
 		actualizar_cuentas()
 		actualizar_compatibles()
+	$('#rad_operacion_organizacion_id').change ->
+		actualizar_compatibles()
 	switch $('#action_name').val()
 		when 'new' then actualizar_cuentas()
 		when 'edit','create' then $.fn.defineUiXOpTipo()

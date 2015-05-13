@@ -78,6 +78,6 @@ class Rco::RegistrosController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def rco_registro_params
-      params.require(:rco_registro).permit(:fecha, :asiento_id, :cuenta_id, :debe, :haber, :vencimiento, :desc)
+      params.require(:rco_registro).permit(:fecha, :asiento_id, :cuenta_id, :debe, :haber, :vencimiento, :desc, :organizacion_id)
     end
 end

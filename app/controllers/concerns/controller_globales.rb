@@ -125,10 +125,10 @@ module ControllerGlobales
         instance_variable_set(entidad[:member],@rta)
         render :new 
       else 
-       redirect_to  root_path+controller_path, notice: "se han importado los items correctamente"
+       redirect_to  root_path + controller_path, notice: "se han importado los items correctamente"
       end
     rescue Exception => e
-      redirect_to  root_path+controller_path, notice: "Hubo algun Error! #{e}"
+      redirect_to  root_path + controller_path, notice: "Hubo algun Error! #{e}"
     end
   end
 end

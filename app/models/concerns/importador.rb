@@ -11,11 +11,11 @@ module Importador
 	end
 
 	def importarCuentas(file, empresa_id)
-		@asiento = Rco::Asiento.new({empresa_id: empresa_id,cotizacion: 1, moneda_id: 1})
+		@asiento = Rco::Asiento.new({empresa_id: empresa_id, cotizacion: 1, moneda_id: 1})
 		index = 0
 			CSV.foreach(file.path, headers: true ) do |row|
 				objeto = row.to_hash
-				objeto = convCodigoToId(objeto, ["rco/cuenta"])
+				objeto = convCodigoToId(objeto, ["rco/cuenta", "rba/organizacion"])
 				if objeto["debe"].nil?
 					objeto["debe_op"] =  "0"
 				else
@@ -34,8 +34,6 @@ module Importador
 					objeto.delete(atr)
 				end
 				@asiento.registros.new(objeto) 
-				puts index
-				puts objeto["fecha"]
 				index += 1
 
 			end
@@ -45,14 +43,16 @@ module Importador
 	end
 
 	def convCodigoToId(objeto, atributos)
-		atributos.each do |atr|
-			entidad = getVariables(atr)
-			puts entidad
-			instance_variable_set(entidad[:member], objeto[atr])
-			instance_variable_set('@'+entidad[:entidad_id], entidad[:clase].find_by_codigo(@rco_cuenta).id)
-			objeto[entidad[:entidad_id]] = @cuenta_id
-			puts objeto[entidad[:entidad_id]]
-			objeto.delete(atr)
+		atributos.each do |relacion|
+			entidad = getVariables(relacion)
+			if relacion == "rba/organizacion"
+				unless objeto[relacion].presence.nil?
+					objeto[entidad[:entidad_id]] = entidad[:clase].find_by_nombre(objeto[relacion]).id
+				end
+			else
+				objeto[entidad[:entidad_id]] = entidad[:clase].find_by_codigo(objeto[relacion]).id
+			end
+			objeto.delete(relacion)
 		end 
 		objeto
 	end
