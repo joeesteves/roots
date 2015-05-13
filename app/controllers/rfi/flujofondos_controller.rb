@@ -4,7 +4,7 @@ class Rfi::FlujofondosController < ApplicationController
 		empresaGrupoId = session[:empresagrupo_id]
 		empresaId = session[:empresa_id]
 		hoy = Date.today()
-		@rep = 13 
+		@rep = 8 
 		tiposDeCuenta = [1.1,1.2,1.9,2.2,2.9]
 		fin = hoy.advance(:months => @rep - 1) 
 		hasta = Date.new(fin.year,fin.month, -1)
