@@ -15,7 +15,7 @@
 			<td class="acumulado">ACUMULADO</td>
 			<td class="acumulado">--</td>
 			<% acumulados = @sDITotal  %>
-			<% (@rep).times do |t| %>
+			<% @rep.times do |t| %>
 				<% acumulados += @sMesTotales[t]  %>
 				<td class="acumulado"><%= acumulados %></td>
 			<% end %>
