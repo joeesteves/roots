@@ -81,16 +81,21 @@ class Rba::NodosController < ApplicationController
     items_seleccion = params[:items].split(',').map(&:to_i)
     items_destino_total = items_destino_prev + items_seleccion
 
-    # identifica el nodo utilizando el primer item del array. 
-    nodo_origen =  v[:clase].find(items_seleccion[0]).nodos.
-    where(:arbol_id => arbol.id).first
+    # identifica el nodo utilizando el primer item del array.
+    begin 
+      nodo_origen =  v[:clase].find(items_seleccion[0]).nodos.
+      where(:arbol_id => arbol.id).first
+    rescue
+      nodo_origen = nil
+    end
+
 
     unless nodo_origen == nodo_destino
-      items_origen_prev = nodo_origen.send(v[:metodo]).collect(&:id)
-      items_origen_total = items_origen_prev - items_seleccion
-
-      nodo_origen.update_attributes(v[:metodo_ids] => items_origen_total) 
-     
+      unless nodo_origen.nil? 
+        items_origen_prev = nodo_origen.send(v[:metodo]).collect(&:id)
+        items_origen_total = items_origen_prev - items_seleccion
+        nodo_origen.update_attributes(v[:metodo_ids] => items_origen_total) 
+      end     
       nodo_destino.update_attributes(v[:metodo_ids] => items_destino_total)
     end
   

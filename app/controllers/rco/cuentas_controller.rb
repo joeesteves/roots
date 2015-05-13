@@ -64,8 +64,8 @@ class Rco::CuentasController < ApplicationController
   end
 
   def x_operacion_tipo
-    eg = session[:empresagrupo_id]
-    cuentas = Rco::Cuenta.xOperacionTipo(params[:operaciontipo_codigo], eg)
+    empresagrupo_id = session[:empresagrupo_id]
+    cuentas = Rco::Cuenta.xOperacionTipo(params[:operaciontipo_codigo], empresagrupo_id)
     @ctasDebe = cuentas[:debe]
     @ctasHaber = cuentas[:haber] 
   

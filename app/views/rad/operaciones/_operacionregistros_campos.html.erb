@@ -1,6 +1,6 @@
 <div class="row <%=f.object.saldo_tipo%> ">
 	<div class="small-3 columns">
-		<%= f.collection_select :cuenta_id, Rco::Cuenta.all, :id, :nombre, {}, {sinEtiqueta: true, class: f.object.saldo_tipo} %>
+		<%= f.collection_select :cuenta_id, @cuentas[f.object.saldo_tipo.to_sym], :id, :nombre, {}, {sinEtiqueta: true, class: f.object.saldo_tipo} %>
 	</div>
 	<div class="small-2 columns">
 		<%= f.text_field :valor, sinEtiqueta: true, placeholder: 'Valor', class: f.object.saldo_tipo + ' valor'  %>
