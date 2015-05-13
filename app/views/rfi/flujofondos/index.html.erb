@@ -1,6 +1,6 @@
  <div class="panel">
 <div class="row" data-no-turbolink>
-
+<% @rep -= 1%>
 <table class="notDT">
 	<thead>
 		<th>CUENTAS</th>
@@ -15,9 +15,9 @@
 			<td class="acumulado">ACUMULADO</td>
 			<td class="acumulado">--</td>
 			<% acumulados = @sDITotal  %>
-			<% @rep.times do |t| %>
-				<td class="acumulado"><%= acumulados %></td>
+			<% (@rep).times do |t| %>
 				<% acumulados += @sMesTotales[t]  %>
+				<td class="acumulado"><%= acumulados %></td>
 			<% end %>
 			<td class="acumulado">--</td>
 		</tr>	
