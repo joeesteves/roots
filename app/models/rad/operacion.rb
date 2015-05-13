@@ -57,7 +57,12 @@ class Rad::Operacion < ActiveRecord::Base
 			else  # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
 				cuotas_array.each do |k|
 					cuentas_origen.each do |cuenta_origen|
-						asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, vars[:valor_al_metodo_op] => cuenta_origen.valor, :fecha => k[:fecha], :organizacion_id => organizacion_id)
+						if cuenta_origen.valor < 0
+							metodo_op_doh = vars[:inv_valor_al_metodo_op]
+						else
+							metodo_op_doh = vars[:valor_al_metodo_op]
+						end
+						asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, metodo_op_doh => cuenta_origen.valor, :fecha => k[:fecha], :organizacion_id => organizacion_id)
 					end
 					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha => k[:fecha], :organizacion_id => organizacion_id)	
 				end

@@ -1,0 +1,45 @@
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.neg {
+background-color: #F27575;
+}
+
+table.notDT {
+border: none;
+border-collapse: collapse;
+width: 100%;
+border-radius: 15px;
+th {
+font-weight: normal;
+white-space: nowrap;
+background-color: #333333;
+color: white;
+}
+tr:last-child:nth-of-type(even) {
+	background-color: #a7c491;
+	td:first-child {
+	border-bottom-left-radius: 15px;
+}
+td:last-child {
+border-bottom-right-radius: 15px;
+}
+}
+th:not:first, td:not(.group), tr:last {
+text-align: left;
+border:none;
+
+}
+th, td{
+	padding-left: 10px;
+	a:hover {
+		background-color: transparent;
+		color: #5e6799;
+	}
+} 
+.acumulado {
+background:rgb(94, 103, 153);
+color:white;
+}
+}
+
+
