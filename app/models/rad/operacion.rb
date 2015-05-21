@@ -9,7 +9,6 @@ class Rad::Operacion < ActiveRecord::Base
 	before_destroy :liberaAsiento
 	belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
 	has_many :operacionregistros, -> {order(:saldo_tipo)}, dependent: :destroy
-	has_many :operacionregistros, -> {order(:saldo_tipo)}, dependent: :destroy
 	delegate :registros, :to => :asiento
 	accepts_nested_attributes_for :operacionregistros, allow_destroy: true
 	
@@ -106,7 +105,7 @@ class Rad::Operacion < ActiveRecord::Base
 			else
 				errors.add(:base, "Error al generar el asiento")
 				false
-			end	
+			end
 		end
 	end
 	# FX PARA EL CALCULO DE CUENTAS
