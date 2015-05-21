@@ -192,4 +192,8 @@ class Rco::Registro < ActiveRecord::Base
 		compatibles
 	end
 
+	def self.chequear_cuenta(cuenta_id)
+		where(:cuenta_id => cuenta_id).empty?
+	end
+
 end

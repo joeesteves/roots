@@ -59,11 +59,6 @@ class Rco::CuentasController < ApplicationController
     redirect_to rco_cuentas_url, notice: 'Cuenta eliminado.'
   end
 
-  def borrar_seleccion
-    Rco::Cuenta.destroy(params[:ids]) 
-    render nothing: true  
-  end
-
   def x_operacion_tipo
     empresagrupo_id = session[:empresagrupo_id]
     cuentas = Rco::Cuenta.xOperacionTipo(params[:operaciontipo_codigo], empresagrupo_id)

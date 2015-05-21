@@ -29,10 +29,13 @@
 			<%= render "layouts/globals/filtro" %>
 
 		<% end %>
+
 		<div id='info'>
-		<% if notice %>	
-			<%= render "layouts/globals/notice" %>
-		<% end %>
+		
+			<% if notice %>	
+				<%= render "layouts/globals/notice" %>
+			<% end %>
+			
 		</div>
 		
 		<%= yield %>
