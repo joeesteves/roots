@@ -39,8 +39,8 @@ module ModeloGlobales
 			where(:empresa_id => empresaId)
 		end
 
-		def deEmpresaGrupoXId(empresaId)
-			where(:empresagrupo_id => empresaId)
+		def deEmpresaGrupoXId(empresa_grupo_id)
+			where(:empresagrupo_id => empresa_grupo_id)
 		end
 
 	# filtros por codigo

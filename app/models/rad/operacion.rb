@@ -9,6 +9,7 @@ class Rad::Operacion < ActiveRecord::Base
 	before_destroy :liberaAsiento
 	belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
 	has_many :operacionregistros, -> {order(:saldo_tipo)}, dependent: :destroy
+	has_many :operacionregistros, -> {order(:saldo_tipo)}, dependent: :destroy
 	delegate :registros, :to => :asiento
 	accepts_nested_attributes_for :operacionregistros, allow_destroy: true
 	
@@ -45,14 +46,20 @@ class Rad::Operacion < ActiveRecord::Base
 		cuentas_origen = send(vars[:cuentas_origen])
 		cuenta_destino = send(vars[:cuentas_destino]).first.cuenta_id #por ahora se permite una sola
 		cuotas_array = cuotas_array(fecha, cuotas, importe, cuotaimporte)
+		cuenta_destino_objeto = Rco::Cuenta.find(cuenta_destino)
+		if cuenta_destino_objeto.es_tarjeta?
+			organizacion_destino_id = cuenta_destino_objeto.organizacion_id
+		else
+			organizacion_destino_id = organizacion_id
+		end
 
-		unless operaciontipo.codigo == 0 # - MOV. FONDOS
+		unless operaciontipo.codigo == 0 # !MOV. FONDOS
 			if rdosxmes == false
 				cuentas_origen.each do |cuenta_origen|
 					asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, vars[:valor_al_metodo_op] => cuenta_origen.valor, :fecha => fecha, :organizacion_id => organizacion_id)
 				end
 				cuotas_array.each do |k|
-					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha =>  k[:fecha], :organizacion_id => organizacion_id)
+					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha =>  k[:fecha], :organizacion_id => organizacion_destino_id)
 				end
 			else  # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
 				cuotas_array.each do |k|
@@ -64,7 +71,7 @@ class Rad::Operacion < ActiveRecord::Base
 						end
 						asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, metodo_op_doh => cuenta_origen.valor, :fecha => k[:fecha], :organizacion_id => organizacion_id)
 					end
-					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha => k[:fecha], :organizacion_id => organizacion_id)	
+					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha => k[:fecha], :organizacion_id => organizacion_destino_id)	
 				end
 			end
 		else # MOV. FONDOS

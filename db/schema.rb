@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150511134833) do
+ActiveRecord::Schema.define(version: 20150520202321) do
 
   create_table "rad_operaciones", force: true do |t|
     t.date     "fecha"
@@ -283,6 +283,7 @@ ActiveRecord::Schema.define(version: 20150511134833) do
     t.integer  "empresagrupo_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "organizacion_id"
   end
 
   add_index "rco_cuentas", ["cuentatipo_id"], name: "index_rco_cuentas_on_cuentatipo_id", using: :btree

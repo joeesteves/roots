@@ -22,6 +22,7 @@ class Rco::CuentasController < ApplicationController
   # GET /rco/cuentas/new
   def new
     @rco_cuenta = Rco::Cuenta.new
+    @rco_cuenta.empresagrupo_id = session[:empresagrupo_id]
     define_nodo(params[:nodo])
   end
 
@@ -86,6 +87,6 @@ class Rco::CuentasController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def rco_cuenta_params
       params.require(:rco_cuenta).permit(:codigo, :nombre, 
-        :estado, :desc, :cuentatipo_id, :empresagrupo_id)
+        :estado, :desc, :cuentatipo_id, :empresagrupo_id, :organizacion_id)
     end
 end

@@ -1,16 +1,20 @@
 <% f.errores %>
 <div class="row">
-  <div class="small-4 columns">
+  <div class="small-3 columns">
     <%= f.text_field :codigo %>
   </div>
-  <div class="small-4 columns">
+  <div class="small-3 columns">
     <%= f.text_field :nombre %>
   </div>
   
-  <div class="small-4 columns">
-    <%= f.collection_select :cuentatipo_id, Rco::Cuentatipo.all, :id,
-     :nombre, {}, {label: "Tipo"}%>
+  <div class="small-3 columns">
+   <%= f.select :cuentatipo_id, Rco::Cuentatipo.all.map {|c| [c.nombre, c.id, {data: {codigo: c.codigo}}]}, {}, {label: "Tipo"} %>
   </div>
+  <div class="small-3 columns organizacion_div">
+    <%= f.collection_select :organizacion_id, Rba::Organizacion.deEmpresaGrupoXId(@rco_cuenta.empresagrupo_id), :id,
+     :nombre, {}, {label: "Organizacion"}%>
+  </div>
+</
 </div>
 <div class="row">
 
