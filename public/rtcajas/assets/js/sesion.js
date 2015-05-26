@@ -5,7 +5,7 @@ app.directive('sesion', function(){
 		templateUrl: 'sesion.html',
 		controller: ['$rootScope','$scope', '$http', '$cookies', function($rootScope, $scope, $http, $cookies){
 			$rootScope.get_cuentas_egresos = function() {
-				$http.get('http://rba.herokuapp.comhttp://rba.herokuapp.com//api/rba/cajas/egresos').
+				$http.get('http://rba.herokuapp.com/api/rba/cajas/egresos').
 				success(function(data, status, headers, config) {
 					$rootScope.cuentas_egresos = data;
 				});
