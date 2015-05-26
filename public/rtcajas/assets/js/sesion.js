@@ -8,6 +8,7 @@ app.directive('sesion', function(){
 				$http.get('http://rba.herokuapp.com/api/rba/cajas/egresos').
 				success(function(data, status, headers, config) {
 					$rootScope.cuentas_egresos = data;
+					$rootScope.velo = false;
 				});
 			};
 			$rootScope.get_cuenta_caja = function() {
@@ -19,15 +20,17 @@ app.directive('sesion', function(){
 			};	
 			if ($cookies.usuario_nombre) {
 				$rootScope.logueado=true;
-				$rootScope.get_cuentas_egresos();
 				$rootScope.get_cuenta_caja();
+				$rootScope.get_cuentas_egresos();
+				$rootScope.velo = true;
 			};
 			$scope.log_in = function(){
 				$http.post('http://rba.herokuapp.com/api/rba/sesiones', {usuario: $scope.usuario, password: $scope.password, empresagrupo: 1}, {withCredentials: true}).
 				success(function(data, status, headers, config) {
+					$rootScope.velo = true;
 					$rootScope.logueado=true;
-					$rootScope.get_cuentas_egresos();
 					$rootScope.get_cuenta_caja();
+					$rootScope.get_cuentas_egresos();
 
 				}).
 				error(function(data, status, headers, config) {
