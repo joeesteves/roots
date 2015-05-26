@@ -26,7 +26,7 @@ class Api::Rba::CajasController < ApplicationController
     rad_operacion.importe = params[:importe]
     rad_operacion.desc = params[:desc] ||= ''
     rad_operacion.cuotas = 1
-    rad_operacion.cuotaimporte = 1
+    rad_operacion.cuotaimporte = params[:importe]
     if rad_operacion.rSave(nil,nil)
       render nothing: true
     else 
