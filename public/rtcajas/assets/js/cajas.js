@@ -11,16 +11,18 @@ app.directive('cajas', function(){
 			};
 			$scope.vaciar_formulario = function() {
 				 $scope.importe = undefined;
-				 $scope.desc = undefined;
+				 $scope.desc = undefined; 
 			};
 			$scope.apretar_boton = function(cuenta) {
 				if (cuenta.activo == true & $scope.importe != undefined) {
+					$rootScope.velo = true
 					obj = {'caja_id': $rootScope.cuenta_caja.id, 'cuenta_id': cuenta.id, 'importe': $scope.importe, 'desc': $scope.desc};
 					$http.post("http://rba.herokuapp.com/api/rba/cajas", obj).
 					success(function() {
 						$rootScope.get_cuenta_caja();
 						$scope.reset();
 						$scope.vaciar_formulario();
+						$rootScope.velo = false
 					}).
 					error(function() {
 						alert("Problema Interno");
