@@ -1,0 +1,43 @@
+input {
+	margin: 4px 1px 4px 1px;
+	width: 100%;
+	text-align: center;
+
+}
+input[type=submit] {
+	height: 75px;
+
+}
+input[type=text], input[type=password], input[type=number] {
+	height: 75px;
+	font-size:30px;
+}
+
+textarea {
+	margin: 4px 1px 4px 1px;
+	width: 100%;
+	height: 125px;
+	font-size:30px;
+	vertical-align: text-top;
+	text-align: center;
+}
+.col-xs-6.cuentas, .col-xs-12 {
+	padding: 1px;
+}
+
+span.label {
+	margin: 4px 1px 4px 1px;
+	width: 100%;
+	text-align: center;
+	height: 75px;
+	font-size:30px;
+	padding: 10px;
+}
+
+ input.ng-invalid {
+     border: 3px solid #FFC2C2;
+  }
+
+  input.ng-valid {
+    border: 3px solid #5cb85c;
+  }

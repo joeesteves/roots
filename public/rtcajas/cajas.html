@@ -1,0 +1,13 @@
+<div class="panel panel-default col-xs-12" ng-show="logueado" >
+	<form style="width:100%">
+		<div class="col-xs-12">
+			<input type="number" step="any" placeholder="Importe" ng-model="importe" required>
+			<textarea placeholder="Descripción" wrap="hard" rows="4" ng-model="desc"></textarea>
+		</div>
+		<div class="col-xs-12 cuentas">
+			<span class="label label-success col-xs-12">{{cuenta_caja.nombre}}</br>SALDO: {{cuenta_caja.saldo}}</span>
+		</div>
+		<div class="col-xs-6 cuentas"  ng-repeat="cuenta in cuentas_egresos"  ng-init="cuenta.activo = false">
+			<input id="{{cuenta.nombre}}" type="submit" ng-class="cuenta.activo ? 'btn btn-success' : 'btn btn-warning'" value="{{cuenta.nombre}}"  ng-disabled="tiene_saldo" ng-click="apretar_boton(cuenta)" />
+		</div>
+	</form>

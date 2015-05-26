@@ -1,0 +1,10 @@
+<div class="col-xs-12">
+<form ng-submit="log_in()" ng-hide="logueado">
+<input  class="form-control" type="text" ng-model="usuario" placeholder="Usuario" required/>
+<input  class="form-control" type="password" ng-model="password" placeholder="Contraseña" required/>
+<input  class="btn btn-primary" type="submit" value="Entar">
+</form>
+<form ng-submit="log_out()" ng-show="logueado">
+<input  class="btn btn-primary" type="submit" value="Salir">
+</form>
+</div>
