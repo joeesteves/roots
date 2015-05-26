@@ -16,7 +16,7 @@ app.directive('cajas', function(){
 			$scope.apretar_boton = function(cuenta) {
 				if (cuenta.activo == true & $scope.importe != undefined) {
 					obj = {'caja_id': $rootScope.cuenta_caja.id, 'cuenta_id': cuenta.id, 'importe': $scope.importe, 'desc': $scope.desc};
-					$http.post("http://rba.herokuapps.com/api/rba/cajas", obj).
+					$http.post("http://rba.herokuapp.com/api/rba/cajas", obj).
 					success(function() {
 						$rootScope.get_cuenta_caja();
 						$scope.reset();
