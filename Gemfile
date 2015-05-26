@@ -46,6 +46,8 @@ gem 'chosen-rails'
 
 # para Heroku
 gem 'rails_12factor', group: :production
+
+gem 'rack-cors', :require => 'rack/cors'
 # gem 'roo'
 # Use unicorn as the app server
 # gem 'unicorn'

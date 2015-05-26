@@ -1,5 +1,7 @@
 Roots::Application.routes.draw do
 
+  get "cajas/cajas"
+  get "cajas/create"
  concern :globales do
     collection do
       post :borrar_seleccion
@@ -10,6 +12,7 @@ Roots::Application.routes.draw do
   end
 
   get 'salir', to: 'rba/sesiones#salir', :as => :salir
+  get '/api/rba/sesiones/salir', to: 'api/rba/sesiones#salir'
   get '/rba/sesiones/actualizaSesion/:modelo/:id', to: 'rba/sesiones#actualizaSesion', :as => :actualizaSesion
   post 'rba/mover_items', to: 'rba/nodos#mover_items'
   root 'rba/bienvenidos#inicio'
@@ -87,6 +90,16 @@ Roots::Application.routes.draw do
       concerns [:globales]
     end
   end
+
+    namespace :api, defaults: {format: 'json'} do
+      namespace :rba do
+        resources :sesiones
+        resources :cajas do
+          get :caja, on: :collection
+          get :egresos, on: :collection
+        end
+      end
+    end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
