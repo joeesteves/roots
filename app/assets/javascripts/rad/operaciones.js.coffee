@@ -193,7 +193,7 @@ get_origen = () ->
 		when 1, 2, 3
 			"haber"
 		when 0
-			"movimiento_fondos"
+			"debe"
 get_destino = () ->
 	switch get_op_tipo()
 		when -1,-2,-3
@@ -201,7 +201,7 @@ get_destino = () ->
 		when 1, 2, 3
 			"debe"
 		when 0
-			"movimiento_fondos"
+			"haber"
 get_organizacion_id = () ->
 	$('#rad_operacion_organizacion_id').val()
 get_operacion_id = () ->
@@ -214,24 +214,26 @@ interruptor_inputs_y_agregar_lineas = () ->
 	lineas_vivas = get_origen()
 	switch lineas_vivas
 		when 'debe'
-			posicion = true
+			posicionDebe = true
+			posicionHaber = !posicionDebe
 			$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos').show()
 			$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos, .debe a.quitar_campos:first').hide()
-			rev
 		when 'haber'
-			posicion = false
+			posicionDebe = false
+			posicionHaber = !posicionDebe
 			$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos').show()
 			$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos, .haber a.quitar_campos:first').hide()
-			rev
 		when 'movimiento_fondos'
-			posicion = false
-			rev = !
+			posicionDebe = false
+			posicionHaber = posicionDebe
 			$('a.simil_agrega_campos_H, a.agregar_campos_H, .haber a.quitar_campos').hide()
 			$('a.simil_agrega_campos_D, a.agregar_campos_D, .debe a.quitar_campos').hide()
 	$('.row.' + lineas_vivas).not(':first').remove() if lineas_vivas != 'movimiento_fondos' && $('#action_name').val() != 'edit'
-	$('input.debe').prop('readonly', rev + !posicion)
-	$('input.haber').prop('readonly', posicion)
-	$('[readonly]').prop('tabindex', -1)
+	$('input.debe').prop('readonly', posicionHaber)
+	$('input.haber').prop('readonly', posicionDebe)
+	$('input[readonly]').prop('tabindex', -1)
+	$('input:not([readonly])').prop('tabindex',true)
+
 
 interruptor_cuotas = (io) ->
 	traduccion = traduce_io(io)
