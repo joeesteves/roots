@@ -55,7 +55,14 @@ class Rad::Operacion < ActiveRecord::Base
 		unless operaciontipo.codigo == 0 # !MOV. FONDOS
 			if rdosxmes == false
 				cuentas_origen.each do |cuenta_origen|
-					asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, vars[:valor_al_metodo_op] => cuenta_origen.valor, :fecha => fecha, :organizacion_id => organizacion_id)
+					if cuenta_origen.valor < 0
+						metodo_op_doh = vars[:inv_valor_al_metodo_op]
+						valor = cuenta_origen.valor * -1
+					else
+						metodo_op_doh = vars[:valor_al_metodo_op]
+						valor = cuenta_origen.valor
+					end
+					asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, metodo_op_doh => valor, :fecha => fecha, :organizacion_id => organizacion_id)
 				end
 				cuotas_array.each do |k|
 					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha =>  k[:fecha], :organizacion_id => organizacion_destino_id)
@@ -65,10 +72,12 @@ class Rad::Operacion < ActiveRecord::Base
 					cuentas_origen.each do |cuenta_origen|
 						if cuenta_origen.valor < 0
 							metodo_op_doh = vars[:inv_valor_al_metodo_op]
+							valor = cuenta_origen.valor * -1
 						else
 							metodo_op_doh = vars[:valor_al_metodo_op]
+							valor = cuenta_origen.valor
 						end
-						asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, metodo_op_doh => cuenta_origen.valor, :fecha => k[:fecha], :organizacion_id => organizacion_id)
+						asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, metodo_op_doh => valor, :fecha => k[:fecha], :organizacion_id => organizacion_id)
 					end
 					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha => k[:fecha], :organizacion_id => organizacion_destino_id)	
 				end

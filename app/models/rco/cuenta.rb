@@ -24,6 +24,7 @@ class Rco::Cuenta < ActiveRecord::Base
 		joins(:registros).group('rco_cuentas.id').
 		where('rco_registros.fecha <= :fecha', :fecha => fecha).
 		having('coalesce(sum(rco_registros.debe),0)-coalesce(sum(rco_registros.haber),0) != 0').
+		order('rco_cuentatipos.codigo asc, rco_cuentas.nombre asc').
 		references(:registros)
 	end
 	def es_tarjeta?
