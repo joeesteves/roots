@@ -232,7 +232,7 @@ interruptor_inputs_y_agregar_lineas = () ->
 	$('input.debe').prop('readonly', posicionHaber)
 	$('input.haber').prop('readonly', posicionDebe)
 	$('input[readonly]').prop('tabindex', -1)
-	$('input:not([readonly])').prop('tabindex',true)
+	$('input:not([readonly])').removeProp('tabindex')
 
 
 interruptor_cuotas = (io) ->
