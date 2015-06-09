@@ -23,6 +23,7 @@ class Rco::Cuenta < ActiveRecord::Base
 		xTipos(tipos, empresagrupo_id).
 		joins(:registros).group('rco_cuentas.id').
 		where('rco_registros.fecha <= :fecha', :fecha => fecha).
+		where('rco_registros.id' => Rco::Registro.pendientes.collect(&:id)).
 		having('coalesce(sum(rco_registros.debe),0)-coalesce(sum(rco_registros.haber),0) != 0').
 		order('rco_cuentatipos.codigo asc, rco_cuentas.nombre asc').
 		references(:registros)

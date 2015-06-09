@@ -32,6 +32,7 @@ class Rco::Registro < ActiveRecord::Base
 	def self.saldoCta(ctas, fecha, empresa)
 		where(:cuenta_id => ctas).
 		where('rco_registros.fecha <= :fecha', :fecha => fecha).
+		where(:id => pendientes.collect(&:id)).
 		includes(:asiento).
 		where('rco_asientos.empresa_id in (?)', empresa).
 		references(:asiento).
@@ -41,15 +42,17 @@ class Rco::Registro < ActiveRecord::Base
 	def self.saldoMesCta(ctas, fecha, empresa)
 		where(:cuenta_id => ctas).
 		where('month(rco_registros.fecha) = :mes and year(rco_registros.fecha) = :year ', :mes => fecha.month, :year => fecha.year).
+		where(:id => pendientes.collect(&:id)).
 		includes(:asiento).
 		where('rco_asientos.empresa_id in (?)', empresa).
 		references(:asiento).
-		sum('coalesce(debe,0) -coalesce(haber,0)', :group => :cuenta_id)
+		sum('coalesce(debe,0) - coalesce(haber,0)', :group => :cuenta_id)
 	end
 
 	def self.saldoPeriodoCta(ctas, desde, hasta, empresa)
 		where(:cuenta_id => ctas).
 		where('rco_registros.fecha > :desde AND rco_registros.fecha <= :hasta', :desde => desde, :hasta => hasta).
+		where(:id => pendientes.collect(&:id)).
 		includes(:asiento).
 		where('rco_asientos.empresa_id in (?)', empresa).
 		references(:asiento).
