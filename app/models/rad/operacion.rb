@@ -196,7 +196,7 @@ class Rad::Operacion < ActiveRecord::Base
 	      end
 	    when 'registros'
 	    	case codigo
-		      when -1, -2, -3
+		      when -1, -2, -3, 0
 		        valor_al = "debe"
 		      when 1, 2, 3
 		        valor_al = "haber"
