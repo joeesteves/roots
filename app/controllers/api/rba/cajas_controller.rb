@@ -1,7 +1,7 @@
 class Api::Rba::CajasController < ApplicationController
   def caja
   	@caja = Rco::Cuenta.xTipos('1.1', 1).where("rco_cuentas.nombre like 'CAJA%'").first
-  	saldo = Rco::Registro.saldoCta(@caja, Date.today, 1)[@caja.id]
+  	saldo =  Rco::Registro.saldoCta([@caja.id], Date.today, 1)[@caja.id]
   	@caja =  @caja.attributes.merge({saldo: saldo})
   	render json: @caja
   end
