@@ -46,9 +46,9 @@ $.fn.gridInit = (col_nombres, col_props, query, agrupar) ->
 		selectionmode: 'multiplerowsextended', #'checkbox', 'multiplerows'
 		filterable: true,
 		pageable: true,
-		pagesizeoptions: ['25','50','100'],
-		pagesize: 25
-		groupsexpandedbydefault: true
+		pagesizeoptions: ['500','1000','5000'],
+		pagesize: 500
+		groupsexpandedbydefault: false
 
 	$("#jqxgrid").jqxGrid(opciones)
 

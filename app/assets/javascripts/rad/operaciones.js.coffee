@@ -310,7 +310,7 @@ $.fn.seleccionaAplicados = (aplicados_ids, ood) ->
 $.fn.gridRequest = (query) ->
 	nombres = ['id','fecha','tipo', 'importe',['desc','string'],'cuotaimporte']
 	propiedades = [['Fecha','20%'],['Tipo','auto'],['Importe','20%'],['desc','auto', 'Descripción'],['cuotaimporte','auto','Cuota']]
-	$.fn.gridPrepDatos(nombres, propiedades, query)
+	$.fn.gridPrepDatos(nombres, propiedades, query, 'tipo')
 
 $(document).on('page:load', ready)
 $(document).ready(ready)
