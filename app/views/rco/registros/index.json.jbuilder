@@ -20,7 +20,7 @@ json.array!(@rco_registros) do |rco_registro|
   end
   json.debe debe
   json.haber haber
-  json.extract! rco_registro, :desc
+  json.desc rco_registro.desc
   json.fecha rco_registro.fecha.strftime("%d/%m/%Y") rescue nil
   cuenta = rco_registro.cuenta
   if cuenta.id == cuenta_ant_id
@@ -31,5 +31,9 @@ json.array!(@rco_registros) do |rco_registro|
 	json.cuenta cuenta.nombre
   json.saldo saldo
   cuenta_ant_id = cuenta.id
-  json.desc_asiento rco_registro.asiento.desc rescue nil
+  if rco_registro.organizacion
+    json.organizacion rco_registro.organizacion.nombre
+  else
+    json.organizacion "S/O"
+  end
 end
