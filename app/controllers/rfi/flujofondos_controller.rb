@@ -15,12 +15,12 @@ class Rfi::FlujofondosController < ApplicationController
 		@sDI = Rco::Registro.saldoCta(ctasDispIds,hoy,empresaId) # saldos iniciales
 		sDI = Array.new
 		@sDI.each {|k,v| sDI.push(v)}
-		@sDITotal = sDI.sum
+		@sDITotal = sDI.sum.round(2)
 
 		@sDF = Rco::Registro.saldoCta(ctasDispIds,hasta,empresaId) # saldos finales 
 		sDF = Array.new
 		@sDF.each {|k,v| sDF.push(v)}
-		@sDFTotal = sDF.sum
+		@sDFTotal = sDF.sum.round(2)
 		@sMes = Array.new	
 		@sMesTotales = Array.new
 		@rep.times do |t|
@@ -31,7 +31,7 @@ class Rfi::FlujofondosController < ApplicationController
 				@sMes[t] = Rco::Registro.saldoMesCta(ctasDispIds,hoy.advance(:months => t),empresaId)
 			end
 			@sMes[t].each {|k,v| sMes.push(v)} 
-			@sMesTotales[t] = sMes.sum
+			@sMesTotales[t] = sMes.sum.round(2)
 
 		end
 		@meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']

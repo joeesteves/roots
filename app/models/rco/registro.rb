@@ -29,34 +29,22 @@ class Rco::Registro < ActiveRecord::Base
 		end
 	end
 	
-	def self.saldoCta(ctas, fecha, empresa)
-		where(:cuenta_id => ctas).
-		where('rco_registros.fecha <= :fecha', :fecha => fecha).
-		where(:id => pendientes.collect(&:id)).
-		includes(:asiento).
-		where('rco_asientos.empresa_id in (?)', empresa).
-		references(:asiento).
-		sum('coalesce(debe,0) - coalesce(haber,0)', :group => :cuenta_id)
+	def self.saldoCta(cuentas, fecha, empresa)
+		query = {}
+		find_by_sql("select rco_registros.cuenta_id, sum(coalesce(sq.pendienteDebe,0) - coalesce(sq.pendienteHaber,0)) as pendiente from rco_registros join (select rco_registros.*, (rco_registros.debe - coalesce(sum(apHaber.importe),0)) as pendienteDebe, (rco_registros.haber - coalesce(sum(apDebe.importe),0)) as pendienteHaber from rco_registros left outer JOIN rco_asientos on rco_asientos.id = rco_registros.asiento_id left outer join rco_aplicaciones as apDebe on rco_registros.id = apDebe.reg_haber_id left outer join rco_aplicaciones as apHaber on rco_registros.id = apHaber.reg_debe_id where rco_asientos.empresa_id in (#{empresa}) and rco_registros.fecha <= '#{fecha}' group by rco_registros.id) as sq on rco_registros.id = sq.id where rco_registros.cuenta_id in (#{cuentas.join(',')}) group by rco_registros.cuenta_id").map{ |v| query[v.cuenta_id] = v.pendiente.to_f.round(2) }
+		query
 	end 
 
-	def self.saldoMesCta(ctas, fecha, empresa)
-		where(:cuenta_id => ctas).
-		where('month(rco_registros.fecha) = :mes and year(rco_registros.fecha) = :year ', :mes => fecha.month, :year => fecha.year).
-		where(:id => pendientes.collect(&:id)).
-		includes(:asiento).
-		where('rco_asientos.empresa_id in (?)', empresa).
-		references(:asiento).
-		sum('coalesce(debe,0) - coalesce(haber,0)', :group => :cuenta_id)
+	def self.saldoMesCta(cuentas, fecha, empresa)
+		query = {}
+		find_by_sql("select rco_registros.cuenta_id, sum(coalesce(sq.pendienteDebe,0) - coalesce(sq.pendienteHaber,0)) as pendiente from rco_registros join (select rco_registros.*, (rco_registros.debe - coalesce(sum(apHaber.importe),0)) as pendienteDebe, (rco_registros.haber - coalesce(sum(apDebe.importe),0)) as pendienteHaber from rco_registros left outer JOIN rco_asientos on rco_asientos.id = rco_registros.asiento_id left outer join rco_aplicaciones as apDebe on rco_registros.id = apDebe.reg_haber_id left outer join rco_aplicaciones as apHaber on rco_registros.id = apHaber.reg_debe_id where rco_asientos.empresa_id in (#{empresa}) and month(rco_registros.fecha) = #{fecha.month} and year(rco_registros.fecha) = #{fecha.year} group by rco_registros.id) as sq on rco_registros.id = sq.id where rco_registros.cuenta_id in (#{cuentas.join(',')}) group by rco_registros.cuenta_id").map{ |v| query[v.cuenta_id] = v.pendiente.to_f.round(2) }
+		query
 	end
 
-	def self.saldoPeriodoCta(ctas, desde, hasta, empresa)
-		where(:cuenta_id => ctas).
-		where('rco_registros.fecha > :desde AND rco_registros.fecha <= :hasta', :desde => desde, :hasta => hasta).
-		where(:id => pendientes.collect(&:id)).
-		includes(:asiento).
-		where('rco_asientos.empresa_id in (?)', empresa).
-		references(:asiento).
-		sum('coalesce(debe,0) -coalesce(haber,0)', :group => :cuenta_id)
+	def self.saldoPeriodoCta(cuentas, desde, hasta, empresa)
+		query = {}
+		find_by_sql("select rco_registros.cuenta_id, sum(coalesce(sq.pendienteDebe,0) - coalesce(sq.pendienteHaber,0)) as pendiente from rco_registros join (select rco_registros.*, (rco_registros.debe - coalesce(sum(apHaber.importe),0)) as pendienteDebe, (rco_registros.haber - coalesce(sum(apDebe.importe),0)) as pendienteHaber from rco_registros left outer JOIN rco_asientos on rco_asientos.id = rco_registros.asiento_id left outer join rco_aplicaciones as apDebe on rco_registros.id = apDebe.reg_haber_id left outer join rco_aplicaciones as apHaber on rco_registros.id = apHaber.reg_debe_id where rco_asientos.empresa_id in (#{empresa}) and rco_registros.fecha > #{desde} and rco_registros.fecha <= #{hasta} group by rco_registros.id) as sq on rco_registros.id = sq.id where rco_registros.cuenta_id in (#{cuentas.join(',')}) group by rco_registros.cuenta_id").map{ |v| query[v.cuenta_id] = v.pendiente.to_f.round(2) }
+		query
 	end  
 
 	def self.filtros(empresa_ids, desde, hasta, cuentas, ver_saldos)
@@ -76,7 +64,6 @@ class Rco::Registro < ActiveRecord::Base
 			where('rco_asientos.empresa_id in (?)', empresa_ids).
 			where('rco_registros.fecha >= ?', desde).
 			where('rco_registros.fecha <= ?', hasta).
-			ctes.
 			con_cuenta(cuentas).order(:cuenta_id, :fecha, :id)
 		else 
 			includes(:asiento).
