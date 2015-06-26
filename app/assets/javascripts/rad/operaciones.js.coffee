@@ -308,7 +308,7 @@ $.fn.seleccionaAplicados = (aplicados_ids, ood) ->
 		agregar_editor_aplicacion($(this),'onRecord', ood)
 		
 $.fn.gridRequest = (query) ->
-	nombres = ['id','fecha','tipo', 'importe','desc','cuotaimporte']
+	nombres = ['id','fecha','tipo', 'importe',['desc','string'],'cuotaimporte']
 	propiedades = [['Fecha','20%'],['Tipo','auto'],['Importe','20%'],['desc','auto', 'Descripción'],['cuotaimporte','auto','Cuota']]
 	$.fn.gridPrepDatos(nombres, propiedades, query)
 

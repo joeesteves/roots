@@ -59,7 +59,7 @@ ready = ->
 		return false
 
 $.fn.gridRequest = (query) ->
-	nombres = ['id','fecha','desc','importe','moneda','cotizacion']
+	nombres = ['id','fecha',['desc', 'string'],'importe','moneda','cotizacion']
 	propiedades = [['Fecha','auto'],['desc','auto','Descripcion'],['Importe','auto'],
 	['Moneda','auto'],['Cotizacion','auto']]
 	$.fn.gridPrepDatos(nombres, propiedades, query)

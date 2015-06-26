@@ -1,0 +1,1 @@
+(function(){var n;n=function(){},$(document).on("page:load",n),$(document).ready(n)}).call(this);

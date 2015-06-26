@@ -10,6 +10,7 @@ class Rad::Operacion < ActiveRecord::Base
 	belongs_to :asiento, class_name: "Rco::Asiento", dependent: :destroy, inverse_of: :operacion
 	has_many :operacionregistros, -> {order(:saldo_tipo)}, dependent: :destroy
 	delegate :registros, :to => :asiento
+	belongs_to :organizacion, class_name: "Rba::Organizacion"
 	accepts_nested_attributes_for :operacionregistros, allow_destroy: true
 	
 	def ctas_debe_instancia
