@@ -1,0 +1,2 @@
+module Rco::EerrHelper
+end

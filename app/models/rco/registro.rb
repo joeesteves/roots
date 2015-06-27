@@ -45,7 +45,17 @@ class Rco::Registro < ActiveRecord::Base
 		query = {}
 		find_by_sql("select rco_registros.cuenta_id, sum(coalesce(sq.pendienteDebe,0) - coalesce(sq.pendienteHaber,0)) as pendiente from rco_registros join (select rco_registros.*, (rco_registros.debe - coalesce(sum(apHaber.importe),0)) as pendienteDebe, (rco_registros.haber - coalesce(sum(apDebe.importe),0)) as pendienteHaber from rco_registros left outer JOIN rco_asientos on rco_asientos.id = rco_registros.asiento_id left outer join rco_aplicaciones as apDebe on rco_registros.id = apDebe.reg_haber_id left outer join rco_aplicaciones as apHaber on rco_registros.id = apHaber.reg_debe_id where rco_asientos.empresa_id in (#{empresa}) and rco_registros.fecha > #{desde} and rco_registros.fecha <= #{hasta} group by rco_registros.id) as sq on rco_registros.id = sq.id where rco_registros.cuenta_id in (#{cuentas.join(',')}) group by rco_registros.cuenta_id").map{ |v| query[v.cuenta_id] = v.pendiente.to_f.round(2) }
 		query
-	end  
+	end
+
+	def self.saldo_cuenta_resultado(cuentas, desde, hasta, empresa)
+		includes(:asiento).
+		where('rco_asientos.empresa_id in (?)', empresa).
+		where('rco_registros.fecha > ?', desde).
+		where('rco_registros.fecha <= ?', hasta).
+		where(:cuenta_id => cuentas).
+		sum('coalesce(debe,0) - coalesce(haber,0)', :group => :cuenta_id)
+	end
+
 
 	def self.filtros(empresa_ids, desde, hasta, cuentas, ver_saldos)
 		##revisar esto genera el json ok. Pero jqxgrid lee solo algunos registros

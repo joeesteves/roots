@@ -1,0 +1,52 @@
+<%= hidden_field_tag 'filtro_desde', @desde %>
+<%= hidden_field_tag 'filtro_hasta', @hasta %>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	google.load("visualization", "1", {packages:["corechart"]});
+	google.setOnLoadCallback(drawChart);
+	function drawChart() {
+	  var data = google.visualization.arrayToDataTable([
+	    ['Cuenta', 'Saldo', { role: 'style' }],
+	    <% @saldo_cuentas_resultado.each do |k,v| %>
+			['<%= Rco::Cuenta.find(k.to_i).nombre %>' , <%= v.to_i %> , '<%= v>0?"red":"blue"%>'],
+		  <% end %>
+				
+	  ]);
+
+	  var options = {
+	    title: 'Estado de resultados',
+	    hAxis: {title: 'EERR', titleTextStyle: {color: 'blue'}},
+			legend: {position: 'none'}
+
+	  };
+
+	  var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+	  chart.draw(data, options);
+	}
+</script>
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Cuenta', 'Importe'],
+         <% @saldo_cuentas_egreso.each do |k,v| %>
+					['<%= Rco::Cuenta.find(k.to_i).nombre %>' , <%= v.to_i %> ],
+		  	<% end %>
+        ]);
+
+        var options = {
+          title: 'Composición del Egreso',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+<h1> RESULTADOS </h1>
+DESDE <%= @desde.strftime('%d/%m/%Y') %>
+HASTA <%= @hasta.strftime('%d/%m/%Y') %>
+<div id="chart_div" style="height: 700px"></div>
+ <div id="piechart_3d" style="width: 1200px; height: 700px;"></div>

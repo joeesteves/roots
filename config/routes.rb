@@ -63,6 +63,7 @@ Roots::Application.routes.draw do
     :cotizaciones,
     :monedas,
     concerns: [:globales]
+    resources :eerr
   end
 
   namespace :rga do
