@@ -7,15 +7,15 @@
 	google.setOnLoadCallback(drawChart);
 	function drawChart() {
 	  var data = google.visualization.arrayToDataTable([
-	    ['Cuenta', 'Saldo', { role: 'style' }],
-	    <% @saldo_cuentas_resultado.each do |k,v| %>
-			['<%= Rco::Cuenta.find(k.to_i).nombre %>' , <%= v.to_i %> , '<%= v>0?"red":"blue"%>'],
+	    ['Cuenta', 'Saldo', { role: 'style' },{ role: 'annotation' }],
+	    <% @saldo_cuentas_egreso.each do |k,v| %>
+			['<%= Rco::Cuenta.find(k.to_i).nombre %>' , <%= v.to_i %> , '<%= v>0?"red":"blue"%>','<%= v.to_i %>' ],
 		  <% end %>
 				
 	  ]);
 
 	  var options = {
-	    title: 'Estado de resultados',
+	    title: 'Analisis de Egresos',
 	    hAxis: {title: 'EERR', titleTextStyle: {color: 'blue'}},
 			legend: {position: 'none'}
 
@@ -45,8 +45,34 @@
         chart.draw(data, options);
       }
     </script>
+    <script type="text/javascript">
+	google.load("visualization", "1", {packages:["corechart"]});
+	google.setOnLoadCallback(drawChart);
+	function drawChart() {
+	  var data = google.visualization.arrayToDataTable([
+	    ['Tipo', 'Total', { role: 'style' },{ role: 'annotation' }],
+	 
+			['Egresos' , <%= @egresos_totales.to_s %> , "red",'<%= @egresos_totales.to_s %>' ],
+			['Ingresos' , <%= (@ingresos_totales * -1).to_s %> , "green",'<%= (@ingresos_totales * -1).to_s %>' ],
+		  ['Saldo' , <%= ((@ingresos_totales * -1) - @egresos_totales).to_s %> , "blue",'<%= ((@ingresos_totales * -1) - @egresos_totales).to_s %>' ],
+				
+	  ]);
+
+	  var options = {
+	    title: 'Resultado Económico del período',
+	    hAxis: {title: 'EERR', titleTextStyle: {color: 'blue'}},
+			legend: {position: 'none'}
+
+	  };
+
+	  var chart = new google.visualization.BarChart(document.getElementById('saldo_div'));
+	  chart.draw(data, options);
+	}
+</script>
 <h1> RESULTADOS </h1>
 DESDE <%= begin  @desde.strftime('%d/%m/%Y')  rescue  Date.parse(@desde).strftime('%d/%m/%Y') end %>
 HASTA <%= begin @hasta.strftime('%d/%m/%Y') rescue Date.parse(@hasta).strftime('%d/%m/%Y') end%>
 <div id="chart_div" style="height: 700px"></div>
  <div id="piechart_3d" style="width: 1200px; height: 700px;"></div>
+ <div id="saldo_div" style="height: 700px"></div>
+
