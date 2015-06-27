@@ -46,7 +46,7 @@
       }
     </script>
 <h1> RESULTADOS </h1>
-DESDE <%= @desde.strftime('%d/%m/%Y') %>
-HASTA <%= @hasta.strftime('%d/%m/%Y') %>
+DESDE <%= begin  @desde.strftime('%d/%m/%Y')  rescue  Date.parse(@desde).strftime('%d/%m/%Y') end %>
+HASTA <%= begin @hasta.strftime('%d/%m/%Y') rescue Date.parse(@hasta).strftime('%d/%m/%Y') end%>
 <div id="chart_div" style="height: 700px"></div>
  <div id="piechart_3d" style="width: 1200px; height: 700px;"></div>
