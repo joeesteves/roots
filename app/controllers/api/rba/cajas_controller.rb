@@ -15,13 +15,25 @@ class Api::Rba::CajasController < ApplicationController
     rad_operacion = Rad::Operacion.new
     rad_operacion.empresa_id = session[:empresa_id]
     rad_operacion.fecha = Date.today
-    reg_debe = rad_operacion.operacionregistros.new(:saldo_tipo => 'debe')
-    reg_debe.cuenta_id = params[:cuenta_id]
-    reg_debe.valor = params[:importe]
-    reg_haber = rad_operacion.operacionregistros.new(:saldo_tipo => 'haber')
-    reg_haber.cuenta_id = params[:caja_id]
-    reg_haber.valor = params[:importe]
-    operacionCodigo = -1 # Se define por default el egreso (-1) que es la mas habitual
+        reg_debe = rad_operacion.operacionregistros.new(:saldo_tipo => 'debe')
+        reg_haber = rad_operacion.operacionregistros.new(:saldo_tipo => 'haber')
+    case params[:tipo] 
+      when 'egreso'
+        reg_debe.cuenta_id = params[:cuenta_id]
+        reg_debe.valor = params[:importe]
+        reg_haber.cuenta_id = params[:caja_id]
+        reg_haber.valor = params[:importe]
+        operacionCodigo = -1 # Se define por default el egreso (-1) que es la mas habitual
+      when 'extraccion'
+        reg_debe.cuenta_id = params[:caja_id]
+        reg_debe.valor = params[:importe]
+        reg_haber.cuenta_id = 315 # bbva ca
+        reg_haber.valor = params[:importe]
+        operacionCodigo = 0 # Se define por default el egreso (-1) que es la mas habitual
+    end
+        
+    
+
     rad_operacion.operaciontipo_id = Rad::Operaciontipo.where(:codigo => operacionCodigo).last.id
     rad_operacion.importe = params[:importe]
     rad_operacion.desc = params[:desc] ||= ''

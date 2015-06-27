@@ -6,8 +6,13 @@ input {
 }
 input[type=submit] {
 	height: 75px;
-
 }
+
+input[type=submit].extraccion {
+	height: 75px;
+	width: 100%;
+}
+
 input[type=text], input[type=password], input[type=number] {
 	height: 75px;
 	font-size:30px;

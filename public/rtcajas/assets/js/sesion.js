@@ -31,6 +31,7 @@ app.directive('sesion', function(){
 					$rootScope.logueado=true;
 					$rootScope.get_cuenta_caja();
 					$rootScope.get_cuentas_egresos();
+					$rootScope.banco_activo = false
 
 				}).
 				error(function(data, status, headers, config) {

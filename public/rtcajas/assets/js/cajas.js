@@ -16,7 +16,7 @@ app.directive('cajas', function(){
 			$scope.apretar_boton = function(cuenta) {
 				if (cuenta.activo == true & $scope.importe != undefined) {
 					$rootScope.velo = true
-					obj = {'caja_id': $rootScope.cuenta_caja.id, 'cuenta_id': cuenta.id, 'importe': $scope.importe, 'desc': $scope.desc};
+					obj = {'tipo': 'egreso', 'caja_id': $rootScope.cuenta_caja.id, 'cuenta_id': cuenta.id, 'importe': $scope.importe, 'desc': $scope.desc};
 					$http.post("http://rba.herokuapp.com/api/rba/cajas", obj).
 					success(function() {
 						$rootScope.get_cuenta_caja();
@@ -30,6 +30,24 @@ app.directive('cajas', function(){
 				};
 				$scope.reset();
 				cuenta.activo = !cuenta.activo
+			};
+			$scope.extraccion = function() {
+				if ($rootScope.banco_activo == true & $scope.importe != undefined) {
+					$rootScope.velo = true
+					obj = {'tipo': 'extraccion', 'caja_id': $rootScope.cuenta_caja.id, 'importe': $scope.importe, 'desc': $scope.desc};
+					$http.post("http://rba.herokuapp.com/api/rba/cajas", obj).
+					success(function() {
+						$rootScope.get_cuenta_caja();
+						$scope.reset();
+						$scope.vaciar_formulario();
+						$rootScope.velo = false
+					}).
+					error(function() {
+						alert("Problema Interno");
+					});
+				};
+				$scope.reset();
+				$rootScope.banco_activo = !$rootScope.banco_activo
 			};
 
 		}]
