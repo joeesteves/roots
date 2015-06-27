@@ -10,5 +10,5 @@
 		<div class="col-xs-6 cuentas"  ng-repeat="cuenta in cuentas_egresos"  ng-init="cuenta.activo = false">
 			<input id="{{cuenta.nombre}}" type="submit" ng-class="cuenta.activo ? 'btn btn-success' : 'btn btn-warning'" value="{{cuenta.nombre}}"  ng-disabled="tiene_saldo" ng-click="apretar_boton(cuenta)" />
 		</div>
-			<input type="submit" class="extraccion" ng-class="banco_activo ? 'btn btn-success' : 'btn btn-warning'" value="** EXTRACCION BBVA **"  ng-click="extraccion()" />
+			<input type="submit" ng-class="banco_activo ? 'btn btn-info' : 'btn btn-warning'" value="** EXTRACCION BBVA **"  ng-click="extraccion()" />
 	</form>
