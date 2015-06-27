@@ -1,4 +1,4 @@
-class Rco::EerrController < ApplicationController
+class Rco::EerrsController < ApplicationController
   def index
   	@desde = params[:desde] || Date.today.at_beginning_of_month
   	@hasta = params[:hasta] || Date.today.at_end_of_month
