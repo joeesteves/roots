@@ -17,7 +17,7 @@
 			<% acumulados = @sDITotal  %>
 			<% @rep.times do |t| %>
 				<% acumulados += @sMesTotales[t]  %>
-				<td class="acumulado"><%= acumulados %></td>
+				<td class="acumulado"><%= acumulados.round(2) %></td>
 			<% end %>
 			<td class="acumulado">--</td>
 		</tr>	
