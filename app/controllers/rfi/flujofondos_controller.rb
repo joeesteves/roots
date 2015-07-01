@@ -3,7 +3,7 @@ class Rfi::FlujofondosController < ApplicationController
 	def index
 		empresaGrupoId = session[:empresagrupo_id]
 		empresaId = session[:empresa_id]
-		hoy = Date.today()
+		hoy = Date.today
 		@rep = 8 
 		tiposDeCuenta = [1.12,1.2,1.9,2.2,2.9,2.1]
 		fin = hoy.advance(:months => @rep - 2) 
@@ -27,7 +27,7 @@ class Rfi::FlujofondosController < ApplicationController
 		@rep.times do |t|
 			sMes = Array.new
 			if t == 0
-				@sMes[t] = Rco::Registro.saldoPeriodoCta(ctasDispIds,hoy,Date.new(hoy.year,hoy.month,-1),empresaId)
+				@sMes[t] = Rco::Registro.saldoPeriodoCta(ctasDispIds,hoy,Date.today.end_of_month,empresaId)
 			else	
 				@sMes[t] = Rco::Registro.saldoMesCta(ctasDispIds,hoy.advance(:months => t),empresaId)
 			end
