@@ -1,6 +1,6 @@
 class Rba::UsuariosController < ApplicationController
   before_action :set_rba_usuario, only: [:show, :edit, :update, :destroy]
-  skip_before_filter :validar_usuario, only: [:new, :create]
+  # skip_before_filter :validar_usuario, only: [:new, :create]
  
  
   # GET /rba/usuarios
