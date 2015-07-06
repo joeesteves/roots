@@ -15,6 +15,7 @@ class Api::Rba::CajasController < ApplicationController
     rad_operacion = Rad::Operacion.new
     rad_operacion.empresa_id = session[:empresa_id]
     rad_operacion.fecha = Date.today
+    rad_operacion.venc = Date.today
         reg_debe = rad_operacion.operacionregistros.new(:saldo_tipo => 'debe')
         reg_haber = rad_operacion.operacionregistros.new(:saldo_tipo => 'haber')
     case params[:tipo] 
