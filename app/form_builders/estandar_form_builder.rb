@@ -40,10 +40,10 @@ class EstandarFormBuilder < ActionView::Helpers::FormBuilder
 			
 			unless opciones[:sinEtiqueta]
 				"<span class='prefix postfix'>#{nombre.to_s.capitalize}</span>".html_safe + 
-				"<input type='date' id=#{object_name}_fecha 
+				"<input type='date' id=#{object_name}_#{nombre.to_s} 
 				name=#{object_name}[#{nombre}] value='#{object.send(nombre)}' #{html_options} />".html_safe
 			else
-				"<input type='date' id=#{object_name}_fecha 
+				"<input type='date' id=#{object_name}_#{nombre.to_s} 
 				name=#{object_name}[#{nombre}] value='#{object.send(nombre)}' #{html_options} />".html_safe
 			end	
 

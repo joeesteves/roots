@@ -1,5 +1,10 @@
 ready = ->
 	$.fn.comun()
+	$('#rad_operacion_fecha').change ->
+		$('#rad_operacion_venc').val($(this).val()) if $('#edicion_venc_manual').val() == "0"
+	$('#rad_operacion_venc').change ->
+		if $(this).val() != $('#rad_operacion_fecha').val()
+			$('#edicion_venc_manual').val("1")			
 	$('.calcular_valores').change -> 
 		calcular_valores_desde_totales()
 	# .calcular_valores importe, cuotaimporte y cuota
@@ -283,7 +288,7 @@ $.fn.cargaCompatibles = (datos, ood) ->
 	$('#compatibles_' + ood).empty()
 	$('#compatibles_' + ood + '_importe').empty()
 	if datos.length != 0
-		$('#compatibles_' + ood).append('<span>Ap_' + ood + '</span><select data-placeholder="Seleccionar registros" id="aplicaciones_' + ood + '" name="aplicaciones_' + ood + '[]" multiple></select>')
+		$('#compatibles_' + ood).append('<span>' + ood + '</span><select data-placeholder="Seleccionar registros" id="aplicaciones_' + ood + '" name="aplicaciones_' + ood + '[]" multiple></select>')
 		$.each datos, (i) ->
 			opcion = '<option id="'+ this.id + '" value="'+ this.id + ', ' + this.cuenta_id + ', ' + this.disponible + '" data-disponible="'+ this.disponible + '"' +
 			'data-aplicado="'+ this.aplicado_a_registro + '"' +

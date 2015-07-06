@@ -44,6 +44,10 @@
   <div class="small-1 columns">
     <%= f.check_box :rdosxmes, {label: "Rmes"} %>
   </div>
+  <div class="small-2 columns">
+    <%= f.date_select :venc, {label: "Venc"} %>
+    <input type='hidden' id="edicion_venc_manual" value="0" />
+  </div>
   <div class="small-1 columns">
     <%= f.number_field :cuotas, class: "calcular_valores" %>
   </div>

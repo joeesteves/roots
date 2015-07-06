@@ -3,6 +3,7 @@ class Rad::Operacion < ActiveRecord::Base
 	habtm_nodo
 	validates :importe, :cuotas, :cuotaimporte, presence: { message: "no puede estar vacio"},
 	numericality: { message: "debe ser un número"}
+	validates :fecha, :venc, presence: { message: "Debe indicar fecha y vencimiento"}
 	belongs_to :operaciontipo
 	delegate :codigo, :to => :operaciontipo, :prefix => false
 	belongs_to :empresa, class_name: "Rba::Empresa"
@@ -66,7 +67,7 @@ class Rad::Operacion < ActiveRecord::Base
 					asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, metodo_op_doh => valor, :fecha => fecha, :organizacion_id => organizacion_id)
 				end
 				cuotas_array.each do |k|
-					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha =>  k[:fecha], :organizacion_id => organizacion_destino_id)
+					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha =>  k[:venc], :organizacion_id => organizacion_destino_id)
 				end
 			else  # SOLO DEBERIAN SER CUENTAS DE INGRESOS O EGRESOS CONTROLADO HOY POR JS
 				cuotas_array.each do |k|
@@ -80,7 +81,7 @@ class Rad::Operacion < ActiveRecord::Base
 						end
 						asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, metodo_op_doh => valor, :fecha => k[:fecha], :organizacion_id => organizacion_id)
 					end
-					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha => k[:fecha], :organizacion_id => organizacion_destino_id)	
+					asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => k[:valorCuota], :fecha => k[:venc], :organizacion_id => organizacion_destino_id)	
 				end
 			end
 		else # MOV. FONDOS
@@ -125,7 +126,7 @@ class Rad::Operacion < ActiveRecord::Base
 		cuotas.times do |c|
 			valorCuota = importe - cuotaAcu if c == cuotas - 1
 			cuotaAcu += valorCuota
-			cuotas_array.push({fecha: fecha.advance(:months => c), valorCuota: valorCuota})
+			cuotas_array.push({venc: venc.advance(:months => c), fecha: fecha.advance(:months => c), valorCuota: valorCuota})
 		end	
 		cuotas_array
 	end  
