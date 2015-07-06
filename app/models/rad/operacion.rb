@@ -88,7 +88,7 @@ class Rad::Operacion < ActiveRecord::Base
 			cuentas_origen.each do |cuenta_origen|
 				asiento.registros.new(:cuenta_id => cuenta_origen.cuenta_id, vars[:valor_al_metodo_op] => cuenta_origen.valor, :fecha => fecha)
 			end
-			asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => importe, :fecha => fecha)
+			asiento.registros.new(:cuenta_id => cuenta_destino, vars[:inv_valor_al_metodo_op] => importe, :fecha => venc)
 		end
 
 		asiento.transaction do
