@@ -39,6 +39,7 @@ agregar_lineas_init = () ->
 		$.fn.initChosen()
 		calcular_desde_lineas_vivas_init(false)
 		setPlaceHolder($('#rad_operacion_rdosxmes').prop('checked'))
+		$.fn.activarCalcular()
 		return false
 	$('form').on 'click', '.simil_agrega_campos_D', () ->
 		$('.agregar_campos_D').click()
