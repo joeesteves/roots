@@ -3,11 +3,12 @@ $('#filtroRow').append('<div class="small-7 columns"><select multiple id="cuenta
 
 	$('#cuentas').append(new Option('<%= c.nombre%>','<%= c.id %>' ));
 <% end %>
-<% @filtro_cuentas_valor.each do |a| %>
-	$('#cuentas option[value=<%=a%>]').prop('selected', true)
+<% if @filtro_cuentas_valor %> 
+	<% @filtro_cuentas_valor.each do |a| %>
+		$('#cuentas option[value=<%=a%>]').prop('selected', true);
+	<% end %>
 <% end %>
-
-$.fn.initChosen()
-$.fn.activarFechaAutocompletado()
+$.fn.initChosen();
+$.fn.activarFechaAutocompletado();
 
 

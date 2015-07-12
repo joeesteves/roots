@@ -6,7 +6,7 @@ class Rco::CuentasController < ApplicationController
     arbol_index(params[:nodo], contexto: "grupo", 
       flash_nodo: flash[:nodo])
 
-    @filtro_cuentas_valor = params[:filtro_valor] if request.xhr? && params[:filtro_valor]
+    @filtro_cuentas_valor = params[:filtro_valor] if request.xhr? && params[:filtro_valor] != [""]
     
     respond_to do |format|
       format.html

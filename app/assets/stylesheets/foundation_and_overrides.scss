@@ -92,10 +92,9 @@ nav li {
 text-transform:uppercase;
 }
 
-.top-bar-section ul.dropdown:not(.simple) {
-width: 450px;
+.top-bar-section .has-dropdown.hover > ul.dropdown:not(.simple) {
+width: rem-calc(450);
 }
-
 
 .top-bar a.topbar_button, .top-bar input.topbar_input {
 font-size: rem-calc(10);
