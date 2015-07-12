@@ -1,0 +1,1 @@
+(function(){var o;o=function(){return"true"===$("#con_arbol").val()&&$.fn.arbolInit(),$.fn.gridRequest($("#nodo_actual").val())},$.fn.gridRequest=function(o){var a,n;return a=["id","nombre","apellido","mail"],n=[["Nombre","auto"],["Apellido","auto"],["Mail","auto"]],$.fn.gridPrepDatos(a,n,o)},$(document).on("page:load",o),$(document).ready(o)}).call(this);

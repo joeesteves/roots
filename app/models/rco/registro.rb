@@ -48,20 +48,22 @@ class Rco::Registro < ActiveRecord::Base
 	end
 
 	def self.saldo_cuenta_resultado(cuentas, desde, hasta, empresa)
+		group('cuenta_id').
 		includes(:asiento).
 		where('rco_asientos.empresa_id in (?)', empresa).
 		where('rco_registros.fecha > ?', desde).
 		where('rco_registros.fecha <= ?', hasta).
 		where(:cuenta_id => cuentas).
-		sum('coalesce(debe,0) - coalesce(haber,0)', :group => :cuenta_id)
+		sum('coalesce(debe,0) - coalesce(haber,0)')
 	end
 	def self.saldo_cuenta_resultado_org(cuentas, desde, hasta, empresa)
+		group('organizacion_id').
 		includes(:asiento).
 		where('rco_asientos.empresa_id in (?)', empresa).
 		where('rco_registros.fecha > ?', desde).
 		where('rco_registros.fecha <= ?', hasta).
 		where(:cuenta_id => cuentas).
-		sum('coalesce(debe,0) - coalesce(haber,0)', :group => :organizacion_id)
+		sum('coalesce(debe,0) - coalesce(haber,0)')
 	end
 
 

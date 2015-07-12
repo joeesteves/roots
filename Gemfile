@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
-
+ruby '2.2.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.4'
+gem 'rails', '~> 4.2.3'
 
 # Use sqlite3 as the database for Active Record
 gem 'mysql2'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.2'
+gem 'sass-rails', '~> 5.0.1'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -43,6 +43,8 @@ gem 'foundation-rails'
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'chosen-rails'
+gem 'compass-rails', '~> 2.0.4'
+
 
 # para Heroku
 gem 'rails_12factor', group: :production

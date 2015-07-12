@@ -8,6 +8,10 @@
 // Allows the use of rem-calc() or lower-bound() in your settings
 @import "foundation/functions";
 
+span.postfix {
+	border-left: none;
+}
+
 span.noborder {
 	border-style: hidden;
 	margin-bottom: 1rem;
@@ -1228,7 +1232,7 @@ nav li ul li {
 }
 
 // Height and margin
- $topbar-height: 30px;
+ $topbar-height: rem-calc(30);
 // $topbar-margin-bottom: 0;
 
 // Controlling the styles for the title in the top bar
@@ -1311,5 +1315,9 @@ input[type="checkbox"] {
   width: 100%; 
   height: 30px;
   margin-top: 5px; 
+
+}
+.top-bar-section ul li > a {
+text-transform:uppercase;
 
 }
