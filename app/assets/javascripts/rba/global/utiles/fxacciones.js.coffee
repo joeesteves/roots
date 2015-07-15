@@ -67,8 +67,12 @@ $.fn.abrirFiltros = () ->
 #Funcion le da funcionalidad al boton editar de la grilla def en grid_prep_datos
 $.fn.editaRow = (row) ->
 	if $('#controller_full_path').val() == "/rco/registros"
-		id = $("#jqxgrid").jqxGrid('getrowdata', row).id_padre
-		url = "/rco/asientos" + "/" + id + "/edit"
+		if $("#jqxgrid").jqxGrid('getrowdata', row).id_operacion != undefined
+			id = $("#jqxgrid").jqxGrid('getrowdata', row).id_operacion
+			url = "/rad/operaciones" + "/" + id + "/edit"
+		else
+			id = $("#jqxgrid").jqxGrid('getrowdata', row).id_padre
+			url = "/rco/asientos" + "/" + id + "/edit"
 	else
 		id = $("#jqxgrid").jqxGrid('getrowdata', row).id
 		url = $('#controller_full_path').val() + "/" + id + "/edit"

@@ -31,6 +31,9 @@ json.array!(@rco_registros) do |rco_registro|
 	json.cuenta cuenta.nombre
   json.saldo saldo
   cuenta_ant_id = cuenta.id
+  if rco_registro.asiento.operacion
+    json.id_operacion rco_registro.asiento.operacion.id
+  end
   if rco_registro.organizacion
     json.organizacion rco_registro.organizacion.nombre
   else
