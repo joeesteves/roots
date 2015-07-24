@@ -1,0 +1,77 @@
+en foundation_and_overrides
+
+.fab {
+	padding-left: rem-calc(13);
+	padding-top: rem-calc(13);
+	width: rem-calc(50);
+	height: rem-calc(50); 
+	position: fixed;
+	bottom: rem-calc(0);
+	right: rem-calc(0);
+	border-radius: rem-calc(150);
+	-webkit-border-radius: 150px;
+	-moz-border-radius: 150px;
+	background: #105B7F;
+	z-index: 1000;
+}
+
+.no_desplegado {
+	@extend .fab;
+}
+.opcion {
+	@extend .no_desplegado;
+	position: relative;
+	margin-bottom: rem-calc(4);
+}
+.desplegado {
+	@extend .fab;
+	padding: 0 0 0 0;
+	background: none;
+	height: rem-calc(212);
+}
+
+.fab p {
+	font-size: rem-calc(30);
+	color: white;
+}
+
+en _menu.html.erb
+
+
+	<div id="circulo_no_desplegado" class="no_desplegado">
+		<p>+</p>
+	</div>
+
+	<div id="circulo_activo" class="desplegado">
+
+		<div class="opcion">
+			<p class="borrar">B</p>
+		</div>
+		<div class="opcion">
+			<p class="editar">E</p>
+		</div>
+		<div class="opcion">
+			<p class="importar">I</p>
+		</div>
+		<div class="opcion">
+			<p class="nuevo">N</p>
+		</div>
+	</div>
+</div>
+
+
+javascript
+
+ready = ->
+	$('#circulo_activo').hide()
+	$('#circulo_no_desplegado').hover ->
+		$('#circulo_no_desplegado').fadeOut()
+		$('#circulo_activo').fadeIn()
+	$('#circulo_activo').hover(undefined, ->
+		$('#circulo_activo').fadeOut()
+		$('#circulo_no_desplegado').fadeIn())
+
+
+
+$(document).on('page:load', ready)
+$(document).ready(ready)
